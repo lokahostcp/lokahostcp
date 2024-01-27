@@ -1,5 +1,5 @@
 <?php
-use function Hestiacp\quoteshellarg\quoteshellarg;
+use function Lokahostcp\quoteshellarg\quoteshellarg;
 
 // Init
 ob_start();

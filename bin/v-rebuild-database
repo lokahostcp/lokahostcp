@@ -15,18 +15,18 @@ user=$1
 database=$2
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-# shellcheck source=/usr/local/hestia/func/db.sh
-source $HESTIA/func/db.sh
-# shellcheck source=/usr/local/hestia/func/rebuild.sh
-source $HESTIA/func/rebuild.sh
-# shellcheck source=/usr/local/hestia/func/syshealth.sh
-source $HESTIA/func/syshealth.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/db.sh
+source $LOKAHOST/func/db.sh
+# shellcheck source=/usr/local/lokahost/func/rebuild.sh
+source $LOKAHOST/func/rebuild.sh
+# shellcheck source=/usr/local/lokahost/func/syshealth.sh
+source $LOKAHOST/func/syshealth.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -39,7 +39,7 @@ is_object_valid 'user' 'USER' "$user"
 is_object_valid 'db' 'DB' "$database"
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -65,7 +65,7 @@ update_user_value "$user" '$U_DATABASES' "$U_DATABASES"
 update_user_value "$user" '$U_DISK_DB' "$U_DISK_DB"
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging

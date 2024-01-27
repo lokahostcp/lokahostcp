@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hestia Control Panel upgrade script for target version 1.6.1
+# Lokahost Control Panel upgrade script for target version 1.6.1
 
 #######################################################################################
 #######                      Place additional commands below.                   #######
@@ -38,14 +38,14 @@ if [ "$MAIL_SYSTEM" = "exim4" ]; then
 fi
 
 # With setup from installer
-if [ -f "/etc/apt/sources.list.d/hestia-beta.list" ]; then
+if [ -f "/etc/apt/sources.list.d/lokahost-beta.list" ]; then
 	echo "[ ! ] Change to stable release!"
-	rm /etc/apt/sources.list.d/hestia-beta.list
-	sed -i 's/#//g' /etc/apt/sources.list.d/hestia.list
+	rm /etc/apt/sources.list.d/lokahost-beta.list
+	sed -i 's/#//g' /etc/apt/sources.list.d/lokahost.list
 fi
-check=$(cat /etc/apt/sources.list.d/hestia.list | grep "beta.hestiacp.com")
+check=$(cat /etc/apt/sources.list.d/lokahost.list | grep "beta.lokahost.com")
 if [ ! -z "$check" ]; then
 	echo "[ ! ] Change to stable release!"
-	sed -i '/beta.hestiacp.com/d' /etc/apt/sources.list.d/hestia.list
-	sed -i 's/#//g' /etc/apt/sources.list.d/hestia.list
+	sed -i '/beta.lokahost.com/d' /etc/apt/sources.list.d/lokahost.list
+	sed -i 's/#//g' /etc/apt/sources.list.d/lokahost.list
 fi

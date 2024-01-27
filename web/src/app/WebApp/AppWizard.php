@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Hestia\WebApp;
+namespace Lokahost\WebApp;
 
-use Hestia\System\HestiaApp;
+use Lokahost\System\HestiaApp;
 
 class AppWizard {
 	private $domain;

@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Includes
-# shellcheck source=/usr/local/hestia/conf/hestia.conf
-source $HESTIA/conf/hestia.conf
+# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
+source $LOKAHOST/conf/lokahost.conf
 
 # Variables and arguments
-HESTIA="/usr/local/hestia"
+LOKAHOST="/usr/local/lokahost"
 script=$1
 log=$2
 scroll=$3

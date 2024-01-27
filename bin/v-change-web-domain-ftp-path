@@ -18,14 +18,14 @@ ftp_user=$3
 ftp_path=$4
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-# shellcheck source=/usr/local/hestia/func/domain.sh
-source $HESTIA/func/domain.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/domain.sh
+source $LOKAHOST/func/domain.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 # Additional argument formatting
 format_domain
@@ -57,7 +57,7 @@ if [ -z "$(echo $ftp_path_a | grep $HOMEDIR/$user/web/$domain)" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -81,7 +81,7 @@ delete_chroot_jail $ftp_user
 add_chroot_jail $ftp_user
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Transforming absolute path to relative

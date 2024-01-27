@@ -24,14 +24,14 @@ if [ "$ttl" == '' ]; then
 fi
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-# shellcheck source=/usr/local/hestia/func/db.sh
-source $HESTIA/func/db.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/db.sh
+source $LOKAHOST/func/db.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -48,7 +48,7 @@ is_object_unsuspended 'db' 'DB' "$database"
 get_next_dbhost
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -59,7 +59,7 @@ get_database_values
 
 #generate password and unique user
 dbpass=$(generate_password)
-dbuser="hestia_sso_$(generate_password)"
+dbuser="lokahost_sso_$(generate_password)"
 
 add_mysql_database_temp_user
 if [ $? -ne 0 ]; then
@@ -78,7 +78,7 @@ echo '{
 }'
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging

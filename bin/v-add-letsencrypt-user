@@ -14,12 +14,12 @@
 user=$1
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 # LE API
 LE_API='https://acme-v02.api.letsencrypt.org'
@@ -50,7 +50,7 @@ query_le_v2() {
 	post_data=$post_data'"payload":"'"$payload_"'",'
 	post_data=$post_data'"signature":"'"$signature_"'"}'
 
-	curl --user-agent "HestiaCP" -s -i -d "$post_data" "$1" -H "$content"
+	curl --user-agent "LokahostCP" -s -i -d "$post_data" "$1" -H "$content"
 }
 
 #----------------------------------------------------------#
@@ -68,7 +68,7 @@ if [ -n "$KID" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -126,7 +126,7 @@ if [[ "${status:0:2}" -ne "20" ]]; then
 fi
 
 #----------------------------------------------------------#
-#                        Hestia                            #
+#                        Lokahost                            #
 #----------------------------------------------------------#
 
 # Adding le.conf

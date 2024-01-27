@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hestia Control Panel upgrade script for target version 1.9.0
+# Lokahost Control Panel upgrade script for target version 1.9.0
 
 #######################################################################################
 #######                      Place additional commands below.                   #######
@@ -38,47 +38,47 @@ if [ ! -f $apt/nodesource.list ] && [ ! -z $(which "node") ]; then
 	curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee /usr/share/keyrings/nodesource.gpg > /dev/null 2>&1
 fi
 
-# Check if hestiaweb exists
-if [ -z "$(grep ^hestiaweb: /etc/passwd)" ]; then
+# Check if lokahostweb exists
+if [ -z "$(grep ^lokahostweb: /etc/passwd)" ]; then
 	# Generate a random password
 	random_password=$(generate_password '32')
-	# Create the new hestiaweb user
-	/usr/sbin/useradd "hestiaweb" -c "$email" --no-create-home
-	# do not allow login into hestiaweb user
-	echo hestiaweb:$random_password | sudo chpasswd -e
-	cp $HESTIA_COMMON_DIR/sudo/hestiaweb /etc/sudoers.d/
+	# Create the new lokahostweb user
+	/usr/sbin/useradd "lokahostweb" -c "$email" --no-create-home
+	# do not allow login into lokahostweb user
+	echo lokahostweb:$random_password | sudo chpasswd -e
+	cp $LOKAHOST_COMMON_DIR/sudo/lokahostweb /etc/sudoers.d/
 	# Keep enabled for now
 	# Remove sudo permissions admin user
 	#rm /etc/sudoers.d/admin/
 fi
 
 # Check if cronjobs have been migrated
-if [ ! -f "/var/spool/cron/crontabs/hestiaweb" ]; then
-	echo "MAILTO=\"\"" > /var/spool/cron/crontabs/hestiaweb
-	echo "CONTENT_TYPE=\"text/plain; charset=utf-8\"" >> /var/spool/cron/crontabs/hestiaweb
+if [ ! -f "/var/spool/cron/crontabs/lokahostweb" ]; then
+	echo "MAILTO=\"\"" > /var/spool/cron/crontabs/lokahostweb
+	echo "CONTENT_TYPE=\"text/plain; charset=utf-8\"" >> /var/spool/cron/crontabs/lokahostweb
 	while read line; do
 		parse_object_kv_list "$line"
 		if [ -n "$(echo "$CMD" | grep ^sudo)" ]; then
 			echo "$MIN $HOUR $DAY $MONTH $WDAY $CMD" \
 				| sed -e "s/%quote%/'/g" -e "s/%dots%/:/g" \
-					>> /var/spool/cron/crontabs/hestiaweb
+					>> /var/spool/cron/crontabs/lokahostweb
 			$BIN/v-delete-cron-job admin "$JOB"
 		fi
-	done < $HESTIA/data/users/admin/cron.conf
+	done < $LOKAHOST/data/users/admin/cron.conf
 	# Update permissions
-	chmod 600 /var/spool/cron/crontabs/hestiaweb
-	chown hestiaweb:hestiaweb /var/spool/cron/crontabs/hestiaweb
+	chmod 600 /var/spool/cron/crontabs/lokahostweb
+	chown lokahostweb:lokahostweb /var/spool/cron/crontabs/lokahostweb
 
 fi
 
-chown hestiaweb:hestiaweb /usr/local/hestia/data/sessions
+chown lokahostweb:lokahostweb /usr/local/lokahost/data/sessions
 
-packages=$(ls --sort=time $HESTIA/data/packages | grep .pkg)
+packages=$(ls --sort=time $LOKAHOST/data/packages | grep .pkg)
 for package in $packages; do
-	if [ -z "$(grep -e 'SHELL_JAIL_ENABLED' $HESTIA/data/packages/$package)" ]; then
-		echo "SHELL_JAIL_ENABLED='no'" >> $HESTIA/data/packages/$package
+	if [ -z "$(grep -e 'SHELL_JAIL_ENABLED' $LOKAHOST/data/packages/$package)" ]; then
+		echo "SHELL_JAIL_ENABLED='no'" >> $LOKAHOST/data/packages/$package
 	fi
 done
 
-$BIN/v-add-user-notification 'admin' 'Hestia securirty has been upgraded' 'Here should come a nice message about the upgrade and how to change the user name of the admin user!'
+$BIN/v-add-user-notification 'admin' 'Lokahost securirty has been upgraded' 'Here should come a nice message about the upgrade and how to change the user name of the admin user!'
 add_upgrade_message 'Here should come a nice message about the upgrade and how to change the user name of the admin user!'

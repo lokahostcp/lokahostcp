@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Hestia\System;
-use function Hestiacp\quoteshellarg\quoteshellarg;
+namespace Lokahost\System;
+use function Lokahostcp\quoteshellarg\quoteshellarg;
 
 class HestiaApp {
 	/** @var string[] */
 	public $errors;
-	protected const TMPDIR_DOWNLOADS = "/tmp/hestia-webapp";
+	protected const TMPDIR_DOWNLOADS = "/tmp/lokahost-webapp";
 	protected $phpsupport = false;
 
 	public function __construct() {

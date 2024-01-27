@@ -16,12 +16,12 @@ type=$4
 priority=$5
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -33,7 +33,7 @@ is_object_valid 'user' 'USER' "$user"
 is_common_format_valid "$type"
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -68,7 +68,7 @@ echo "$str" >> $USER_DATA/notifications.conf
 chmod 660 $USER_DATA/notifications.conf
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Updating notification counter

@@ -1,14 +1,14 @@
 <?php
 
-namespace Hestia\WebApp\Installers;
+namespace Lokahost\WebApp\Installers;
 
-use Hestia\System\Util;
-use Hestia\System\HestiaApp;
-use Hestia\WebApp\InstallerInterface;
-use Hestia\Models\WebDomain;
+use Lokahost\System\Util;
+use Lokahost\System\HestiaApp;
+use Lokahost\WebApp\InstallerInterface;
+use Lokahost\Models\WebDomain;
 
-use Hestia\WebApp\Installers\Resources\ComposerResource;
-use Hestia\WebApp\Installers\Resources\WpResource;
+use Lokahost\WebApp\Installers\Resources\ComposerResource;
+use Lokahost\WebApp\Installers\Resources\WpResource;
 
 abstract class BaseSetup implements InstallerInterface {
 	protected $appInfo;

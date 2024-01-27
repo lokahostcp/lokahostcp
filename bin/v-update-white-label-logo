@@ -4,7 +4,7 @@
 #
 # example: v-update-white-label-logo
 #
-# Replace Hestia logos with User created logo's
+# Replace Lokahost logos with User created logo's
 
 #----------------------------------------------------------#
 #                Variables & Functions                     #
@@ -15,53 +15,53 @@ download=${1-no}
 reset=${2-no}
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source "$HESTIA/func/main.sh"
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source "$LOKAHOST/func/main.sh"
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 if [ "$reset" = "yes" ]; then
-	rm -rf "$HESTIA/web/images/custom/"
+	rm -rf "$LOKAHOST/web/images/custom/"
 fi
 
-if [ -f "$HESTIA/web/images/custom/logo.svg" ]; then
-	cp -f "$HESTIA/web/images/custom/logo.svg" "$HESTIA/web/images/logo.svg"
-elif [ ! -f "$HESTIA/web/images/custom/logo.svg" ] && [ "$download" = "yes" ]; then
-	download_file "https://raw.githubusercontent.com/hestiacp/hestiacp/release/web/images/logo.svg" "$HESTIA/web/images/logo.svg"
+if [ -f "$LOKAHOST/web/images/custom/logo.svg" ]; then
+	cp -f "$LOKAHOST/web/images/custom/logo.svg" "$LOKAHOST/web/images/logo.svg"
+elif [ ! -f "$LOKAHOST/web/images/custom/logo.svg" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/logo.svg" "$LOKAHOST/web/images/logo.svg"
 fi
 
-if [ -f "$HESTIA/web/images/custom/logo.png" ]; then
-	cp -f "$HESTIA/web/images/custom/logo.png" "$HESTIA/web/images/logo.png"
-elif [ ! -f "$HESTIA/web/images/custom/logo.png" ] && [ "$download" = "yes" ]; then
-	download_file "https://raw.githubusercontent.com/hestiacp/hestiacp/release/web/images/logo.png" "$HESTIA/web/images/logo.png"
+if [ -f "$LOKAHOST/web/images/custom/logo.png" ]; then
+	cp -f "$LOKAHOST/web/images/custom/logo.png" "$LOKAHOST/web/images/logo.png"
+elif [ ! -f "$LOKAHOST/web/images/custom/logo.png" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/logo.png" "$LOKAHOST/web/images/logo.png"
 fi
 
-if [ -f "$HESTIA/web/images/custom/logo-header.svg" ]; then
-	cp -f "$HESTIA/web/images/custom/logo-header.svg" "$HESTIA/web/images/logo-header.svg"
-elif [ ! -f "$HESTIA/web/images/custom/logo-header.svg" ] && [ "$download" = "yes" ]; then
-	download_file "https://raw.githubusercontent.com/hestiacp/hestiacp/release/web/images/logo-header.svg" "$HESTIA/web/images/logo-header.svg"
+if [ -f "$LOKAHOST/web/images/custom/logo-header.svg" ]; then
+	cp -f "$LOKAHOST/web/images/custom/logo-header.svg" "$LOKAHOST/web/images/logo-header.svg"
+elif [ ! -f "$LOKAHOST/web/images/custom/logo-header.svg" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/logo-header.svg" "$LOKAHOST/web/images/logo-header.svg"
 fi
 
-if [ -f "$HESTIA/web/images/custom/favicon.png" ]; then
-	cp -f "$HESTIA/web/images/custom/favicon.png" "$HESTIA/web/images/favicon.png"
-elif [ ! -f "$HESTIA/web/images/custom/favicon.png" ] && [ "$download" = "yes" ]; then
-	download_file "https://raw.githubusercontent.com/hestiacp/hestiacp/release/web/images/favicon.png" "$HESTIA/web/images/favicon.png"
+if [ -f "$LOKAHOST/web/images/custom/favicon.png" ]; then
+	cp -f "$LOKAHOST/web/images/custom/favicon.png" "$LOKAHOST/web/images/favicon.png"
+elif [ ! -f "$LOKAHOST/web/images/custom/favicon.png" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/favicon.png" "$LOKAHOST/web/images/favicon.png"
 fi
 
-if [ -f "$HESTIA/web/images/custom/favicon.ico" ]; then
-	cp -f "$HESTIA/web/images/custom/favicon.ico" "$HESTIA/web/favicon.ico"
-elif [ ! -f "$HESTIA/web/images/custom/favicon.ico" ] && [ "$download" = "yes" ]; then
-	download_file "https://raw.githubusercontent.com/hestiacp/hestiacp/release/web/favicon.ico" "$HESTIA/web/favicon.ico"
+if [ -f "$LOKAHOST/web/images/custom/favicon.ico" ]; then
+	cp -f "$LOKAHOST/web/images/custom/favicon.ico" "$LOKAHOST/web/favicon.ico"
+elif [ ! -f "$LOKAHOST/web/images/custom/favicon.ico" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/favicon.ico" "$LOKAHOST/web/favicon.ico"
 fi
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 exit

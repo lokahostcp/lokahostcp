@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-if [ "${PATH#*/usr/local/hestia/bin*}" = "$PATH" ]; then
-    . /etc/profile.d/hestia.sh
+if [ "${PATH#*/usr/local/lokahost/bin*}" = "$PATH" ]; then
+    . /etc/profile.d/lokahost.sh
 fi
 
 load 'test_helper/bats-support/load'
@@ -14,14 +14,14 @@ function random() {
 }
 
 function setup() {
-    source /tmp/hestia-le-env.sh
-    source $HESTIA/func/main.sh
-    source $HESTIA/conf/hestia.conf
-    source $HESTIA/func/ip.sh
+    source /tmp/lokahost-le-env.sh
+    source $LOKAHOST/func/main.sh
+    source $LOKAHOST/conf/lokahost.conf
+    source $LOKAHOST/func/ip.sh
 }
 
 @test "[ User ] Create new user" {
-    run v-add-user $user $user $user@hestiacp.com default "Super Test"
+    run v-add-user $user $user $user@lokahost.com default "Super Test"
     assert_success
     refute_output
 }
@@ -39,7 +39,7 @@ function setup() {
 }
 
 @test "[ Web ] Create 2nd web domain" {
-    run v-add-web-domain $user "hestia.$domain" $ip yes
+    run v-add-web-domain $user "lokahost.$domain" $ip yes
     assert_success
     refute_output
 }
@@ -51,7 +51,7 @@ function setup() {
 }
 
 @test "[ Web ] Request 2nd new certificate for web domain" {
-    run v-add-letsencrypt-domain $user "hestia.$domain"
+    run v-add-letsencrypt-domain $user "lokahost.$domain"
     assert_success
     refute_output
 }
@@ -111,7 +111,7 @@ function setup() {
 }
 
 @test "[ Redirect ] Add Domain redirect to other website" {
-    run v-add-web-domain-redirect $user "redirect.$domain" "https://hestiacp.com" 301 "yes"
+    run v-add-web-domain-redirect $user "redirect.$domain" "https://lokahost.com" 301 "yes"
     assert_success
     refute_output
 }

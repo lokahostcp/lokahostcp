@@ -22,19 +22,19 @@ protocol=$(echo "$protocol" | tr '[:lower:]' '[:upper:]')
 iptables="/sbin/iptables"
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source "$HESTIA/func/main.sh"
-# shellcheck source=/usr/local/hestia/func/firewall.sh
-source "$HESTIA/func/firewall.sh"
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source "$LOKAHOST/func/main.sh"
+# shellcheck source=/usr/local/lokahost/func/firewall.sh
+source "$LOKAHOST/func/firewall.sh"
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
-# Get hestia port by reading nginx.conf
-hestiaport=$(sed -ne "/listen/{s/.*listen[^0-9]*\([0-9][0-9]*\)[ \t]*ssl\;/\1/p;q}" "$HESTIA/nginx/conf/nginx.conf")
-if [ -z "$hestiaport" ]; then
-	hestiaport=8083
+# Get lokahost port by reading nginx.conf
+lokahostport=$(sed -ne "/listen/{s/.*listen[^0-9]*\([0-9][0-9]*\)[ \t]*ssl\;/\1/p;q}" "$LOKAHOST/nginx/conf/nginx.conf")
+if [ -z "$lokahostport" ]; then
+	lokahostport=8083
 fi
 
 #----------------------------------------------------------#
@@ -46,7 +46,7 @@ is_format_valid 'chain' 'port_ext' 'protocol'
 is_system_enabled "$FIREWALL_SYSTEM" 'FIREWALL_SYSTEM'
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -85,8 +85,8 @@ case $chain in
 		port='3306,5432'
 		protocol=TCP
 		;;
-	HESTIA)
-		port=$hestiaport
+	LOKAHOST)
+		port=$lokahostport
 		protocol=TCP
 		;;
 	RECIDIVE)
@@ -111,7 +111,7 @@ if [ $? -eq 0 ]; then
 fi
 
 # Preserving chain
-chains="$HESTIA/data/firewall/chains.conf"
+chains="$LOKAHOST/data/firewall/chains.conf"
 check_chain=""
 [ -f "$chains" ] && check_chain=$(grep "CHAIN='$chain'" "$chains")
 if [ -z "$check_chain" ]; then
@@ -122,7 +122,7 @@ fi
 [ -f "$chains" ] && chmod 660 "$chains"
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging

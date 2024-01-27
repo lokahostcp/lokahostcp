@@ -9,14 +9,14 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 # upgrade config file
-source "$HESTIA/install/upgrade/upgrade.conf"
+source "$LOKAHOST/install/upgrade/upgrade.conf"
 
 MODE=$1
 UPDATE="no"
@@ -44,12 +44,12 @@ if [ "x$(id -u)" != 'x0' ]; then
 	exit 10
 fi
 
-# Ensure that $HESTIA (/usr/local/hestia/) and other variables are valid.
-if [ -z "$HESTIA" ]; then
-	HESTIA="/usr/local/hestia"
+# Ensure that $LOKAHOST (/usr/local/lokahost/) and other variables are valid.
+if [ -z "$LOKAHOST" ]; then
+	LOKAHOST="/usr/local/lokahost"
 fi
 
-if [ -z "$HOMEDIR" ] || [ -z "$HESTIA_INSTALL_DIR" ]; then
+if [ -z "$HOMEDIR" ] || [ -z "$LOKAHOST_INSTALL_DIR" ]; then
 	echo "ERROR: Environment variables not present, installation aborted."
 	exit 2
 fi
@@ -71,7 +71,7 @@ if [ -f "/var/lib/snappymail/data/VERSION" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -119,7 +119,7 @@ if [ "$UPDATE" == "no" ]; then
 		mysql -e "GRANT ALL ON snappymail.*
 		 TO snappymail@localhost IDENTIFIED BY '$r'"
 	fi
-	php -f $HESTIA_COMMON_DIR/snappymail/install.php "admin_$key" "$admin_password" "$r" "$BACKEND_PORT"
+	php -f $LOKAHOST_COMMON_DIR/snappymail/install.php "admin_$key" "$admin_password" "$r" "$BACKEND_PORT"
 
 	chown -R www-data:www-data ./data
 	chown -R www-data:www-data $SM_CONFIG_DIR/
@@ -129,8 +129,8 @@ if [ "$UPDATE" == "no" ]; then
 	echo "User-agent: *" > $SM_INSTALL_DIR/robots.txt
 	echo "Disallow: /" >> $SM_INSTALL_DIR/robots.txt
 
-	# Updating hestia.conf
-	if [ -z "$(grep WEBMAIL_SYSTEM $HESTIA/conf/hestia.conf)" ]; then
+	# Updating lokahost.conf
+	if [ -z "$(grep WEBMAIL_SYSTEM $LOKAHOST/conf/lokahost.conf)" ]; then
 		$BIN/v-change-sys-config-value 'WEBMAIL_SYSTEM' 'snappymail'
 	else
 		if [ -z "$(echo "$WEBMAIL_SYSTEM" | grep -w 'snappymail')" ]; then
@@ -154,7 +154,7 @@ else
 	mkdir -p /tmp/snappy/
 	tar -xzf snappymail-latest.tar.gz -C /tmp/snappy/
 	version_source=$(cat /tmp/snappy/data/VERSION)
-	# Check version inside .tar.gz file in case hestia didn't update yet
+	# Check version inside .tar.gz file in case lokahost didn't update yet
 	if [ "$version" != "$version_source" ]; then
 		tar -xzf ${SM_INSTALL_DIR}/${SM_FILE}
 		rm $SM_INSTALL_DIR/$SM_FILE
@@ -163,7 +163,7 @@ else
 fi
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 if [ "$UPDATE" = "yes" ]; then

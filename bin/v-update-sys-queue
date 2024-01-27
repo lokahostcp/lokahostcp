@@ -17,12 +17,12 @@
 queue=$1
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -44,19 +44,19 @@ fi
 
 # Defining pipe functions
 case $queue in
-	restart) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
-	webstats) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
-	backup) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
-	disk) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
-	daily) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
-	traffic) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
-	dns-cluster) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
-	letsencrypt) bash $HESTIA/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	restart) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	webstats) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	backup) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	disk) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	daily) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	traffic) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	dns-cluster) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
+	letsencrypt) bash $LOKAHOST/data/queue/$queue.pipe > /dev/null 2>&1 ;;
 	*) check_args '1' '0' 'QUEUE' ;;
 esac
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 exit

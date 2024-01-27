@@ -4,7 +4,7 @@
 #
 # example: v-list-sys-info
 #
-# This function checks available updates for hestia packages.
+# This function checks available updates for lokahost packages.
 
 #----------------------------------------------------------#
 #                Variables & Functions                     #
@@ -14,16 +14,16 @@
 format=${1-shell}
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
-# Retrieve Hestia Control Panel version number
-HESTIA_VERSION=$(grep VERSION $HESTIA/conf/hestia.conf | cut -d '=' -f2 | sed "s|'||g")
-HESTIA_RELEASE=$(grep RELEASE_BRANCH $HESTIA/conf/hestia.conf | cut -d '=' -f2 | sed "s|'||g")
+# Retrieve Lokahost Control Panel version number
+LOKAHOST_VERSION=$(grep VERSION $LOKAHOST/conf/lokahost.conf | cut -d '=' -f2 | sed "s|'||g")
+LOKAHOST_RELEASE=$(grep RELEASE_BRANCH $LOKAHOST/conf/lokahost.conf | cut -d '=' -f2 | sed "s|'||g")
 
 # JSON list function
 json_list() {
@@ -33,8 +33,8 @@ json_list() {
         "OS": "'$OS'",
         "VERSION": "'$VERSION'",
         "ARCH": "'$ARCH'",
-        "HESTIA": "'$HESTIA_VERSION'",
-        "RELEASE": "'$HESTIA_RELEASE'",
+        "LOKAHOST": "'$LOKAHOST_VERSION'",
+        "RELEASE": "'$LOKAHOST_RELEASE'",
         "UPTIME": "'$UPTIME'",
         "LOADAVERAGE": "'$LOADAVERAGE'"
         }'
@@ -43,20 +43,20 @@ json_list() {
 
 # SHELL list function
 shell_list() {
-	echo "HOSTNAME   OS   VER   ARCH  HESTIA  RELEASE  UPTIME   LA"
+	echo "HOSTNAME   OS   VER   ARCH  LOKAHOST  RELEASE  UPTIME   LA"
 	echo "--------   --   ---   ----  ------  -------  ------   --"
-	echo "$HOSTNAME $OS $VERSION $ARCH $HESTIA_VERSION $HESTIA_RELEASE $UPTIME $LOADAVERAGE"
+	echo "$HOSTNAME $OS $VERSION $ARCH $LOKAHOST_VERSION $LOKAHOST_RELEASE $UPTIME $LOADAVERAGE"
 }
 
 # PLAIN list function
 plain_list() {
-	echo -e "$HOSTNAME\t$OS\t$VERSION\t$ARCH\t$HESTIA_VERSION\t$HESTIA_RELEASE\t$UPTIME\t$LOADAVERAGE"
+	echo -e "$HOSTNAME\t$OS\t$VERSION\t$ARCH\t$LOKAHOST_VERSION\t$LOKAHOST_RELEASE\t$UPTIME\t$LOADAVERAGE"
 }
 
 # CSV list function
 csv_list() {
-	echo "HOSTNAME,OS,VERSION,ARCH,HESTIA,RELEASE,UPTIME,LOADAVERAGE"
-	echo "$HOSTNAME,$OS,$VERSION,$ARCH,$HESTIA_VERSION,$HESTIA_RELEASE,$UPTIME,$LOADAVERAGE"
+	echo "HOSTNAME,OS,VERSION,ARCH,LOKAHOST,RELEASE,UPTIME,LOADAVERAGE"
+	echo "$HOSTNAME,$OS,$VERSION,$ARCH,$LOKAHOST_VERSION,$LOKAHOST_RELEASE,$UPTIME,$LOADAVERAGE"
 }
 
 #----------------------------------------------------------#
@@ -110,7 +110,7 @@ case $format in
 esac
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 exit

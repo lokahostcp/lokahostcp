@@ -1,0 +1,15 @@
+[Unit]
+Description=Lokahost web console
+Documentation=https://www.lokahost.com
+Wants=network-online.target
+After=network-online.target
+Requires=lokahost-php.service
+Requires=lokahost-nginx.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

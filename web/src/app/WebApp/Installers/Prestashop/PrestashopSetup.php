@@ -1,8 +1,8 @@
 <?php
 
-namespace Hestia\WebApp\Installers\Prestashop;
+namespace Lokahost\WebApp\Installers\Prestashop;
 
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
 
 class PrestashopSetup extends BaseSetup {
 	protected $appInfo = [

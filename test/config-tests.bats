@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-if [ "${PATH#*/usr/local/hestia/bin*}" = "$PATH" ]; then
-    . /etc/profile.d/hestia.sh
+if [ "${PATH#*/usr/local/lokahost/bin*}" = "$PATH" ]; then
+    . /etc/profile.d/lokahost.sh
 fi
 
 load 'test_helper/bats-support/load'
@@ -15,28 +15,28 @@ head /dev/urandom | tr -dc 0-9 | head -c$1
 function setup() {
     # echo "# Setup_file" > &3
     if [ $BATS_TEST_NUMBER = 1 ]; then
-        echo 'user=test-5285' > /tmp/hestia-test-env.sh
-        echo 'user2=test-5286' >> /tmp/hestia-test-env.sh
-        echo 'userbk=testbk-5285' >> /tmp/hestia-test-env.sh
-        echo 'userpass1=test-5285' >> /tmp/hestia-test-env.sh
-        echo 'userpass2=t3st-p4ssw0rd' >> /tmp/hestia-test-env.sh
-        echo 'HESTIA=/usr/local/hestia' >> /tmp/hestia-test-env.sh
-        echo 'domain=test-5285.hestiacp.com' >> /tmp/hestia-test-env.sh
-        echo 'domainuk=test-5285.hestiacp.com.uk' >> /tmp/hestia-test-env.sh
-        echo 'rootdomain=testhestiacp.com' >> /tmp/hestia-test-env.sh
-        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/hestia-test-env.sh
-        echo 'database=test-5285_database' >> /tmp/hestia-test-env.sh
-        echo 'dbuser=test-5285_dbuser' >> /tmp/hestia-test-env.sh
+        echo 'user=test-5285' > /tmp/lokahost-test-env.sh
+        echo 'user2=test-5286' >> /tmp/lokahost-test-env.sh
+        echo 'userbk=testbk-5285' >> /tmp/lokahost-test-env.sh
+        echo 'userpass1=test-5285' >> /tmp/lokahost-test-env.sh
+        echo 'userpass2=t3st-p4ssw0rd' >> /tmp/lokahost-test-env.sh
+        echo 'LOKAHOST=/usr/local/lokahost' >> /tmp/lokahost-test-env.sh
+        echo 'domain=test-5285.lokahost.com' >> /tmp/lokahost-test-env.sh
+        echo 'domainuk=test-5285.lokahost.com.uk' >> /tmp/lokahost-test-env.sh
+        echo 'rootdomain=testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'database=test-5285_database' >> /tmp/lokahost-test-env.sh
+        echo 'dbuser=test-5285_dbuser' >> /tmp/lokahost-test-env.sh
     fi
 
-    source /tmp/hestia-test-env.sh
-    source $HESTIA/func/main.sh
-    source $HESTIA/conf/hestia.conf
-    source $HESTIA/func/ip.sh
+    source /tmp/lokahost-test-env.sh
+    source $LOKAHOST/func/main.sh
+    source $LOKAHOST/conf/lokahost.conf
+    source $LOKAHOST/func/ip.sh
 }
 
 @test "Setup Test domain" {
-    run v-add-user $user $user $user@hestiacp.com default "Super Test"
+    run v-add-user $user $user $user@lokahost.com default "Super Test"
     assert_success
     refute_output
 
@@ -44,7 +44,7 @@ function setup() {
     assert_success
     refute_output
 
-    ssl=$(v-generate-ssl-cert "testhestiacp.com" "info@testhestiacp.com" US CA "Orange County" HestiaCP IT "mail.$domain" | tail -n1 | awk '{print $2}')
+    ssl=$(v-generate-ssl-cert "testhestiacp.com" "info@testhestiacp.com" US CA "Orange County" LokahostCP IT "mail.$domain" | tail -n1 | awk '{print $2}')
     mv $ssl/testhestiacp.com.crt /tmp/testhestiacp.com.crt
     mv $ssl/testhestiacp.com.key /tmp/testhestiacp.com.key
 

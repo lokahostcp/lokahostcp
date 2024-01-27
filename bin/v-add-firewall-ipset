@@ -17,12 +17,12 @@ autoupdate=${4:-yes}
 refresh=${5:-no}
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -35,12 +35,12 @@ is_boolean_format_valid "$refresh" 'Refresh IP list (yes/no)'
 is_system_enabled "$FIREWALL_SYSTEM" 'FIREWALL_SYSTEM'
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 # Define variables for ipset configuration
-ipset_hstobject='../../../data/firewall/ipset'
+ipset_lcpobject='../../../data/firewall/ipset'
 IPSET_BIN="$(command -v ipset)"
-IPSET_PATH="$HESTIA/data/firewall/ipset"
+IPSET_PATH="$LOKAHOST/data/firewall/ipset"
 
 # Ensure ipset is installed
 if [ -z "$IPSET_BIN" ]; then
@@ -57,8 +57,8 @@ fi
 
 # Ensure ipset configuration path and master file exist before attempting to parse
 mkdir -p "$IPSET_PATH"
-if [ ! -f "$HESTIA/data/firewall/ipset.conf" ]; then
-	touch $HESTIA/data/firewall/ipset.conf
+if [ ! -f "$LOKAHOST/data/firewall/ipset.conf" ]; then
+	touch $LOKAHOST/data/firewall/ipset.conf
 fi
 
 if [ -z "$data_source" ]; then
@@ -66,10 +66,10 @@ if [ -z "$data_source" ]; then
 		check_args '2' "$#" 'NAME SOURCE [IPVERSION] [AUTOUPDATE] [FORCE]'
 	fi
 
-	data_source="$(get_object_value "$ipset_hstobject" 'LISTNAME' "$ip_name" '$SOURCE')"
-	ip_version="$(get_object_value "$ipset_hstobject" 'LISTNAME' "$ip_name" '$IP_VERSION')"
+	data_source="$(get_object_value "$ipset_lcpobject" 'LISTNAME' "$ip_name" '$SOURCE')"
+	ip_version="$(get_object_value "$ipset_lcpobject" 'LISTNAME' "$ip_name" '$IP_VERSION')"
 else
-	is_object_new "$ipset_hstobject" 'LISTNAME' "$ip_name"
+	is_object_new "$ipset_lcpobject" 'LISTNAME' "$ip_name"
 fi
 
 if [ "$ip_version" != "v4" ] && [ "$ip_version" != "v6" ]; then
@@ -159,36 +159,36 @@ time_n_date=$(date +'%T %F')
 time=$(echo "$time_n_date" | cut -f 1 -d \ )
 date=$(echo "$time_n_date" | cut -f 2 -d \ )
 
-if [ ! -f "${IPSET_PATH}.conf" ] || [ -z "$(get_object_value "$ipset_hstobject" 'LISTNAME' "$ip_name" '$LISTNAME')" ]; then
+if [ ! -f "${IPSET_PATH}.conf" ] || [ -z "$(get_object_value "$ipset_lcpobject" 'LISTNAME' "$ip_name" '$LISTNAME')" ]; then
 
 	# Concatenating rule
 	str="LISTNAME='$ip_name' IP_VERSION='$ip_version' SOURCE='$data_source'"
 	str="$str AUTOUPDATE='$autoupdate' SUSPENDED='no'"
 	str="$str TIME='$time' DATE='$date'"
-	echo "$str" >> $HESTIA/data/firewall/ipset.conf
+	echo "$str" >> $LOKAHOST/data/firewall/ipset.conf
 	log_type="added"
 
 elif [ "$refresh" = "yes" ]; then
 
 	# Update iplist last regen time
-	update_object_value "$ipset_hstobject" 'LISTNAME' "$ip_name" '$TIME' "$time"
-	update_object_value "$ipset_hstobject" 'LISTNAME' "$ip_name" '$DATE' "$date"
+	update_object_value "$ipset_lcpobject" 'LISTNAME' "$ip_name" '$TIME' "$time"
+	update_object_value "$ipset_lcpobject" 'LISTNAME' "$ip_name" '$DATE' "$date"
 	log_type="refreshed"
 
 fi
 
 # Changing permissions
-chmod 660 $HESTIA/data/firewall/ipset.conf
+chmod 660 $LOKAHOST/data/firewall/ipset.conf
 chmod 660 "${IPSET_PATH}/${IPSET_FILE}.iplist"
 
 # Install ipset daily cron updater
-if ! grep --silent --no-messages "v-update-firewall-ipset" $HESTIA/data/queue/daily.pipe; then
+if ! grep --silent --no-messages "v-update-firewall-ipset" $LOKAHOST/data/queue/daily.pipe; then
 	cmd="$BIN/v-update-firewall-ipset yes"
-	echo "$cmd" >> $HESTIA/data/queue/daily.pipe
+	echo "$cmd" >> $LOKAHOST/data/queue/daily.pipe
 fi
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging

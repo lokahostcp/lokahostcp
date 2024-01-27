@@ -1,10 +1,10 @@
 <?php
 
-namespace Hestia\WebApp\Installers\Wordpress;
+namespace Lokahost\WebApp\Installers\Wordpress;
 
-use Hestia\System\Util;
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
-use function Hestiacp\quoteshellarg\quoteshellarg;
+use Lokahost\System\Util;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use function Lokahostcp\quoteshellarg\quoteshellarg;
 
 class WordpressSetup extends BaseSetup {
 	protected $appInfo = [

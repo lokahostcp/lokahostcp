@@ -12,15 +12,15 @@
 
 # Argument definition
 PORT=$1
-NGINX_CONFIG="$HESTIA/nginx/conf/nginx.conf"
+NGINX_CONFIG="$LOKAHOST/nginx/conf/nginx.conf"
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 # Functions
 is_port_valid() {
@@ -34,7 +34,7 @@ is_port_valid() {
 	# Check if PORT is already used
 	BUSY_PORT=$(lsof -i:"$PORT")
 	if [ -n "$BUSY_PORT" ] && [ "$PORT" != "$BACKEND_PORT" ]; then
-		echo "Port is already used by Hestia, please set another one!"
+		echo "Port is already used by Lokahost, please set another one!"
 		log_event "$E_INUSE" "$ARGUMENTS"
 		exit "$E_INUSE"
 	fi
@@ -48,7 +48,7 @@ check_args '1' "$#" 'PORT'
 is_port_valid
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -68,22 +68,22 @@ else
 	sed -i "s/\(proxy_pass http:\/\/localhost:\)[0-9][0-9]*\([^0-9]*\;$\)/\1$PORT\2/" ${NGINX_CONFIG}
 
 	# Check if the web terminal backend is running
-	if [[ $(ps -eaf | grep -i hestia/web-terminal | sed '/^$/d' | wc -l) -gt 1 ]]; then
-		$BIN/v-restart-service hestia-web-terminal
+	if [[ $(ps -eaf | grep -i lokahost/web-terminal | sed '/^$/d' | wc -l) -gt 1 ]]; then
+		$BIN/v-restart-service lokahost-web-terminal
 	fi
 
-	# Check if Hestia is running
-	if [[ $(ps -eaf | grep -i hestia | sed '/^$/d' | wc -l) -gt 1 ]]; then
-		$BIN/v-restart-service hestia
+	# Check if Lokahost is running
+	if [[ $(ps -eaf | grep -i lokahost | sed '/^$/d' | wc -l) -gt 1 ]]; then
+		$BIN/v-restart-service lokahost
 	fi
 fi
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging
-$BIN/v-log-action "system" "Warning" "System" "Hestia Control Panel web terminal port changed (New Value: $PORT, Old Value: $ORIGINAL_PORT)."
+$BIN/v-log-action "system" "Warning" "System" "Lokahost Control Panel web terminal port changed (New Value: $PORT, Old Value: $ORIGINAL_PORT)."
 log_event "$OK" "$ARGUMENTS"
 
 exit

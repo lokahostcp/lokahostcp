@@ -1,8 +1,8 @@
 <?php
 
-namespace Hestia\WebApp\Installers\Symfony;
+namespace Lokahost\WebApp\Installers\Symfony;
 
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
 
 class SymfonySetup extends BaseSetup {
 	protected $appInfo = [

@@ -1,8 +1,8 @@
 <?php
 
-namespace Hestia\WebApp\Installers\Nextcloud;
+namespace Lokahost\WebApp\Installers\Nextcloud;
 
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
 
 class NextcloudSetup extends BaseSetup {
 	protected $appInfo = [

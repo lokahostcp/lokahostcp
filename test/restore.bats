@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-if [ "${PATH#*/usr/local/hestia/bin*}" = "$PATH" ]; then
-    . /etc/profile.d/hestia.sh
+if [ "${PATH#*/usr/local/lokahost/bin*}" = "$PATH" ]; then
+    . /etc/profile.d/lokahost.sh
 fi
 
 load 'test_helper/bats-support/load'
@@ -15,24 +15,24 @@ head /dev/urandom | tr -dc 0-9 | head -c$1
 function setup() {
     # echo "# Setup_file" > &3
     if [ $BATS_TEST_NUMBER = 1 ]; then
-        echo 'user=test-5285' > /tmp/hestia-test-env.sh
-        echo 'user2=test-5286' >> /tmp/hestia-test-env.sh
-        echo 'userbk=testbk-5285' >> /tmp/hestia-test-env.sh
-        echo 'userpass1=test-5285' >> /tmp/hestia-test-env.sh
-        echo 'userpass2=t3st-p4ssw0rd' >> /tmp/hestia-test-env.sh
-        echo 'HESTIA=/usr/local/hestia' >> /tmp/hestia-test-env.sh
-        echo 'domain=test-5285.hestiacp.com' >> /tmp/hestia-test-env.sh
-        echo 'domainuk=test-5285.hestiacp.com.uk' >> /tmp/hestia-test-env.sh
-        echo 'rootdomain=testhestiacp.com' >> /tmp/hestia-test-env.sh
-        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/hestia-test-env.sh
-        echo 'database=test-5285_database' >> /tmp/hestia-test-env.sh
-        echo 'dbuser=test-5285_dbuser' >> /tmp/hestia-test-env.sh
+        echo 'user=test-5285' > /tmp/lokahost-test-env.sh
+        echo 'user2=test-5286' >> /tmp/lokahost-test-env.sh
+        echo 'userbk=testbk-5285' >> /tmp/lokahost-test-env.sh
+        echo 'userpass1=test-5285' >> /tmp/lokahost-test-env.sh
+        echo 'userpass2=t3st-p4ssw0rd' >> /tmp/lokahost-test-env.sh
+        echo 'LOKAHOST=/usr/local/lokahost' >> /tmp/lokahost-test-env.sh
+        echo 'domain=test-5285.lokahost.com' >> /tmp/lokahost-test-env.sh
+        echo 'domainuk=test-5285.lokahost.com.uk' >> /tmp/lokahost-test-env.sh
+        echo 'rootdomain=testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'database=test-5285_database' >> /tmp/lokahost-test-env.sh
+        echo 'dbuser=test-5285_dbuser' >> /tmp/lokahost-test-env.sh
     fi
 
-    source /tmp/hestia-test-env.sh
-    source $HESTIA/func/main.sh
-    source $HESTIA/conf/hestia.conf
-    source $HESTIA/func/ip.sh
+    source /tmp/lokahost-test-env.sh
+    source $LOKAHOST/func/main.sh
+    source $LOKAHOST/conf/lokahost.conf
+    source $LOKAHOST/func/ip.sh
 }
 
 
@@ -48,12 +48,12 @@ function validate_web_domain() {
     refute [ -z "$domain" ]
     refute [ -z "$webproof" ]
 
-    source $HESTIA/func/ip.sh
+    source $LOKAHOST/func/ip.sh
 
     run v-list-web-domain $user $domain
     assert_success
 
-    USER_DATA=$HESTIA/data/users/$user
+    USER_DATA=$LOKAHOST/data/users/$user
     local domain_ip=$(get_object_value 'web' 'DOMAIN' "$domain" '$IP')
     SSL=$(get_object_value 'web' 'DOMAIN' "$domain" '$SSL')
     domain_ip=$(get_real_ip "$domain_ip")
@@ -89,36 +89,36 @@ function validate_web_domain() {
 #----------------------------------------------------------#
 
 #Test backup
-#  Hestia v1.1.1 archive contains:
+#  Lokahost v1.1.1 archive contains:
 #    user: hestia111
 #    web:
-#      - test.hestia.com (+SSL self-signed)
+#      - test.lokahost.com (+SSL self-signed)
 #    dns:
-#      - test.hestia.com
+#      - test.lokahost.com
 #    mail:
-#      - test.hestia.com
+#      - test.lokahost.com
 #    mail acc:
-#      - testaccount@test.hestia.com
+#      - testaccount@test.lokahost.com
 #    db:
 #      - hestia111_db
 #    cron:
 #      - 1: /bin/true
-#  Hestia 1.7.0 archive contains (As zstd format)
+#  Lokahost 1.7.0 archive contains (As zstd format)
 #    user: hestia131
 #    web:
-#      - test.hestia.com (+SSL self-signed)
+#      - test.lokahost.com (+SSL self-signed)
 #        FTP Account
 #        Awstats enabled
 #    dns:
-#      - test.hestia.com
+#      - test.lokahost.com
 #    mail:
-#      - test.hestia.com
+#      - test.lokahost.com
 #        Ratelimit: 10
 #    mail acc:
-#      - testaccount@test.hestia.com
-#           Alias: info@test.hestiacp.com
+#      - testaccount@test.lokahost.com
+#           Alias: info@test.lokahost.com
 #           Ratelimit: 20
-#      - support@test.hestia.com
+#      - support@test.lokahost.com
 #    db:
 #      - hestia170_db
 #    cron:
@@ -139,8 +139,8 @@ function validate_web_domain() {
 #      - 1: /bin/true
 #
 
-# Testing Hestia backups
-@test "Restore[1]: Hestia archive for a non-existing user" {
+# Testing Lokahost backups
+@test "Restore[1]: Lokahost archive for a non-existing user" {
     if [ -d "$HOMEDIR/$userbk" ]; then
         run v-delete-user $userbk
         assert_success
@@ -150,7 +150,7 @@ function validate_web_domain() {
     mkdir -p /backup
 
     local archive_name="hestia111.2020-03-26"
-    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.hestiacp.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
+    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
     run v-restore-user $userbk "${archive_name}.tar"
@@ -159,13 +159,13 @@ function validate_web_domain() {
     rm "/backup/${archive_name}.tar"
 }
 
-@test "Restore[1]: From Hestia [WEB]" {
-    local domain="test.hestia.com"
-    validate_web_domain $userbk $domain 'Hello Hestia'
+@test "Restore[1]: From Lokahost [WEB]" {
+    local domain="test.lokahost.com"
+    validate_web_domain $userbk $domain 'Hello Lokahost'
 }
 
-@test "Restore[1]: From Hestia [DNS]" {
-    local domain="test.hestia.com"
+@test "Restore[1]: From Lokahost [DNS]" {
+    local domain="test.lokahost.com"
 
     run v-list-dns-domain $userbk $domain
     assert_success
@@ -174,38 +174,38 @@ function validate_web_domain() {
     assert_success
 }
 
-@test "Restore[1]: From Hestia [MAIL]" {
-    local domain="test.hestia.com"
+@test "Restore[1]: From Lokahost [MAIL]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-domain $userbk $domain
     assert_success
 }
 
-@test "Restore[1]: From Hestia [MAIL-Account]" {
-    local domain="test.hestia.com"
+@test "Restore[1]: From Lokahost [MAIL-Account]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-account $userbk $domain testaccount
     assert_success
 }
 
-@test "Restore[1]: From Hestia [DB]" {
+@test "Restore[1]: From Lokahost [DB]" {
     run v-list-database $userbk "${userbk}_db"
     assert_success
 }
 
-@test "Restore[1]: From Hestia [CRON]" {
+@test "Restore[1]: From Lokahost [CRON]" {
     run v-list-cron-job $userbk 1
     assert_success
 }
 
-@test "Restore[1]: From Hestia Cleanup" {
+@test "Restore[1]: From Lokahost Cleanup" {
     run v-delete-user $userbk
     assert_success
     refute_output
 }
 
 
-@test "Restore[2]: Hestia archive over a existing user" {
+@test "Restore[2]: Lokahost archive over a existing user" {
     if [ -d "$HOMEDIR/$userbk" ]; then
         run v-delete-user $userbk
         assert_success
@@ -213,14 +213,14 @@ function validate_web_domain() {
     fi
 
     if [ ! -d "$HOMEDIR/$userbk" ]; then
-        run v-add-user $userbk $userbk test@hestia.com
+        run v-add-user $userbk $userbk test@lokahost.com
         assert_success
     fi
 
     mkdir -p /backup
 
     local archive_name="hestia111.2020-03-26"
-    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.hestiacp.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
+    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
     run v-restore-user $userbk "${archive_name}.tar"
@@ -229,13 +229,13 @@ function validate_web_domain() {
     rm "/backup/${archive_name}.tar"
 }
 
-@test "Restore[2]: From Hestia [WEB]" {
-    local domain="test.hestia.com"
-    validate_web_domain $userbk "${domain}" 'Hello Hestia'
+@test "Restore[2]: From Lokahost [WEB]" {
+    local domain="test.lokahost.com"
+    validate_web_domain $userbk "${domain}" 'Hello Lokahost'
 }
 
-@test "Restore[2]: From Hestia [DNS]" {
-    local domain="test.hestia.com"
+@test "Restore[2]: From Lokahost [DNS]" {
+    local domain="test.lokahost.com"
 
     run v-list-dns-domain $userbk $domain
     assert_success
@@ -244,37 +244,37 @@ function validate_web_domain() {
     assert_success
 }
 
-@test "Restore[2]: From Hestia [MAIL]" {
-    local domain="test.hestia.com"
+@test "Restore[2]: From Lokahost [MAIL]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-domain $userbk $domain
     assert_success
 }
 
-@test "Restore[2]: From Hestia [MAIL-Account]" {
-    local domain="test.hestia.com"
+@test "Restore[2]: From Lokahost [MAIL-Account]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-account $userbk $domain testaccount
     assert_success
 }
 
-@test "Restore[2]: From Hestia [DB]" {
+@test "Restore[2]: From Lokahost [DB]" {
     run v-list-database $userbk "${userbk}_db"
     assert_success
 }
 
-@test "Restore[2]: From Hestia [CRON]" {
+@test "Restore[2]: From Lokahost [CRON]" {
     run v-list-cron-job $userbk 1
     assert_success
 }
 
-@test "Restore[2]: From Hestia Cleanup" {
+@test "Restore[2]: From Lokahost Cleanup" {
     run v-delete-user $userbk
     assert_success
     refute_output
 }
 
-@test "Restore[3]: Hestia (zstd) archive for a non-existing user" {
+@test "Restore[3]: Lokahost (zstd) archive for a non-existing user" {
     if [ -d "$HOMEDIR/$userbk" ]; then
         run v-delete-user $userbk
         assert_success
@@ -284,7 +284,7 @@ function validate_web_domain() {
     mkdir -p /backup
 
     local archive_name="hestia170.2022-08-23"
-    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.hestiacp.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
+    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
     run v-restore-user $userbk "${archive_name}.tar"
@@ -293,31 +293,31 @@ function validate_web_domain() {
     rm "/backup/${archive_name}.tar"
 }
 
-@test "Restore[3]: From Hestia [WEB]" {
-    local domain="test.hestia.com"
-    validate_web_domain $userbk $domain 'Hello Hestia'
+@test "Restore[3]: From Lokahost [WEB]" {
+    local domain="test.lokahost.com"
+    validate_web_domain $userbk $domain 'Hello Lokahost'
 }
 
-@test "Restore[3]: From Hestia [WEB] FTP" {
-    local domain="test.hestia.com"
+@test "Restore[3]: From Lokahost [WEB] FTP" {
+    local domain="test.lokahost.com"
     assert_file_contains /etc/passwd "$userbk_test"
     assert_file_contains /etc/passwd "/home/$userbk/web/$domain"
 }
 
-@test "Restore[3]: From Hestia [WEB] Awstats" {
-    local domain="test.hestia.com"
+@test "Restore[3]: From Lokahost [WEB] Awstats" {
+    local domain="test.lokahost.com"
     assert_file_exist /home/$userbk/conf/web/$domain/awstats.conf
 }
 
-@test "Restore[3]: From Hestia [WEB] Custom rule" {
+@test "Restore[3]: From Lokahost [WEB] Custom rule" {
     # check if custom rule is still working
-    local domain="test.hestia.com"
-    validate_web_domain $userbk $domain 'hestia-yes' '/hestia/hestia' 'no'
+    local domain="test.lokahost.com"
+    validate_web_domain $userbk $domain 'lokahost-yes' '/lokahost/lokahost' 'no'
 }
 
 
-@test "Restore[3]: From Hestia [DNS]" {
-    local domain="test.hestia.com"
+@test "Restore[3]: From Lokahost [DNS]" {
+    local domain="test.lokahost.com"
 
     run v-list-dns-domain $userbk $domain
     assert_success
@@ -326,15 +326,15 @@ function validate_web_domain() {
     assert_success
 }
 
-@test "Restore[3]: From Hestia [MAIL]" {
-    local domain="test.hestia.com"
+@test "Restore[3]: From Lokahost [MAIL]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-domain $userbk $domain
     assert_success
 }
 
-@test "Restore[3]: From Hestia [MAIL-Account]" {
-    local domain="test.hestia.com"
+@test "Restore[3]: From Lokahost [MAIL-Account]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-account $userbk $domain testaccount
     assert_success
@@ -345,24 +345,24 @@ function validate_web_domain() {
     assert_file_contains /etc/exim4/domains/$domain/limits "support@$domain:10"
 }
 
-@test "Restore[3]: From Hestia [DB]" {
+@test "Restore[3]: From Lokahost [DB]" {
     run v-list-database $userbk "${userbk}_db"
     assert_success
 }
 
-@test "Restore[3]: From Hestia [CRON]" {
+@test "Restore[3]: From Lokahost [CRON]" {
     run v-list-cron-job $userbk 1
     assert_success
 }
 
 
-@test "Restore[3]: From Hestia Cleanup" {
+@test "Restore[3]: From Lokahost Cleanup" {
     run v-delete-user $userbk
     assert_success
     refute_output
 }
 
-@test "Restore[4]: Hestia (zstd) archive for a existing user" {
+@test "Restore[4]: Lokahost (zstd) archive for a existing user" {
     if [ -d "$HOMEDIR/$userbk" ]; then
         run v-delete-user $userbk
         assert_success
@@ -370,14 +370,14 @@ function validate_web_domain() {
     fi
 
     if [ ! -d "$HOMEDIR/$userbk" ]; then
-        run v-add-user $userbk $userbk test@hestia.com
+        run v-add-user $userbk $userbk test@lokahost.com
         assert_success
     fi
 
     mkdir -p /backup
 
     local archive_name="hestia170.2022-08-23"
-    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.hestiacp.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
+    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
     run v-restore-user $userbk "${archive_name}.tar"
@@ -386,31 +386,31 @@ function validate_web_domain() {
     rm "/backup/${archive_name}.tar"
 }
 
-@test "Restore[4]: From Hestia [WEB]" {
-    local domain="test.hestia.com"
-    validate_web_domain $userbk $domain 'Hello Hestia'
+@test "Restore[4]: From Lokahost [WEB]" {
+    local domain="test.lokahost.com"
+    validate_web_domain $userbk $domain 'Hello Lokahost'
 }
 
-@test "Restore[4]: From Hestia [WEB] FTP" {
-    local domain="test.hestia.com"
+@test "Restore[4]: From Lokahost [WEB] FTP" {
+    local domain="test.lokahost.com"
     assert_file_contains /etc/passwd "$userbk_test"
     assert_file_contains /etc/passwd "/home/$userbk/web/$domain"
 }
 
-@test "Restore[4]: From Hestia [WEB] Awstats" {
-    local domain="test.hestia.com"
+@test "Restore[4]: From Lokahost [WEB] Awstats" {
+    local domain="test.lokahost.com"
     assert_file_exist /home/$userbk/conf/web/$domain/awstats.conf
 }
 
-@test "Restore[4]: From Hestia [WEB] Custom rule" {
+@test "Restore[4]: From Lokahost [WEB] Custom rule" {
     # check if custom rule is still working
-    local domain="test.hestia.com"
-    validate_web_domain $userbk $domain 'hestia-yes' '/hestia/hestia' 'no'
+    local domain="test.lokahost.com"
+    validate_web_domain $userbk $domain 'lokahost-yes' '/lokahost/lokahost' 'no'
 }
 
 
-@test "Restore[4]: From Hestia [DNS]" {
-    local domain="test.hestia.com"
+@test "Restore[4]: From Lokahost [DNS]" {
+    local domain="test.lokahost.com"
 
     run v-list-dns-domain $userbk $domain
     assert_success
@@ -419,15 +419,15 @@ function validate_web_domain() {
     assert_success
 }
 
-@test "Restore[4]: From Hestia [MAIL]" {
-    local domain="test.hestia.com"
+@test "Restore[4]: From Lokahost [MAIL]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-domain $userbk $domain
     assert_success
 }
 
-@test "Restore[4]: From Hestia [MAIL-Account]" {
-    local domain="test.hestia.com"
+@test "Restore[4]: From Lokahost [MAIL-Account]" {
+    local domain="test.lokahost.com"
 
     run v-list-mail-account $userbk $domain testaccount
     assert_success
@@ -438,17 +438,17 @@ function validate_web_domain() {
     assert_file_contains /etc/exim4/domains/$domain/limits "support@$domain:10"
 }
 
-@test "Restore[4]: From Hestia [DB]" {
+@test "Restore[4]: From Lokahost [DB]" {
     run v-list-database $userbk "${userbk}_db"
     assert_success
 }
 
-@test "Restore[4]: From Hestia [CRON]" {
+@test "Restore[4]: From Lokahost [CRON]" {
     run v-list-cron-job $userbk 1
     assert_success
 }
 
-@test "Restore[4]: From Hestia Cleanup" {
+@test "Restore[4]: From Lokahost Cleanup" {
     run v-delete-user $userbk
     assert_success
     refute_output
@@ -466,7 +466,7 @@ function validate_web_domain() {
     mkdir -p /backup
 
     local archive_name="vesta09823.2018-10-18"
-    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.hestiacp.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
+    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
     run v-restore-user $userbk "${archive_name}.tar"
@@ -529,14 +529,14 @@ function validate_web_domain() {
     fi
 
     if [ ! -d "$HOMEDIR/$userbk" ]; then
-        run v-add-user $userbk $userbk test@hestia.com
+        run v-add-user $userbk $userbk test@lokahost.com
         assert_success
     fi
 
     mkdir -p /backup
 
     local archive_name="vesta09823.2018-10-18"
-    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.hestiacp.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
+    run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
     run v-restore-user $userbk "${archive_name}.tar"

@@ -1,5 +1,5 @@
 <?php
-use function Hestiacp\quoteshellarg\quoteshellarg;
+use function Lokahostcp\quoteshellarg\quoteshellarg;
 
 try {
 	require_once "../inc/vendor/autoload.php";
@@ -13,8 +13,8 @@ try {
 }
 
 //die("Error: Disabled");
-define("HESTIA_DIR_BIN", "/usr/local/hestia/bin/");
-define("HESTIA_CMD", "/usr/bin/sudo /usr/local/hestia/bin/");
+define("HESTIA_DIR_BIN", "/usr/local/lokahost/bin/");
+define("HESTIA_CMD", "/usr/bin/sudo /usr/local/lokahost/bin/");
 
 include $_SERVER["DOCUMENT_ROOT"] . "/inc/helpers.php";
 
@@ -38,7 +38,7 @@ function api_error($exit_code, $message, $hst_return, bool $add_log = false, $us
 
 	// Print the message with http_code and exit_code
 	$http_code = $exit_code >= 100 ? $exit_code : exit_code_to_http_code($exit_code);
-	header("Hestia-Exit-Code: $exit_code");
+	header("Lokahost-Exit-Code: $exit_code");
 	http_response_code($http_code);
 	if ($hst_return == "code") {
 		echo $exit_code;
@@ -148,7 +148,7 @@ function api_legacy(array $request_data) {
 			api_error(E_PASSWORD, "Error: authentication failed", $hst_return);
 		}
 	} else {
-		$key = "/usr/local/hestia/data/keys/" . basename($request_data["hash"]);
+		$key = "/usr/local/lokahost/data/keys/" . basename($request_data["hash"]);
 		$v_ip = quoteshellarg(get_real_user_ip());
 		exec(
 			HESTIA_CMD . "v-check-api-key " . quoteshellarg($key) . " " . $v_ip,
@@ -330,7 +330,7 @@ function api_connection(array $request_data) {
 		unset($output);
 	}
 
-	header("Hestia-Exit-Code: $cmd_exit_code");
+	header("Lokahost-Exit-Code: $cmd_exit_code");
 
 	if ($hst_return == "code") {
 		echo $cmd_exit_code;
@@ -359,7 +359,7 @@ if (isset($_POST["access_key"]) || isset($_POST["user"]) || isset($_POST["hash"]
 } else {
 	api_error(
 		405,
-		"Error: data received is null or invalid, check https://hestiacp.com/docs/server-administration/rest-api.html",
+		"Error: data received is null or invalid, check https://lokahost.com/docs/server-administration/rest-api.html",
 		"",
 	);
 }
@@ -386,7 +386,7 @@ if (isset($request_data["access_key"]) && isset($request_data["secret_key"])) {
 } else {
 	api_error(
 		405,
-		"Error: data received is null or invalid, check https://hestiacp.com/docs/server-administration/rest-api.html",
+		"Error: data received is null or invalid, check https://lokahost.com/docs/server-administration/rest-api.html",
 		"",
 	);
 }

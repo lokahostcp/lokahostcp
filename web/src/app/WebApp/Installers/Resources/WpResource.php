@@ -1,8 +1,8 @@
 <?php
 
-namespace Hestia\WebApp\Installers\Resources;
+namespace Lokahost\WebApp\Installers\Resources;
 
-use Hestia\System\HestiaApp;
+use Lokahost\System\HestiaApp;
 
 class WpResource {
 	private $appcontext;

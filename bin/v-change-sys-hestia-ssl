@@ -1,10 +1,10 @@
 #!/bin/bash
-# info: change hestia ssl certificate
+# info: change lokahost ssl certificate
 # options: SSL_DIR [RESTART]
 #
-# example: v-change-sys-hestia-ssl /home/new/dir/path yes
+# example: v-change-sys-lokahost-ssl /home/new/dir/path yes
 #
-# This function changes hestia SSL certificate and the key.
+# This function changes lokahost SSL certificate and the key.
 
 #----------------------------------------------------------#
 #                Variables & Functions                     #
@@ -16,14 +16,14 @@ ssl_dir=$1
 restart=$2
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-# shellcheck source=/usr/local/hestia/func/domain.sh
-source $HESTIA/func/domain.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/domain.sh
+source $LOKAHOST/func/domain.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -33,7 +33,7 @@ check_args '1' "$#" 'SSL_DIR [RESTART]'
 is_format_valid 'ssl_dir'
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -57,16 +57,16 @@ else
 fi
 
 # Adding new certificate
-cp -f $ssl_dir/certificate.crt $HESTIA/ssl/certificate.crt
-cp -f $ssl_dir/certificate.key $HESTIA/ssl/certificate.key
+cp -f $ssl_dir/certificate.crt $LOKAHOST/ssl/certificate.crt
+cp -f $ssl_dir/certificate.key $LOKAHOST/ssl/certificate.key
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Restarting web server
 if [ "$restart" != 'no' ]; then
-	kill -HUP $(cat /run/hestia-nginx.pid)
+	kill -HUP $(cat /run/lokahost-nginx.pid)
 	$BIN/v-restart-mail "$restart"
 fi
 

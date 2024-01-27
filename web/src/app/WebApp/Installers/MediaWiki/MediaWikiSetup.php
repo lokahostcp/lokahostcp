@@ -1,9 +1,9 @@
 <?php
 
-namespace Hestia\WebApp\Installers\MediaWiki;
+namespace Lokahost\WebApp\Installers\MediaWiki;
 
-use Hestia\System\Util;
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahost\System\Util;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
 
 class MediaWikiSetup extends BaseSetup {
 	protected $appInfo = [

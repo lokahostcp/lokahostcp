@@ -18,7 +18,7 @@
 <?php $_SESSION["unset_alerts"] = true; ?>
 
 <?php
-$customScriptDirectory = new DirectoryIterator($_SERVER["HESTIA"] . "/web/js/custom_scripts");
+$customScriptDirectory = new DirectoryIterator($_SERVER["LOKAHOST"] . "/web/js/custom_scripts");
 foreach ($customScriptDirectory as $customScript) {
 	$extension = $customScript->getExtension();
 	if ($extension === "js") {

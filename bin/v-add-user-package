@@ -14,14 +14,14 @@ package=$2
 rewrite=$3
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-# shellcheck source=/usr/local/hestia/func/domain.sh
-source $HESTIA/func/domain.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/domain.sh
+source $LOKAHOST/func/domain.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 is_package_consistent() {
 	source_conf "$tmpfile"
@@ -104,7 +104,7 @@ fi
 is_package_consistent
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -137,12 +137,12 @@ SHELL_JAIL_ENABLED='$SHELL_JAIL_ENABLED'
 BACKUPS='$BACKUPS'
 TIME='$time'
 DATE='$date'
-" > "$HESTIA/data/packages/$package.pkg"
+" > "$LOKAHOST/data/packages/$package.pkg"
 
-chmod 644 "$HESTIA/data/packages/$package.pkg"
+chmod 644 "$LOKAHOST/data/packages/$package.pkg"
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging

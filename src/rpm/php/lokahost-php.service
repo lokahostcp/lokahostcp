@@ -1,0 +1,16 @@
+[Unit]
+Description=Lokahost PHP daemon
+Documentation=https://www.lokahost.com
+PartOf=lokahost.service
+
+[Service]
+Type=forking
+PIDFile=/run/lokahost-php.pid
+ExecStart=/usr/local/lokahost/php/sbin/lokahost-php --fpm-config /usr/local/lokahost/php/etc/php-fpm.conf
+ExecReload=/bin/sh -c "/bin/kill -s HUP $(/bin/cat /run/lokahost-php.pid)"
+ExecStop=/usr/bin/php -r '$pid=(int)file_get_contents("/run/lokahost-php.pid");posix_kill($pid,SIGTERM);while(posix_kill($pid,0)){sleep(0);}'
+ExecStartPre=/bin/bash -c "/bin/systemctl set-environment HOSTNAME=$(/usr/bin/hostname)"
+Environment="LOKAHOST=/usr/local/lokahost"
+
+[Install]
+WantedBy=lokahost.service

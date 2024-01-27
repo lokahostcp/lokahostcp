@@ -2,7 +2,7 @@
 
 #===========================================================================#
 #                                                                           #
-# Hestia Control Panel - Firewall Function Library                          #
+# Lokahost Control Panel - Firewall Function Library                          #
 #                                                                           #
 #===========================================================================#
 

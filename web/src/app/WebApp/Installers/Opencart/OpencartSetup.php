@@ -1,8 +1,8 @@
 <?php
 
-namespace Hestia\WebApp\Installers\Opencart;
+namespace Lokahost\WebApp\Installers\Opencart;
 
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
 
 class OpencartSetup extends BaseSetup {
 	protected $appInfo = [

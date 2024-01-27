@@ -16,15 +16,15 @@ key=$(echo "$1" | tr '[:lower:]' '[:upper:]')
 value=$2
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -40,13 +40,13 @@ format_no_quotes "$value" 'value'
 change_sys_value "$key" "$value"
 
 # Sort configuration file in alphabetical order on change
-sort $HESTIA/conf/hestia.conf -o /tmp/updconf
-mv $HESTIA/conf/hestia.conf $HESTIA/conf/hestia.conf.bak
-mv /tmp/updconf $HESTIA/conf/hestia.conf
-rm -f $HESTIA/conf/hestia.conf.bak
+sort $LOKAHOST/conf/lokahost.conf -o /tmp/updconf
+mv $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/lokahost.conf.bak
+mv /tmp/updconf $LOKAHOST/conf/lokahost.conf
+rm -f $LOKAHOST/conf/lokahost.conf.bak
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging

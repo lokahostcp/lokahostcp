@@ -1,5 +1,5 @@
 #!/bin/bash
-# info: remove file manager functionality from Hestia Control Panel
+# info: remove file manager functionality from Lokahost Control Panel
 # options: [MODE]
 #
 # example: v-delete-sys-filemanager
@@ -14,14 +14,14 @@ MODE=$1
 FORCE=$2
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
-FM_INSTALL_DIR="$HESTIA/web/fm"
+FM_INSTALL_DIR="$LOKAHOST/web/fm"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -33,18 +33,18 @@ if [ "x$(id -u)" != 'x0' ]; then
 	exit 10
 fi
 
-# Ensure that $HESTIA (/usr/local/hestia/) and other variables are valid.
-if [ -z "$HESTIA" ]; then
-	HESTIA="/usr/local/hestia"
+# Ensure that $LOKAHOST (/usr/local/lokahost/) and other variables are valid.
+if [ -z "$LOKAHOST" ]; then
+	LOKAHOST="/usr/local/lokahost"
 fi
 
-if [ -z "$HOMEDIR" ] || [ -z "$HESTIA_INSTALL_DIR" ]; then
-	echo "Error: Hestia environment vars not present"
+if [ -z "$HOMEDIR" ] || [ -z "$LOKAHOST_INSTALL_DIR" ]; then
+	echo "Error: Lokahost environment vars not present"
 	exit 2
 fi
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 # Check if File Manager components are installed
 if [ "$FORCE" != "yes" ] && [ ! -e "$FM_INSTALL_DIR" ]; then

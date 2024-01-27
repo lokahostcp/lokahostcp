@@ -20,22 +20,22 @@ if [ -z "$BACKUP" ]; then
 fi
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-# shellcheck source=/usr/local/hestia/func/domain.sh
-source $HESTIA/func/domain.sh
-# shellcheck source=/usr/local/hestia/func/ip.sh
-source $HESTIA/func/ip.sh
-# shellcheck source=/usr/local/hestia/func/db.sh
-source $HESTIA/func/db.sh
-# shellcheck source=/usr/local/hestia/func/rebuild.sh
-source $HESTIA/func/rebuild.sh
-# shellcheck source=/usr/local/hestia/func/backup.sh
-source $HESTIA/func/backup.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/domain.sh
+source $LOKAHOST/func/domain.sh
+# shellcheck source=/usr/local/lokahost/func/ip.sh
+source $LOKAHOST/func/ip.sh
+# shellcheck source=/usr/local/lokahost/func/db.sh
+source $LOKAHOST/func/db.sh
+# shellcheck source=/usr/local/lokahost/func/rebuild.sh
+source $LOKAHOST/func/rebuild.sh
+# shellcheck source=/usr/local/lokahost/func/backup.sh
+source $LOKAHOST/func/backup.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -45,7 +45,7 @@ check_args '2' "$#" 'USER BACKUP'
 is_format_valid 'user' 'backup'
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -55,7 +55,7 @@ check_hestia_demo_mode
 disk_usage=$(df $BACKUP | tail -n1 | tr ' ' '\n' | grep % | cut -f 1 -d %)
 if [ "$disk_usage" -ge "$BACKUP_DISK_LIMIT" ]; then
 	echo "Error: Not enough disk space" | $SENDMAIL -s "$subj" $email $notify
-	sed -i "/ $user /d" $HESTIA/data/queue/backup.pipe
+	sed -i "/ $user /d" $LOKAHOST/data/queue/backup.pipe
 	check_result $E_DISK "Not enough disk space"
 fi
 
@@ -84,19 +84,19 @@ if [ ! -e "$BACKUP/$backup" ]; then
 	if [ -z "$downloaded" ]; then
 		subj="Download of $backup failed for $user"
 		$BIN/v-add-user-notification $user "$subj" "<p class'u-text-bold'>Unable to retrieve backup file from remote server.</p><p><span class='u-text-bold'>Error:</span> $backup file doesn't exist in <code>'${BACKUP}'</code> directory.</p>"
-		sed -i "/v-download-backup $user /d" $HESTIA/data/queue/backup.pipe
+		sed -i "/v-download-backup $user /d" $LOKAHOST/data/queue/backup.pipe
 		check_result "$E_NOTEXIST" "backup file $backup doesn't exist in '${BACKUP}' folder"
 	else
 		if [ -e "$BACKUP/$backup" ]; then
 			chmod 0640 $BACKUP/$backup
-			chown hestiaweb:hestiaweb $BACKUP/$backup
+			chown lokahostweb:lokahostweb $BACKUP/$backup
 			echo "rm $BACKUP/$backup" | at now + 1 day
 		fi
 	fi
 fi
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Send notification
@@ -109,7 +109,7 @@ if [ -e "$BACKUP/$backup" ]; then
 fi
 
 # Cleaning restore queue
-sed -i "/v-download-backup $user /d" $HESTIA/data/queue/backup.pipe
+sed -i "/v-download-backup $user /d" $LOKAHOST/data/queue/backup.pipe
 
 # Logging
 $BIN/v-log-action "system" "Info" "Backup" "Backup download requested (User: $user, Archive: $backup)."

@@ -1,5 +1,5 @@
 <?php
-use function Hestiacp\quoteshellarg\quoteshellarg;
+use function Lokahostcp\quoteshellarg\quoteshellarg;
 
 ob_start();
 $TAB = "WEB";
@@ -38,11 +38,11 @@ unset($output);
 if (!empty($_GET["app"])) {
 	$app = basename($_GET["app"]);
 
-	$hestia = new \Hestia\System\HestiaApp();
-	$app_installer_class = "\Hestia\WebApp\Installers\\" . $app . "\\" . $app . "Setup";
+	$lokahost = new \Lokahost\System\HestiaApp();
+	$app_installer_class = "\Lokahost\WebApp\Installers\\" . $app . "\\" . $app . "Setup";
 	if (class_exists($app_installer_class)) {
 		try {
-			$app_installer = new $app_installer_class($v_domain, $hestia);
+			$app_installer = new $app_installer_class($v_domain, $lokahost);
 			$info = $app_installer->info();
 			foreach ($php_versions as $version) {
 				if (in_array($version, $info["php_support"])) {
@@ -61,7 +61,7 @@ if (!empty($_GET["app"])) {
 				);
 			}
 			if ($info["enabled"] == true) {
-				$installer = new \Hestia\WebApp\AppWizard($app_installer, $v_domain, $hestia);
+				$installer = new \Lokahost\WebApp\AppWizard($app_installer, $v_domain, $lokahost);
 				$GLOBALS["WebappInstaller"] = $installer;
 			}
 		} catch (Exception $e) {
@@ -108,7 +108,7 @@ if (!empty($installer)) {
 	$appInstallers = glob(__DIR__ . "/../../src/app/WebApp/Installers/*/*.php");
 	$v_web_apps = [];
 	foreach ($appInstallers as $app) {
-		$hestia = new \Hestia\System\HestiaApp();
+		$lokahost = new \Lokahost\System\HestiaApp();
 		if (
 			preg_match(
 				"/Installers\/([a-zA-Z][a-zA-Z0,9].*)\/([a-zA-Z][a-zA-Z0,9].*).php/",
@@ -118,8 +118,8 @@ if (!empty($installer)) {
 		) {
 			if ($matches[1] != "Resources") {
 				$app_installer_class =
-					"\Hestia\WebApp\Installers\\" . $matches[1] . "\\" . $matches[1] . "Setup";
-				$app_installer = new $app_installer_class($v_domain, $hestia);
+					"\Lokahost\WebApp\Installers\\" . $matches[1] . "\\" . $matches[1] . "Setup";
+				$app_installer = new $app_installer_class($v_domain, $lokahost);
 				$appInstallerInfo = $app_installer->info();
 				$supported = false;
 				$supported_versions = [];

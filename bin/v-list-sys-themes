@@ -15,12 +15,12 @@
 format=${1-shell}
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 # Define array for available themes
 available_themes=()
@@ -28,16 +28,16 @@ available_themes=()
 # Function to process CSS theme files
 get_themes() {
 	# Retrieve list of system themes
-	if [ -d "$HESTIA_THEMES" ]; then
-		for file in "$HESTIA_THEMES"/*.min.css; do
+	if [ -d "$LOKAHOST_THEMES" ]; then
+		for file in "$LOKAHOST_THEMES"/*.min.css; do
 			filename=$(basename "$file" .min.css)
 			available_themes+=("${filename%.*}")
 		done
 	fi
 
 	# Check for existence of custom themes folder and iterate through items
-	if [ -d "$HESTIA_THEMES_CUSTOM" ] && [ "$(ls -A "$HESTIA_THEMES_CUSTOM")" ]; then
-		for file in "$HESTIA_THEMES_CUSTOM"/*.css; do
+	if [ -d "$LOKAHOST_THEMES_CUSTOM" ] && [ "$(ls -A "$LOKAHOST_THEMES_CUSTOM")" ]; then
+		for file in "$LOKAHOST_THEMES_CUSTOM"/*.css; do
 			filename=$(basename "$file" .css)
 			available_themes+=("${filename%.*}")
 		done
@@ -105,7 +105,7 @@ case $format in
 esac
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 exit

@@ -8,12 +8,12 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-# shellcheck source=/usr/local/hestia/conf/hestia.conf
-source $HESTIA/conf/hestia.conf
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
+source $LOKAHOST/conf/lokahost.conf
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -34,31 +34,31 @@ fi
 #----------------------------------------------------------#
 
 # Remove apache2 from config
-sed -i "/^WEB_PORT/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
-sed -i "/^WEB_SSL/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
-sed -i "/^WEB_SSL_PORT/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
-sed -i "/^WEB_RGROUPS/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
-sed -i "/^WEB_SYSTEM/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
+sed -i "/^WEB_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^WEB_SSL/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^WEB_SSL_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^WEB_RGROUPS/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^WEB_SYSTEM/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
 
 # Remove nginx (proxy) from config
-sed -i "/^PROXY_PORT/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
-sed -i "/^PROXY_SSL_PORT/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
-sed -i "/^PROXY_SYSTEM/d" $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
+sed -i "/^PROXY_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^PROXY_SSL_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^PROXY_SYSTEM/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
 
 # Add Nginx settings to config
-echo "WEB_PORT='80'" >> $HESTIA/conf/hestia.conf
-echo "WEB_SSL='openssl'" >> $HESTIA/conf/hestia.conf
-echo "WEB_SSL_PORT='443'" >> $HESTIA/conf/hestia.conf
-echo "WEB_SYSTEM='nginx'" >> $HESTIA/conf/hestia.conf
+echo "WEB_PORT='80'" >> $LOKAHOST/conf/lokahost.conf
+echo "WEB_SSL='openssl'" >> $LOKAHOST/conf/lokahost.conf
+echo "WEB_SSL_PORT='443'" >> $LOKAHOST/conf/lokahost.conf
+echo "WEB_SYSTEM='nginx'" >> $LOKAHOST/conf/lokahost.conf
 
 # Add Nginx settings to config
-echo "WEB_PORT='80'" >> $HESTIA/conf/defaults/hestia.conf
-echo "WEB_SSL='openssl'" >> $HESTIA/conf/defaults/hestia.conf
-echo "WEB_SSL_PORT='443'" >> $HESTIA/conf/defaults/hestia.conf
-echo "WEB_SYSTEM='nginx'" >> $HESTIA/conf/defaults/hestia.conf
+echo "WEB_PORT='80'" >> $LOKAHOST/conf/defaults/lokahost.conf
+echo "WEB_SSL='openssl'" >> $LOKAHOST/conf/defaults/lokahost.conf
+echo "WEB_SSL_PORT='443'" >> $LOKAHOST/conf/defaults/lokahost.conf
+echo "WEB_SYSTEM='nginx'" >> $LOKAHOST/conf/defaults/lokahost.conf
 
-rm $HESTIA/conf/defaults/hestia.conf
-cp $HESTIA/conf/hestia.conf $HESTIA/conf/defaults/hestia.conf
+rm $LOKAHOST/conf/defaults/lokahost.conf
+cp $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
 
 # Rebuild web config
 

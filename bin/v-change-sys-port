@@ -12,15 +12,15 @@
 
 # Argument definition
 PORT=$1
-NGINX_CONFIG="$HESTIA/nginx/conf/nginx.conf"
+NGINX_CONFIG="$LOKAHOST/nginx/conf/nginx.conf"
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source "$HESTIA/func/main.sh"
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source "$LOKAHOST/func/main.sh"
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 # Functions
 is_port_valid() {
@@ -34,7 +34,7 @@ is_port_valid() {
 	# Check if PORT is already used
 	BUSY_PORT=$(lsof -i:"$PORT")
 	if [ -n "$BUSY_PORT" ] && [ "$PORT" != "$BACKEND_PORT" ]; then
-		echo "Port is already used by Hestia, please set anotherone!"
+		echo "Port is already used by Lokahost, please set anotherone!"
 		log_event "$E_INUSE" "$ARGUMENTS"
 		exit "$E_INUSE"
 	fi
@@ -48,7 +48,7 @@ check_args '1' "$#" 'PORT'
 is_port_valid
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -68,18 +68,18 @@ else
 	# Replace port in config files.
 	sed -i "s/\(listen[ \t]*.*[: \t]\)[0-9][0-9]*\([^0-9]*ssl\;$\)/\1$PORT\2/" "$NGINX_CONFIG"
 	if [ -d /etc/roundcube/ ]; then
-		sed -i "/password_hestia_port/c\$rcmail_config['password_hestia_port'] = '$PORT';" /etc/roundcube/plugins/password/config.inc.php
+		sed -i "/password_lokahost_port/c\$rcmail_config['password_lokahost_port'] = '$PORT';" /etc/roundcube/plugins/password/config.inc.php
 	fi
 	if [ -d /etc/snappymail/ ]; then
-		sed -i "/\"hestia_port\":/c\\\"hestia_host\": $PORT" /etc/snappymail/data/_data_/_default_/configs/plugin-change-password.json
+		sed -i "/\"lokahost_port\":/c\\\"lokahost_host\": $PORT" /etc/snappymail/data/_data_/_default_/configs/plugin-change-password.json
 	fi
 
-	if [ -f "$HESTIA/data/firewall/rules.conf" ]; then
-		sed -i "/COMMENT='HESTIA'/c\RULE='2' ACTION='ACCEPT' PROTOCOL='TCP' PORT='$PORT' IP='0.0.0.0/0' COMMENT='HESTIA' SUSPENDED='no' TIME='07:40:16' DATE='2014-05-25'" "$HESTIA/data/firewall/rules.conf"
+	if [ -f "$LOKAHOST/data/firewall/rules.conf" ]; then
+		sed -i "/COMMENT='LOKAHOST'/c\RULE='2' ACTION='ACCEPT' PROTOCOL='TCP' PORT='$PORT' IP='0.0.0.0/0' COMMENT='LOKAHOST' SUSPENDED='no' TIME='07:40:16' DATE='2014-05-25'" "$LOKAHOST/data/firewall/rules.conf"
 	fi
 
-	if [ -f "$HESTIA/data/firewall/chains.conf" ]; then
-		sed -i "/CHAIN='HESTIA'/c\CHAIN='HESTIA' PORT='$PORT' PROTOCOL='TCP'" "$HESTIA/data/firewall/chains.conf"
+	if [ -f "$LOKAHOST/data/firewall/chains.conf" ]; then
+		sed -i "/CHAIN='LOKAHOST'/c\CHAIN='LOKAHOST' PORT='$PORT' PROTOCOL='TCP'" "$LOKAHOST/data/firewall/chains.conf"
 	fi
 
 	# Restart services
@@ -87,20 +87,20 @@ else
 		"$BIN/v-restart-service" iptables
 	fi
 
-	# Check if Hestia is running
-	if [[ $(ps -eaf | grep -i hestia | sed '/^$/d' | wc -l) -gt 1 ]]; then
-		"$BIN/v-restart-service" hestia
+	# Check if Lokahost is running
+	if [[ $(ps -eaf | grep -i lokahost | sed '/^$/d' | wc -l) -gt 1 ]]; then
+		"$BIN/v-restart-service" lokahost
 	fi
 fi
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging
-"$BIN/v-log-action" "system" "Warning" "System" "Hestia Control Panel backend port changed (New Value: $PORT, Old Value: $ORIGINAL_PORT)."
+"$BIN/v-log-action" "system" "Warning" "System" "Lokahost Control Panel backend port changed (New Value: $PORT, Old Value: $ORIGINAL_PORT)."
 if [ $LISTEN_ROWS -gt 1 ]; then
-	"$BIN/v-log-action" "system" "Warning" "System" "Hestia Control Panel backend port: Use first of $LISTEN_ROWS listened ports in $NGINX_CONFIG"
+	"$BIN/v-log-action" "system" "Warning" "System" "Lokahost Control Panel backend port: Use first of $LISTEN_ROWS listened ports in $NGINX_CONFIG"
 fi
 log_event "$OK" "$ARGUMENTS"
 

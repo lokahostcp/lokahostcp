@@ -1,9 +1,9 @@
 <?php
 
-namespace Hestia\WebApp\Installers\Grav;
+namespace Lokahost\WebApp\Installers\Grav;
 
-use Hestia\System\Util;
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahost\System\Util;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
 
 class GravSetup extends BaseSetup {
 	protected $appInfo = [

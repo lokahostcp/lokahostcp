@@ -9,15 +9,15 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
-source $HESTIA/func/db.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+source $LOKAHOST/func/db.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 # upgrade config file
-source "$HESTIA/install/upgrade/upgrade.conf"
+source "$LOKAHOST/install/upgrade/upgrade.conf"
 
 MODE=$2
 UPDATE="no"
@@ -42,12 +42,12 @@ if [ "x$(id -u)" != 'x0' ]; then
 	exit 10
 fi
 
-# Ensure that $HESTIA (/usr/local/hestia/) and other variables are valid.
-if [ -z "$HESTIA" ]; then
-	HESTIA="/usr/local/hestia"
+# Ensure that $LOKAHOST (/usr/local/lokahost/) and other variables are valid.
+if [ -z "$LOKAHOST" ]; then
+	LOKAHOST="/usr/local/lokahost"
 fi
 
-if [ -z "$HOMEDIR" ] || [ -z "$HESTIA_COMMON_DIR" ]; then
+if [ -z "$HOMEDIR" ] || [ -z "$LOKAHOST_COMMON_DIR" ]; then
 	echo "ERROR: Environment variables not present, installation aborted."
 	exit 2
 fi
@@ -74,7 +74,7 @@ if [ -f "/var/lib/roundcube/index.php" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -97,26 +97,26 @@ if [ "$UPDATE" == "no" ]; then
 	cp $RC_INSTALL_DIR/config/defaults.inc.php $RC_CONFIG_DIR/defaults.inc.php
 	rm -f -r $RC_INSTALL_DIR/config/
 	ln -s $RC_CONFIG_DIR/ ./config
-	# Replace with Hestia config
-	cp -f $HESTIA_COMMON_DIR/roundcube/main.inc.php $RC_CONFIG_DIR/config.inc.php
-	cp -f $HESTIA_COMMON_DIR/roundcube/mimetypes.php $RC_CONFIG_DIR/mimetypes.php
+	# Replace with Lokahost config
+	cp -f $LOKAHOST_COMMON_DIR/roundcube/main.inc.php $RC_CONFIG_DIR/config.inc.php
+	cp -f $LOKAHOST_COMMON_DIR/roundcube/mimetypes.php $RC_CONFIG_DIR/mimetypes.php
 	chmod 644 $RC_CONFIG_DIR/*.php
 
-	cp -f $HESTIA_COMMON_DIR/roundcube/hestia.php $RC_INSTALL_DIR/plugins/password/drivers/
+	cp -f $LOKAHOST_COMMON_DIR/roundcube/lokahost.php $RC_INSTALL_DIR/plugins/password/drivers/
 	mkdir -p $RC_CONFIG_DIR/plugins/password
 	mkdir -p $RC_CONFIG_DIR/plugins/newmail_notifier
 	mkdir -p $RC_CONFIG_DIR/plugins/zipdownload
 
 	# Allow changes to the respective config / Create symlinks to /etc/roundcube/
-	cp -f $HESTIA_COMMON_DIR/roundcube/config.inc.php $RC_CONFIG_DIR/plugins/password/config.inc.php
+	cp -f $LOKAHOST_COMMON_DIR/roundcube/config.inc.php $RC_CONFIG_DIR/plugins/password/config.inc.php
 	ln -s $RC_CONFIG_DIR/plugins/password/config.inc.php ./plugins/password/config.inc.php
-	cp -f $HESTIA_COMMON_DIR/roundcube/plugins/config_newmail_notifier.inc.php $RC_CONFIG_DIR/plugins/newmail_notifier/config.inc.php
+	cp -f $LOKAHOST_COMMON_DIR/roundcube/plugins/config_newmail_notifier.inc.php $RC_CONFIG_DIR/plugins/newmail_notifier/config.inc.php
 	ln -s $RC_CONFIG_DIR/plugins/newmail_notifier/config.inc.php ./plugins/newmail_notifier/config.inc.php
-	cp -f $HESTIA_COMMON_DIR/roundcube/plugins/config_zipdownload.inc.php $RC_CONFIG_DIR/plugins/zipdownload/config.inc.php
+	cp -f $LOKAHOST_COMMON_DIR/roundcube/plugins/config_zipdownload.inc.php $RC_CONFIG_DIR/plugins/zipdownload/config.inc.php
 	ln -s $RC_CONFIG_DIR/plugins/zipdownload/config.inc.php ./plugins/zipdownload/config.inc.php
 
 	# Set up correct permissions roundcube
-	chown -R root:hestiamail $RC_CONFIG_DIR/
+	chown -R root:lokahostmail $RC_CONFIG_DIR/
 	chmod 751 -R $RC_CONFIG_DIR
 	chmod 644 $RC_CONFIG_DIR/config.inc.php
 	chmod 644 $RC_CONFIG_DIR/plugins/password/config.inc.php
@@ -127,13 +127,13 @@ if [ "$UPDATE" == "no" ]; then
 	echo "User-agent: *" > /var/lib/roundcube/robots.txt
 	echo "Disallow: /" >> /var/lib/roundcube/robots.txt
 
-	chown -R root:hestiamail $RC_INSTALL_DIR
+	chown -R root:lokahostmail $RC_INSTALL_DIR
 
 	# Log file
 	if [ ! -d $RC_LOG ]; then
 		mkdir $RC_LOG
 	fi
-	chown hestiamail:hestiamail $RC_LOG
+	chown lokahostmail:lokahostmail $RC_LOG
 	chmod 751 $RC_LOG
 
 	if [ ! -z "$(echo "$DB_SYSTEM" | grep -E 'mysql|pgsql')" ]; then
@@ -165,8 +165,8 @@ if [ "$UPDATE" == "no" ]; then
 	rm -f -r $RC_INSTALL_DIR/$RC_FILE
 	rm -f -r $RC_INSTALL_DIR/$RC_EXTRACT
 
-	# Updating hestia.conf
-	if [ -z "$(grep WEBMAIL_SYSTEM $HESTIA/conf/hestia.conf)" ]; then
+	# Updating lokahost.conf
+	if [ -z "$(grep WEBMAIL_SYSTEM $LOKAHOST/conf/lokahost.conf)" ]; then
 		$BIN/v-change-sys-config-value 'WEBMAIL_SYSTEM' 'roundcube'
 	else
 		if [ -z "$(echo "$WEBMAIL_SYSTEM" | grep -w 'roundcube')" ]; then
@@ -192,7 +192,7 @@ else
 	export COMPOSER_ALLOW_SUPERUSER=1
 	$RC_INSTALL_DIR/bin/update.sh --version "$version" > /dev/null 2>&1
 	$RC_INSTALL_DIR/bin/indexcontacts.sh > /dev/null 2>&1
-	chown -R root:hestiamail $RC_INSTALL_DIR
+	chown -R root:lokahostmail $RC_INSTALL_DIR
 
 	#clean up the mess
 	if [ -d "$RC_INSTALL_DIR/installer" ]; then
@@ -203,7 +203,7 @@ else
 fi
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 if [ "$UPDATE" = "yes" ]; then

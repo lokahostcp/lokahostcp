@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hestia Control Panel upgrade script for target version 1.5.6
+# Lokahost Control Panel upgrade script for target version 1.5.6
 
 #######################################################################################
 #######                      Place additional commands below.                   #######
@@ -23,5 +23,5 @@ upgrade_config_set_value 'UPGRADE_UPDATE_FILEMANAGER_CONFIG' 'false'
 
 echo "[ * ] Refresh Hostname SSL..."
 hostname=$(hostname)
-user=$($HESTIA/bin/v-search-domain-owner "$hostname")
-$HESTIA/bin/v-update-host-certificate "$user" "$hostname"
+user=$($LOKAHOST/bin/v-search-domain-owner "$hostname")
+$LOKAHOST/bin/v-update-host-certificate "$user" "$hostname"

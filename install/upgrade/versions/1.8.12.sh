@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hestia Control Panel upgrade script for target version 1.8.11
+# Lokahost Control Panel upgrade script for target version 1.8.11
 
 #######################################################################################
 #######                      Place additional commands below.                   #######
@@ -29,8 +29,8 @@ SM_CONFIG_DIR="/etc/snappymail"
 SM_LOG="/var/log/snappymail"
 
 if [ -d "/var/lib/snappymail" ]; then
-	chown hestiamail:hestiamail /var/lib/snappymail
-	chown hestiamail:hestiamail /etc/snappymail
+	chown lokahostmail:lokahostmail /var/lib/snappymail
+	chown lokahostmail:lokahostmail /etc/snappymail
 fi
 
 sed -i "s/disable_functions =.*/disable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority/g" /etc/php/*/cli/php.ini

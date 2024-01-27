@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hestia Control Panel upgrade script for target version 1.6.13
+# Lokahost Control Panel upgrade script for target version 1.6.13
 
 #######################################################################################
 #######                      Place additional commands below.                   #######

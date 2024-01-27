@@ -7,37 +7,37 @@ if [ "$1" != "configure" ]; then
 fi
 
 # Run triggers below only on updates
-if [ ! -e "/usr/local/hestia/data/users/" ]; then
+if [ ! -e "/usr/local/lokahost/data/users/" ]; then
 	exit
 fi
 
 # Check if preinstall hook exists
-if [ -e "/etc/hestiacp/hooks/php/pre_install.sh" ]; then
-	/etc/hestiacp/hooks/php/pre_install.sh
+if [ -e "/etc/lokahost/hooks/php/pre_install.sh" ]; then
+	/etc/lokahost/hooks/php/pre_install.sh
 fi
 
 ###############################################################
 #                Initialize functions/variables               #
 ###############################################################
 
-if [ -z "$HESTIA" ]; then
-	export HESTIA='/usr/local/hestia'
-	PATH=$PATH:/usr/local/hestia/bin
+if [ -z "$LOKAHOST" ]; then
+	export LOKAHOST='/usr/local/lokahost'
+	PATH=$PATH:/usr/local/lokahost/bin
 	export PATH
 fi
 
 # Load upgrade functions and variables
-source /usr/local/hestia/func/main.sh
-source /usr/local/hestia/func/upgrade.sh
-source /usr/local/hestia/conf/hestia.conf
-source /usr/local/hestia/install/upgrade/upgrade.conf
+source /usr/local/lokahost/func/main.sh
+source /usr/local/lokahost/func/upgrade.sh
+source /usr/local/lokahost/conf/lokahost.conf
+source /usr/local/lokahost/install/upgrade/upgrade.conf
 
-# Restart hestia service
-if [ -f "/etc/init.d/hestia" ]; then
-	systemctl restart hestia > /dev/null 2>&1
+# Restart lokahost service
+if [ -f "/etc/init.d/lokahost" ]; then
+	systemctl restart lokahost > /dev/null 2>&1
 fi
 
 # Check if preinstall hook exists
-if [ -e "/etc/hestiacp/hooks/php/post_install.sh" ]; then
-	/etc/hestiacp/hooks/php/post_install.sh
+if [ -e "/etc/lokahost/hooks/php/post_install.sh" ]; then
+	/etc/lokahost/hooks/php/post_install.sh
 fi

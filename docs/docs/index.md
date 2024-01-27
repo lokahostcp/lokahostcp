@@ -47,8 +47,8 @@
 
 ## Community
 
-- [Hestia Nginx Cache](/docs/community/hestia-nginx-cache)
-- [Ioncube installer for Hestia](/docs/community/ioncube-hestia-installer)
+- [Lokahost Nginx Cache](/docs/community/lokahost-nginx-cache)
+- [Ioncube installer for Lokahost](/docs/community/ioncube-lokahost-installer)
 - [Install script generator](/docs/community/install-script-generator)
 
 ## Reference

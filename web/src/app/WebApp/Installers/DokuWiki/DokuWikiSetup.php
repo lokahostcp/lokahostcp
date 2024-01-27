@@ -1,9 +1,9 @@
 <?php
 
-namespace Hestia\WebApp\Installers\DokuWiki;
+namespace Lokahost\WebApp\Installers\DokuWiki;
 
-use Hestia\System\Util;
-use Hestia\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahost\System\Util;
+use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
 
 class DokuWikiSetup extends BaseSetup {
 	protected $appInfo = [

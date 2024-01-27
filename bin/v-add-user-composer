@@ -16,17 +16,17 @@ user=$1
 version=${2-2}
 update=$3
 
-if [ -z "$HESTIA" ]; then
-	HESTIA="/usr/local/hestia"
+if [ -z "$LOKAHOST" ]; then
+	LOKAHOST="/usr/local/lokahost"
 fi
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -38,10 +38,10 @@ is_number_format_valid "$version" "version"
 is_object_valid 'user' 'USER' "$user"
 is_object_unsuspended 'user' 'USER' "$user"
 
-[ -z "$HOMEDIR" ] && check_result "$E_NOTEXIST" "Hestia environment vars not present"
+[ -z "$HOMEDIR" ] && check_result "$E_NOTEXIST" "Lokahost environment vars not present"
 
 # Perform verification if read-only mode is enabled
-check_hestia_demo_mode
+check_lokahost_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -90,7 +90,7 @@ check_result $? "Composer install failed"
 [ -f "$COMPOSER_SETUP_FILE" ] && rm -f "$COMPOSER_SETUP_FILE"
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 # Logging

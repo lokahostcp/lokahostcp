@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hestia Control Panel upgrade script for target version 1.5.0
+# Lokahost Control Panel upgrade script for target version 1.5.0
 
 #######################################################################################
 #######                      Place additional commands below.                   #######
@@ -26,7 +26,7 @@ if [ -n "$DB_PMA_ALIAS" ]; then
 		rm /etc/apache2/conf.d/phpmyadmin.conf
 		touch /etc/apache2/conf.d/phpmyadmin.inc
 	fi
-	$HESTIA/bin/v-change-sys-db-alias 'pma' "$DB_PMA_ALIAS"
+	$LOKAHOST/bin/v-change-sys-db-alias 'pma' "$DB_PMA_ALIAS"
 fi
 
 if [ -n "$DB_PGA_ALIAS" ]; then
@@ -34,7 +34,7 @@ if [ -n "$DB_PGA_ALIAS" ]; then
 		rm /etc/apache2/conf.d/phppgadmin.conf
 		touch /etc/apache2/conf.d/phppgadmin.inc
 	fi
-	$HESTIA/bin/v-change-sys-db-alias 'pga' "$DB_PGA_ALIAS"
+	$LOKAHOST/bin/v-change-sys-db-alias 'pga' "$DB_PGA_ALIAS"
 
 fi
 
@@ -56,18 +56,18 @@ if [ -n "$MAIL_SYSTEM" ]; then
 
 	# Clean up legacy ip variable
 	for ip in $($BIN/v-list-sys-ips plain | cut -f1); do
-		sed '/^HELO/d' $HESTIA/data/ips/$ip > /dev/null
+		sed '/^HELO/d' $LOKAHOST/data/ips/$ip > /dev/null
 	done
 fi
 
-if [ -L "/var/log/hestia" ]; then
-	echo "[ ! ] Updating log file location: /usr/local/hestia/log/* to /var/log/hestia/..."
-	rm /var/log/hestia
-	mkdir -p /var/log/hestia
-	cp /usr/local/hestia/log/* /var/log/hestia/
-	rm -rf /usr/local/hestia/log
-	ln -s /var/log/hestia /usr/local/hestia/log
-	touch /var/log/hestia/auth.log /var/log/hestia/error.log /var/log/hestia/system.log /var/log/hestia/nginx-error.log /var/log/hestia/nginx-access.log
+if [ -L "/var/log/lokahost" ]; then
+	echo "[ ! ] Updating log file location: /usr/local/lokahost/log/* to /var/log/lokahost/..."
+	rm /var/log/lokahost
+	mkdir -p /var/log/lokahost
+	cp /usr/local/lokahost/log/* /var/log/lokahost/
+	rm -rf /usr/local/lokahost/log
+	ln -s /var/log/lokahost /usr/local/lokahost/log
+	touch /var/log/lokahost/auth.log /var/log/lokahost/error.log /var/log/lokahost/system.log /var/log/lokahost/nginx-error.log /var/log/lokahost/nginx-access.log
 fi
 
 if [ -d "/var/log/roundcube" ]; then

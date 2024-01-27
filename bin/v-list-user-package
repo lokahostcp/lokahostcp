@@ -14,12 +14,12 @@ PACKAGE=$package
 format=${2-shell}
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
-# shellcheck source=/usr/local/hestia/func/main.sh
-source $HESTIA/func/main.sh
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 # JSON list function
 json_list() {
 	echo '{'
@@ -109,7 +109,7 @@ is_package_valid
 #----------------------------------------------------------#
 
 # Parsing package
-source_conf "$HESTIA/data/packages/$PACKAGE.pkg"
+source_conf "$LOKAHOST/data/packages/$PACKAGE.pkg"
 
 # Listing data
 case $format in
@@ -120,7 +120,7 @@ case $format in
 esac
 
 #----------------------------------------------------------#
-#                       Hestia                             #
+#                       Lokahost                             #
 #----------------------------------------------------------#
 
 exit

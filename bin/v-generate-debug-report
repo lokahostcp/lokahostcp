@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Includes
-# shellcheck source=/etc/hestiacp/hestia.conf
-source /etc/hestiacp/hestia.conf
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
 # load config file
-source_conf "$HESTIA/conf/hestia.conf"
+source_conf "$LOKAHOST/conf/lokahost.conf"
 
 # Variables and arguments
-HESTIA="/usr/local/hestia"
+LOKAHOST="/usr/local/lokahost"
 script=$1
 log=$2
 mode=${3-$2}

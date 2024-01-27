@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hestia\WebApp;
+namespace Lokahost\WebApp;
 
 interface InstallerInterface {
 	public function install(array $options = null);

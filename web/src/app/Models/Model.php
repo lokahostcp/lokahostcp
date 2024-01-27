@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hestia\Models;
+namespace Lokahost\Models;
 
 class Model {
 	public function __construct() {

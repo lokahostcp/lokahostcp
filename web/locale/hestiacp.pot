@@ -115,7 +115,7 @@ msgstr ""
 #: ../../web/unsuspend/dns/index.php:44 ../../web/bulk/restore/index.php:78
 #: ../../web/schedule/restore/index.php:70
 #: ../../web/schedule/backup/index.php:17
-msgid "Error: Hestia did not return any output."
+msgid "Error: Lokahost did not return any output."
 msgstr ""
 
 #: ../../web/edit/cron/index.php:89 ../../web/edit/db/index.php:100
@@ -2892,7 +2892,7 @@ msgstr[1] ""
 
 #: ../../web/templates/pages/list_server_info.php:16
 #: ../../web/templates/pages/list_server_info.php:17
-msgid "Hestia Control Panel"
+msgid "Lokahost Control Panel"
 msgstr ""
 
 #: ../../web/templates/pages/list_server_info.php:27
@@ -3528,7 +3528,7 @@ msgid "FTP"
 msgstr ""
 
 #: ../../web/templates/pages/add_firewall_banlist.php:42
-msgid "HESTIA"
+msgid "LOKAHOST"
 msgstr ""
 
 #: ../../web/templates/pages/list_dns_public.php:7
@@ -4739,7 +4739,7 @@ msgid ""
 "An existing backup task is already running, please wait for it to complete."
 msgstr ""
 
-#: ../../web/update/hestia/index.php:20
+#: ../../web/update/lokahost/index.php:20
 #, php-format
 msgid "Error: %s update failed."
 msgstr ""
@@ -4748,16 +4748,16 @@ msgstr ""
 msgid "Error: unable to copy package."
 msgstr ""
 
-#: ../../bin/v-list-sys-hestia-updates:110
-msgid "Hestia core package"
+#: ../../bin/v-list-sys-lokahost-updates:110
+msgid "Lokahost core package"
 msgstr ""
 
-#: ../../bin/v-list-sys-hestia-updates:125
-msgid "Hestia internal php interpreter"
+#: ../../bin/v-list-sys-lokahost-updates:125
+msgid "Lokahost internal php interpreter"
 msgstr ""
 
-#: ../../bin/v-list-sys-hestia-updates:141
-msgid "Hestia internal web server"
+#: ../../bin/v-list-sys-lokahost-updates:141
+msgid "Lokahost internal web server"
 msgstr ""
 
 #: ../../bin/v-list-sys-services:166
