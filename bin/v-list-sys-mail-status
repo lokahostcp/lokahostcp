@@ -1,0 +1,57 @@
+#!/bin/bash
+# info: list mail status
+# options:
+#
+# example: v-list-sys-mail-status
+#
+# This function lists mail server status
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+#format=${1-shell}
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
+source $LOKAHOST/conf/lokahost.conf
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Checking mail system
+if [ -z "$MAIL_SYSTEM" ]; then
+	exit
+fi
+
+# Displaying exim queue status
+echo "Exim queue status"
+exim -bp
+echo -en "\n---------------------------------------------"
+echo -en "---------------------------------------------\n\n"
+
+# Displaying exim stats
+if [ -e "/var/log/exim4/mainlog" ]; then
+	eximstats /var/log/exim4/mainlog 2> /dev/null
+else
+	eximstats /var/log/exim/main.log 2> /dev/null
+fi
+
+if [ $? -ne 0 ]; then
+	echo "[Exim4] No valid log lines read"
+	exit 0
+fi
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+exit 0

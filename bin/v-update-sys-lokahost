@@ -1,0 +1,55 @@
+#!/bin/bash
+# info: update lokahost package/configs
+# options: PACKAGE
+#
+# example: v-update-sys-lokahost lokahost-php
+#
+# This function runs as apt update trigger. It pulls shell script from lokahost
+# server and runs it. (lokahost, lokahost-nginx and lokahost-php are valid options)
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+package=$1
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+# Checking arg number
+check_args '1' "$#" 'PACKAGE'
+is_lokahost_package "lokahost lokahost-nginx lokahost-php" "$package"
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Update repo
+apt-get update -o Dir::Etc::sourcelist="sources.list.d/lokahost.list" \
+	-o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0" -qq
+
+# Update lokahost package
+apt-get install $package -qq > /dev/null 2>&1
+check_result $? "$package update failed" "$E_UPDATE"
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+log_event "$OK" "$ARGUMENTS"
+
+exit

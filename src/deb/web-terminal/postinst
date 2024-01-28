@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+if [ "$1" != "configure" ]; then
+	exit 0
+fi
+
+# Run triggers below only on updates
+if [ ! -e "/usr/local/lokahost/data/users/admin" ]; then
+	exit
+fi
+
+###############################################################
+#                Initialize functions/variables               #
+###############################################################
+
+if [ -z "$LOKAHOST" ]; then
+	export LOKAHOST='/usr/local/lokahost'
+	PATH=$PATH:/usr/local/lokahost/bin
+	export PATH
+fi
+
+# Load upgrade functions and variables
+source /usr/local/lokahost/func/main.sh
+source /usr/local/lokahost/func/upgrade.sh
+source /usr/local/lokahost/conf/lokahost.conf
+source /usr/local/lokahost/install/upgrade/upgrade.conf
+
+# Restart lokahost-web-terminal service if enabled
+if [ -f "/etc/systemd/system/lokahost-web-terminal.service" ]; then
+	systemctl daemon-reload > /dev/null 2>&1
+	if systemctl is-enabled lokahost-web-terminal > /dev/null 2>&1; then
+		systemctl restart lokahost-web-terminal
+	fi
+fi

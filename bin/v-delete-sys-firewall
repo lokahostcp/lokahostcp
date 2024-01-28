@@ -1,0 +1,50 @@
+#!/bin/bash
+# info: delete system firewall
+# options: NONE
+#
+# example: v-delete-sys-firewall
+#
+# This function disables firewall support
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+if [ -z "$FIREWALL_SYSTEM" ]; then
+	exit
+fi
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Updating FIREWALL_SYSTEM value
+$BIN/v-change-sys-config-value "FIREWALL_SYSTEM" ""
+
+# Stopping firewall
+$BIN/v-stop-firewall
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+$BIN/v-log-action "system" "Warning" "Firewall" "System firewall disabled."
+log_event "$OK" "$ARGUMENTS"
+
+exit

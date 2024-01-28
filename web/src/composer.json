@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Lokahost\\": "app/"
+        }
+    },
+    "require-dev": {
+        "filp/whoops": "2.15.4"
+    }
+}

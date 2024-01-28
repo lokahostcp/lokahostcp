@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e
+
+if [ "$1" != "configure" ]; then
+	exit 0
+fi
+
+# Run triggers below only on updates
+if [ ! -e "/usr/local/lokahost/data/users/" ]; then
+	exit
+fi
+
+# Check if preinstall hook exists
+if [ -e "/etc/lokahost/hooks/php/pre_install.sh" ]; then
+	/etc/lokahost/hooks/php/pre_install.sh
+fi
+
+###############################################################
+#                Initialize functions/variables               #
+###############################################################
+
+if [ -z "$LOKAHOST" ]; then
+	export LOKAHOST='/usr/local/lokahost'
+	PATH=$PATH:/usr/local/lokahost/bin
+	export PATH
+fi
+
+# Load upgrade functions and variables
+source /usr/local/lokahost/func/main.sh
+source /usr/local/lokahost/func/upgrade.sh
+source /usr/local/lokahost/conf/lokahost.conf
+source /usr/local/lokahost/install/upgrade/upgrade.conf
+
+# Restart lokahost service
+if [ -f "/etc/init.d/lokahost" ]; then
+	systemctl restart lokahost > /dev/null 2>&1
+fi
+
+# Check if preinstall hook exists
+if [ -e "/etc/lokahost/hooks/php/post_install.sh" ]; then
+	/etc/lokahost/hooks/php/post_install.sh
+fi

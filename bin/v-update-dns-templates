@@ -1,0 +1,39 @@
+#!/bin/bash
+# info: update dns templates
+# options: [RESTART]
+#
+# example: v-update-dns-templates
+#
+# This function for obtaining updated dns templates from Lokahost package.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+restart=$1
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Update templates
+cp -rf $LOKAHOST_COMMON_DIR/templates/dns $LOKAHOST/data/templates/
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+$BIN/v-log-action "system" "Info" "Updates" "Default DNS zone templates updated."
+exit

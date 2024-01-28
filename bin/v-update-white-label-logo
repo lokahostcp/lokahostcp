@@ -1,0 +1,67 @@
+#!/bin/bash
+# info: update white label logo's
+# options: [DOWNLOAD]
+#
+# example: v-update-white-label-logo
+#
+# Replace Lokahost logos with User created logo's
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+download=${1-no}
+reset=${2-no}
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source "$LOKAHOST/func/main.sh"
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+if [ "$reset" = "yes" ]; then
+	rm -rf "$LOKAHOST/web/images/custom/"
+fi
+
+if [ -f "$LOKAHOST/web/images/custom/logo.svg" ]; then
+	cp -f "$LOKAHOST/web/images/custom/logo.svg" "$LOKAHOST/web/images/logo.svg"
+elif [ ! -f "$LOKAHOST/web/images/custom/logo.svg" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/logo.svg" "$LOKAHOST/web/images/logo.svg"
+fi
+
+if [ -f "$LOKAHOST/web/images/custom/logo.png" ]; then
+	cp -f "$LOKAHOST/web/images/custom/logo.png" "$LOKAHOST/web/images/logo.png"
+elif [ ! -f "$LOKAHOST/web/images/custom/logo.png" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/logo.png" "$LOKAHOST/web/images/logo.png"
+fi
+
+if [ -f "$LOKAHOST/web/images/custom/logo-header.svg" ]; then
+	cp -f "$LOKAHOST/web/images/custom/logo-header.svg" "$LOKAHOST/web/images/logo-header.svg"
+elif [ ! -f "$LOKAHOST/web/images/custom/logo-header.svg" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/logo-header.svg" "$LOKAHOST/web/images/logo-header.svg"
+fi
+
+if [ -f "$LOKAHOST/web/images/custom/favicon.png" ]; then
+	cp -f "$LOKAHOST/web/images/custom/favicon.png" "$LOKAHOST/web/images/favicon.png"
+elif [ ! -f "$LOKAHOST/web/images/custom/favicon.png" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/images/favicon.png" "$LOKAHOST/web/images/favicon.png"
+fi
+
+if [ -f "$LOKAHOST/web/images/custom/favicon.ico" ]; then
+	cp -f "$LOKAHOST/web/images/custom/favicon.ico" "$LOKAHOST/web/favicon.ico"
+elif [ ! -f "$LOKAHOST/web/images/custom/favicon.ico" ] && [ "$download" = "yes" ]; then
+	download_file "https://raw.githubusercontent.com/lokahost/lokahost/release/web/favicon.ico" "$LOKAHOST/web/favicon.ico"
+fi
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+exit

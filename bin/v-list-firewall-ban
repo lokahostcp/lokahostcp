@@ -1,0 +1,94 @@
+#!/bin/bash
+# info: list firewall block list
+# options: [FORMAT]
+#
+# example: v-list-firewall-ban json
+#
+# This function of obtaining the list of currently blocked ips.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+format=${1-shell}
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+# JSON list function
+json_list() {
+	IFS=$'\n'
+	i=1
+	objects=$(grep IP $LOKAHOST/data/firewall/banlist.conf | wc -l)
+	echo "{"
+	while read str; do
+		parse_object_kv_list "$str"
+		echo -n '    "'$IP'": {
+        "IP": "'$IP'",
+        "CHAIN": "'$CHAIN'",
+        "TIME": "'$TIME'",
+        "DATE": "'$DATE'"
+    }'
+		if [ "$i" -lt "$objects" ]; then
+			echo ','
+		else
+			echo
+		fi
+		((i++))
+	done < <(cat $LOKAHOST/data/firewall/banlist.conf)
+	echo '}'
+}
+
+# SHELL list function
+shell_list() {
+	IFS=$'\n'
+	echo "IP   CHAIN   TIME   DATE"
+	echo "--   -----   ----   ----"
+	while read str; do
+		parse_object_kv_list "$str"
+		echo "$IP $CHAIN $TIME $DATE"
+	done < <(cat $LOKAHOST/data/firewall/banlist.conf)
+}
+
+# PLAIN list function
+plain_list() {
+	IFS=$'\n'
+	while read str; do
+		parse_object_kv_list "$str"
+		echo -e "$IP\t$CHAIN\t$TIME\t$DATE"
+	done < <(cat $LOKAHOST/data/firewall/banlist.conf)
+}
+
+# CSV list function
+csv_list() {
+	IFS=$'\n'
+	echo "IP,CHAIN,TIME,DATE"
+	while read str; do
+		parse_object_kv_list "$str"
+		echo "$IP,$CHAIN,$TIME,$DATE"
+	done < <(cat $LOKAHOST/data/firewall/banlist.conf)
+}
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Listing data
+case $format in
+	json) json_list ;;
+	plain) plain_list ;;
+	csv) csv_list ;;
+	shell) shell_list | column -t ;;
+esac
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+exit

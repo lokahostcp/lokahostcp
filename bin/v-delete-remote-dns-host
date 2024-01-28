@@ -1,0 +1,70 @@
+#!/bin/bash
+# info: delete remote dns host
+# options: HOST
+#
+# example: v-delete-remote-dns-host example.org
+#
+# This function for deleting the remote dns host from lokahost configuration.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+host=$1
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/remote.sh
+source $LOKAHOST/func/remote.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+check_args '1' "$#" 'HOST'
+is_format_valid 'host'
+is_system_enabled "$DNS_CLUSTER" 'DNS_CLUSTER'
+is_object_valid "../../conf/dns-cluster" 'HOST' "$host"
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Deleting remote domains
+$BIN/v-delete-remote-dns-domains "$host" >> /dev/null 2>&1
+
+# Deleting server
+sed -i "/HOST='$host' /d" "$LOKAHOST/conf/dns-cluster.conf"
+
+# Deleting DNS_CLUSTER key
+check_cluster=$(grep HOST $LOKAHOST/conf/dns-cluster.conf | wc -l)
+if [ "$check_cluster" -eq '0' ]; then
+	rm -f "$LOKAHOST/conf/dns-cluster.conf"
+	sed -i "/DNS_CLUSTER=/d" "$LOKAHOST/conf/lokahost.conf"
+
+	# Delete cron job
+	cmd="v-update-sys-queue dns-cluster"
+	check_cron=$(grep "$cmd" "/var/spool/cron/crontabs/lokahostweb" 2> /dev/null)
+	if [ -n "$check_cron" ]; then
+		sed -i "/v-update-sys-queue dns-cluster/d" "/var/spool/cron/crontabs/lokahostweb"
+	fi
+fi
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+$BIN/v-log-action "system" "Info" "System" "Removed remote DNS host (Host: $host)."
+log_event "$OK" "$ARGUMENTS"
+
+exit

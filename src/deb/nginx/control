@@ -1,0 +1,14 @@
+Source: lokahost-nginx
+Package: lokahost-nginx
+Priority: optional
+Version: 1.25.2-1
+Section: admin
+Maintainer: LokahostCP <info@lokahost.com>
+Homepage: https://www.lokahost.com
+Architecture: amd64
+Depends: lokahost
+Description: lokahost Nginx
+ lokahost is an open source hosting control panel.
+ lokahost has a clean and focused interface without the clutter.
+ lokahost has the latest of very innovative technologies.
+ lokahost is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin.
