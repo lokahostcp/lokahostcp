@@ -23,8 +23,8 @@ function setup() {
         echo 'LOKAHOST=/usr/local/lokahost' >> /tmp/lokahost-test-env.sh
         echo 'domain=test-5285.lokahost.com' >> /tmp/lokahost-test-env.sh
         echo 'domainuk=test-5285.lokahost.com.uk' >> /tmp/lokahost-test-env.sh
-        echo 'rootdomain=testhestiacp.com' >> /tmp/lokahost-test-env.sh
-        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'rootdomain=testlokahostcp.com' >> /tmp/lokahost-test-env.sh
+        echo 'subdomain=cdn.testlokahostcp.com' >> /tmp/lokahost-test-env.sh
         echo 'database=test-5285_database' >> /tmp/lokahost-test-env.sh
         echo 'dbuser=test-5285_dbuser' >> /tmp/lokahost-test-env.sh
     fi

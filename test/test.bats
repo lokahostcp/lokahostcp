@@ -24,8 +24,8 @@ function setup() {
         echo 'LOKAHOST=/usr/local/lokahost' >> /tmp/lokahost-test-env.sh
         echo 'domain=test-5285.lokahost.com' >> /tmp/lokahost-test-env.sh
         echo 'domainuk=test-5285.lokahost.com.uk' >> /tmp/lokahost-test-env.sh
-        echo 'rootdomain=testhestiacp.com' >> /tmp/lokahost-test-env.sh
-        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'rootdomain=testlokahostcp.com' >> /tmp/lokahost-test-env.sh
+        echo 'subdomain=cdn.testlokahostcp.com' >> /tmp/lokahost-test-env.sh
         echo 'database=test-5285_database' >> /tmp/lokahost-test-env.sh
         echo 'dbuser=test-5285_dbuser' >> /tmp/lokahost-test-env.sh
         echo 'pguser=test5290' >> /tmp/lokahost-test-env.sh
@@ -368,36 +368,36 @@ function check_ip_not_banned(){
 }
 
 @test "User: Add new user Failed 1" {
-	run v-add-user 'jäap' $user $user@hestiacp2.com default "Super Test"
+	run v-add-user 'jäap' $user $user@lokahostcp2.com default "Super Test"
 	assert_failure $E_INVALID
 	assert_output --partial 'Error: invalid user format'
 }
 @test "User: Add new user Failed 2" {
-	run v-add-user 'ëaap' $user $user@hestiacp2.com default "Super Test"
+	run v-add-user 'ëaap' $user $user@lokahostcp2.com default "Super Test"
 	assert_failure $E_INVALID
 	assert_output --partial 'Error: invalid user format'
 }
 
 @test "User: Add new user Failed 3" {
-	run v-add-user 'jaaẞ'  $user $user@hestiacp2.com default "Super Test"
+	run v-add-user 'jaaẞ'  $user $user@lokahostcp2.com default "Super Test"
 	assert_failure $E_INVALID
 	assert_output --partial 'Error: invalid user format'
 }
 
 @test "User: Add new user Failed 4" {
-	run v-add-user '1234'  $user $user@hestiacp2.com default "Super Test"
+	run v-add-user '1234'  $user $user@lokahostcp2.com default "Super Test"
 	assert_failure $E_INVALID
 	assert_output --partial 'Error: invalid user format'
 }
 
 @test "User: Add new user Failed 5" {
-	run v-add-user '1aap'  $user $user@hestiacp2.com default "Super Test"
+	run v-add-user '1aap'  $user $user@lokahostcp2.com default "Super Test"
 	assert_failure $E_INVALID
 	assert_output --partial 'Error: invalid user format'
 }
 
 @test "User: Add new user Success 1" {
-	run v-add-user 'jaap01'  $user $user@hestiacp2.com default "Super Test"
+	run v-add-user 'jaap01'  $user $user@lokahostcp2.com default "Super Test"
 	assert_success
 	refute_output
 }
@@ -421,7 +421,7 @@ function check_ip_not_banned(){
 }
 
 @test "User: Change user contact invalid email " {
-    run v-change-user-contact "$user" testerhestiacp.com
+    run v-change-user-contact "$user" testerlokahostcp.com
     assert_failure $E_INVALID
     assert_output --partial 'Error: invalid email format'
 }
@@ -1634,16 +1634,16 @@ function check_ip_not_banned(){
 }
 
 @test "MAIL: Add account alias" {
-	run v-add-mail-account-alias $user $domain test hestiacprocks
+	run v-add-mail-account-alias $user $domain test lokahostcprocks
 	assert_success
-	assert_file_contains /etc/exim4/domains/$domain/aliases "hestiacprocks@$domain"
+	assert_file_contains /etc/exim4/domains/$domain/aliases "lokahostcprocks@$domain"
 	refute_output
 }
 
 @test "MAIL: Add account alias 2" {
-	run v-add-mail-account-alias $user $domain test hestiacprocks2
+	run v-add-mail-account-alias $user $domain test lokahostcprocks2
 	assert_success
-	assert_file_contains /etc/exim4/domains/$domain/aliases "hestiacprocks2@$domain"
+	assert_file_contains /etc/exim4/domains/$domain/aliases "lokahostcprocks2@$domain"
 	refute_output
 }
 
@@ -1662,9 +1662,9 @@ function check_ip_not_banned(){
 }
 
 @test "MAIL: Add account 4" {
-	run v-add-mail-account $user $domain hestiarocks3 "$userpass2"
+	run v-add-mail-account $user $domain lokahostrocks3 "$userpass2"
 	assert_success
-	assert_file_contains /etc/exim4/domains/$domain/limits "hestiarocks3@$domain"
+	assert_file_contains /etc/exim4/domains/$domain/limits "lokahostrocks3@$domain"
 	refute_output
 }
 
@@ -1696,7 +1696,7 @@ function check_ip_not_banned(){
 }
 
 @test "MAIL: Add account alias (duplicate)" {
-	run v-add-mail-account-alias $user $domain test hestiacprocks
+	run v-add-mail-account-alias $user $domain test lokahostcprocks
 	assert_failure $E_EXISTS
 }
 
@@ -2146,32 +2146,32 @@ echo   "1.2.3.4" >> $LOKAHOST/data/firewall/excludes.conf
 
 @test "Package: Create new Package" {
     cp $LOKAHOST/data/packages/default.pkg /tmp/package
-    run v-add-user-package /tmp/package hestiatest
+    run v-add-user-package /tmp/package lokahosttest
     assert_success
     refute_output
 }
 
 @test "Package: Assign user to new Package" {
-    run v-change-user-package  $user hestiatest
+    run v-change-user-package  $user lokahosttest
     assert_success
     refute_output
 }
 
 @test "Package: Create new package (Duplicate)" {
     sed -i "s/BANDWIDTH='unlimited'/BANDWIDTH='100'/g" /tmp/package
-    run v-add-user-package /tmp/package hestiatest
+    run v-add-user-package /tmp/package lokahosttest
     assert_failure $E_EXISTS
 }
 
 @test "Package: Update new Package" {
     sed -i "s/BANDWIDTH='unlimited'/BANDWIDTH='100'/g" /tmp/package
-    run v-add-user-package /tmp/package hestiatest yes
+    run v-add-user-package /tmp/package lokahosttest yes
     assert_success
     refute_output
 }
 
 @test "Package: Update package of user" {
-    run v-change-user-package  $user hestiatest
+    run v-change-user-package  $user lokahosttest
     assert_success
     refute_output
     run grep "BANDWIDTH='100'" $LOKAHOST/data/users/$user/user.conf
@@ -2180,24 +2180,24 @@ echo   "1.2.3.4" >> $LOKAHOST/data/firewall/excludes.conf
 }
 
 @test "Package: Copy package Not Exists" {
-  run v-copy-user-package hestiadoesnotexists hestiatest2
+  run v-copy-user-package lokahostdoesnotexists lokahosttest2
   assert_failure $E_NOTEXIST
 }
 
 @test "Package: Copy package" {
-  run v-copy-user-package hestiatest hestiatest2
+  run v-copy-user-package lokahosttest lokahosttest2
   assert_success
   refute_output
 }
 
 @test "Package: Copy package Exists" {
-  run v-copy-user-package hestiatest hestiatest2
+  run v-copy-user-package lokahosttest lokahosttest2
   assert_failure $E_EXISTS
 }
 
 @test "Package: Delete package" {
-    run v-delete-user-package hestiatest
-    run v-delete-user-package hestiatest2
+    run v-delete-user-package lokahosttest
+    run v-delete-user-package lokahosttest2
     rm /tmp/package
     assert_success
     refute_output

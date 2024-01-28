@@ -8,8 +8,8 @@
 #
 # - container name will be generated depending on enabled features (os,proxy,webserver and php)
 # - 'SHARED_HOST_FOLDER' will be mounted in the (guest lxc) container at '/home/ubuntu/source/' and lokahost src folder is expected to be there
-# - wildcard dns *.hst.domain.tld can be used to point to vm host
-# - watch install log ex:(host) tail -n 100 -f /tmp/hst_installer_hst-ub1604-a2-mphp
+# - wildcard dns *.lcp.domain.tld can be used to point to vm host
+# - watch install log ex:(host) tail -n 100 -f /tmp/lcp_installer_lcp-ub1604-a2-mphp
 #
 # CONFIG HOST STEPS:
 #   export SHARED_HOST_FOLDER="/home/myuser/projectfiles"
@@ -21,7 +21,7 @@
 # Nginx reverse proxy config: /etc/nginx/conf.d/lxc-lokahost.conf
 server {
     listen 80;
-    server_name ~(?<lxcname>hst-.+)\.hst\.domain\.tld$;
+    server_name ~(?<lxcname>lcp-.+)\.lcp\.domain\.tld$;
     location / {
         set $backend_upstream "http://$lxcname:80";
         proxy_pass $backend_upstream;
@@ -31,7 +31,7 @@ server {
 }
 server {
     listen 8083;
-    server_name ~^(?<lxcname>hst-.+)\.hst\.domain\.tld$;
+    server_name ~^(?<lxcname>lcp-.+)\.lcp\.domain\.tld$;
     location / {
         set $backend_upstream "https://$lxcname:8083";
         proxy_pass $backend_upstream;
@@ -39,7 +39,7 @@ server {
 }
 
 # use lxc resolver /etc/nginx/nginx.conf
-# test resolver ip ex: dig +short @10.240.232.1 hst-ub1804-ngx-a2-mphp
+# test resolver ip ex: dig +short @10.240.232.1 lcp-ub1804-ngx-a2-mphp
 http {
 ...
     resolver 10.240.232.1 ipv6=off valid=5s;
@@ -49,26 +49,26 @@ http {
 */
 
 ##  Uncomment and configure the following vars
-# define('DOMAIN',     'hst.domain.tld');
+# define('DOMAIN',     'lcp.domain.tld');
 # define('SHARED_HOST_FOLDER', '/home/myuser/projectfiles');
-# define('HST_PASS',   ''); // <- # openssl rand -base64 12
-# define('HST_EMAIL',  'user@domain.tld');
-define("HST_BRANCH", "~localsrc");
-define("HST_ARGS", "--force --interactive no --clamav no -p " . HST_PASS . " --email " . HST_EMAIL);
+# define('LCP_PASS',   ''); // <- # openssl rand -base64 12
+# define('LCP_EMAIL',  'user@domain.tld');
+define("LCP_BRANCH", "~localsrc");
+define("LCP_ARGS", "--force --interactive no --clamav no -p " . LCP_PASS . " --email " . LCP_EMAIL);
 define("LXC_TIMEOUT", 30);
 
 if (
 	!defined("SHARED_HOST_FOLDER") ||
-	!defined("HST_PASS") ||
-	!defined("HST_EMAIL") ||
-	!defined("HST_BRANCH") ||
+	!defined("LCP_PASS") ||
+	!defined("LCP_EMAIL") ||
+	!defined("LCP_BRANCH") ||
 	!defined("DOMAIN")
 ) {
 	die("Error: missing variables" . PHP_EOL);
 }
 
 $containers = [
-	//    ['description'=>'hst-d9-ngx-a2-mphp',       'os'=>'debian9',     'nginx'=>true,  'apache2'=>true,    'php'=>'multiphp',  'dns'=>'auto', 'exim'=>'auto'],
+	//    ['description'=>'lcp-d9-ngx-a2-mphp',       'os'=>'debian9',     'nginx'=>true,  'apache2'=>true,    'php'=>'multiphp',  'dns'=>'auto', 'exim'=>'auto'],
 	[
 		"description" => "ub1804 ngx mphp",
 		"os" => "ubuntu18.04",
@@ -152,10 +152,10 @@ $containers = [
 ];
 
 array_walk($containers, function (&$element) {
-	$lxc_name = "hst-"; // hostname and lxc name prefix. Update nginx reverse proxy config after altering this value
-	$hst_args = HST_ARGS;
+	$lxc_name = "lcp-"; // hostname and lxc name prefix. Update nginx reverse proxy config after altering this value
+	$lcp_args = LCP_ARGS;
 
-	$element["hst_installer"] = "hst-install-ubuntu.sh";
+	$element["lcp_installer"] = "lcp-install-ubuntu.sh";
 	$element["lxc_image"] = "ubuntu:18.04";
 
 	if ($element["os"] == "ubuntu16.04") {
@@ -163,11 +163,11 @@ array_walk($containers, function (&$element) {
 		$lxc_name .= "ub1604";
 	} elseif ($element["os"] == "debian8") {
 		$element["lxc_image"] = "images:debian/8";
-		$element["hst_installer"] = "hst-install-debian.sh";
+		$element["lcp_installer"] = "lcp-install-debian.sh";
 		$lxc_name .= "d8";
 	} elseif ($element["os"] == "debian9") {
 		$element["lxc_image"] = "images:debian/9";
-		$element["hst_installer"] = "hst-install-debian.sh";
+		$element["lcp_installer"] = "lcp-install-debian.sh";
 		$lxc_name .= "d9";
 	} else {
 		$lxc_name .= "ub1804";
@@ -176,57 +176,57 @@ array_walk($containers, function (&$element) {
 
 	if ($element["nginx"] === true) {
 		$lxc_name .= "-ngx";
-		$hst_args .= " --nginx yes";
+		$lcp_args .= " --nginx yes";
 	} else {
-		$hst_args .= " --nginx no";
+		$lcp_args .= " --nginx no";
 	}
 
 	if ($element["apache2"] === true) {
 		$lxc_name .= "-a2";
-		$hst_args .= " --apache yes";
+		$lcp_args .= " --apache yes";
 	} else {
-		$hst_args .= " --apache no";
+		$lcp_args .= " --apache no";
 	}
 
 	if ($element["php"] == "fpm") {
 		$lxc_name .= "-fpm";
-		$hst_args .= " --phpfpm yes";
+		$lcp_args .= " --phpfpm yes";
 	} elseif ($element["php"] == "multiphp") {
 		$lxc_name .= "-mphp";
-		$hst_args .= " --multiphp yes";
+		$lcp_args .= " --multiphp yes";
 	}
 
 	if (isset($element["dns"])) {
 		if ($element["dns"] === true || $element["dns"] == "auto") {
-			$hst_args .= " --named yes";
+			$lcp_args .= " --named yes";
 		} else {
-			$hst_args .= " --named no";
+			$lcp_args .= " --named no";
 		}
 	}
 
 	if (isset($element["exim"])) {
 		if ($element["exim"] === true || $element["exim"] == "auto") {
-			$hst_args .= " --exim yes";
+			$lcp_args .= " --exim yes";
 		} else {
-			$hst_args .= " --exim no";
+			$lcp_args .= " --exim no";
 		}
 	}
 
 	if (isset($element["webmail"])) {
 		if ($element["webmail"] === true || $element["webmail"] == "auto") {
-			$hst_args .= " --dovecot yes";
+			$lcp_args .= " --dovecot yes";
 		} else {
-			$hst_args .= " --dovecot no";
+			$lcp_args .= " --dovecot no";
 		}
 	}
 
 	$element["lxc_name"] = $lxc_name;
 	$element["hostname"] = $lxc_name . "." . DOMAIN;
 
-	// $hst_args .= ' --with-debs /home/ubuntu/source/lokahost/src/pkgs/develop/' . $element['os'];
-	$hst_args .= " --with-debs /tmp/lokahost-src/debs";
-	$hst_args .= " --hostname " . $element["hostname"];
-	$element["hst_args"] = $hst_args;
+	// $lcp_args .= ' --with-debs /home/ubuntu/source/lokahost/src/pkgs/develop/' . $element['os'];
+	$lcp_args .= " --with-debs /tmp/lokahost-src/debs";
+	$lcp_args .= " --hostname " . $element["hostname"];
+	$element["lcp_args"] = $lcp_args;
 });
 
 function lxc_run($args, &$rc) {
@@ -253,7 +253,7 @@ function lxc_run($args, &$rc) {
 	return json_decode(implode(PHP_EOL, $cmdout), true);
 }
 
-function getHestiaVersion($branch) {
+function getLokahostVersion($branch) {
 	$control_file = "";
 	if ($branch === "~localsrc") {
 		$control_file = file_get_contents(SHARED_HOST_FOLDER . "/lokahost/src/deb/lokahost/control");
@@ -321,7 +321,7 @@ function check_lxc_container($container) {
 	exec(
 		"lxc config device add " .
 			escapeshellarg($container["lxc_name"]) .
-			" hestiasrc disk path=/home/ubuntu/source source=" .
+			" lokahostsrc disk path=/home/ubuntu/source source=" .
 			SHARED_HOST_FOLDER .
 			" 2>/dev/null",
 		$devnull,
@@ -345,7 +345,7 @@ function check_lxc_container($container) {
 	exit(0);
 }
 
-function hst_installer_worker($container) {
+function lcp_installer_worker($container) {
 	$pid = pcntl_fork();
 	if ($pid > 0) {
 		return $pid;
@@ -354,23 +354,23 @@ function hst_installer_worker($container) {
 	system(
 		"lxc exec " .
 			$container["lxc_name"] .
-			' -- bash -c "/home/ubuntu/source/lokahost/src/hst_autocompile.sh --lokahost \"' .
-			HST_BRANCH .
+			' -- bash -c "/home/ubuntu/source/lokahost/src/lcp_autocompile.sh --lokahost \"' .
+			LCP_BRANCH .
 			'\" no"',
 	);
 
-	$hver = getHestiaVersion(HST_BRANCH);
+	$hver = getLokahostVersion(LCP_BRANCH);
 	echo "Install Lokahost ${hver} on " . $container["lxc_name"] . PHP_EOL;
-	echo "Args: " . $container["hst_args"] . PHP_EOL;
+	echo "Args: " . $container["lcp_args"] . PHP_EOL;
 
 	system(
 		"lxc exec " .
 			$container["lxc_name"] .
 			' -- bash -c "cd \"/home/ubuntu/source/lokahost\"; install/' .
-			$container["hst_installer"] .
+			$container["lcp_installer"] .
 			" " .
-			$container["hst_args"] .
-			'" 2>&1 > /tmp/hst_installer_' .
+			$container["lcp_args"] .
+			'" 2>&1 > /tmp/lcp_installer_' .
 			$container["lxc_name"],
 	);
 
@@ -406,7 +406,7 @@ foreach ($containers as $container) {
 		continue;
 	}
 
-	$worker_pid = hst_installer_worker($container);
+	$worker_pid = lcp_installer_worker($container);
 	if ($worker_pid > 0) {
 		$worker_pool[] = $worker_pid;
 	}

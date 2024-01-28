@@ -340,7 +340,7 @@ upgrade_init_backup() {
 
 upgrade_init_logging() {
 	# Set log file path
-	LOG="$LOKAHOST_BACKUP/hst-upgrade-$(date +%d%m%Y%H%M).log"
+	LOG="$LOKAHOST_BACKUP/lcp-upgrade-$(date +%d%m%Y%H%M).log"
 
 	# Create log file
 	touch $LOG

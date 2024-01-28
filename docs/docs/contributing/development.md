@@ -47,7 +47,7 @@ These instructions use [Multipass](https://multipass.run/) to create an Ubuntu V
 
    ```bash
    cd src
-   ./hst_autocompile.sh --all --noinstall --keepbuild '~localsrc'
+   ./lcp_autocompile.sh --all --noinstall --keepbuild '~localsrc'
    ```
 
 1. Navigate to `/install` in the VM then install Lokahost with these flags
@@ -56,7 +56,7 @@ These instructions use [Multipass](https://multipass.run/) to create an Ubuntu V
 
    ```bash
    cd ../install
-   bash hst-install-ubuntu.sh --hostname demo.lokahost.com --email admin@example.com --username admin --password Password123 --with-debs /tmp/lokahost-src/deb/ --interactive no --force
+   bash lcp-install-ubuntu.sh --hostname demo.lokahost.com --email admin@example.com --username admin --password Password123 --with-debs /tmp/lokahost-src/deb/ --interactive no --force
    ```
 
 1. Reboot the VM (and exit SSH session)
@@ -111,7 +111,7 @@ Below are some instructions for making a change to Lokahost's UI, running the bu
 1. Run the Lokahost build script
 
    ```bash
-   ./hst_autocompile.sh --lokahost --install '~localsrc'
+   ./lcp_autocompile.sh --lokahost --install '~localsrc'
    ```
 
 1. Reload the page in your browser to see the change
@@ -120,7 +120,7 @@ Please refer to the [contributing guidelines](https://github.com/lokahost/lokaho
 
 ::: info
 A backup is created each time the Lokahost build script is run. If you run this often it can fill up your VM's disk space.
-You can delete the backups by running `rm -rf /root/hst_backups` as root user on the VM.
+You can delete the backups by running `rm -rf /root/lcp_backups` as root user on the VM.
 :::
 
 ## Running automated tests

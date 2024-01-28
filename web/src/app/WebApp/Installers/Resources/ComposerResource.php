@@ -2,14 +2,14 @@
 
 namespace Lokahost\WebApp\Installers\Resources;
 
-use Lokahost\System\HestiaApp;
+use Lokahost\System\LokahostApp;
 
 class ComposerResource {
 	private $project;
 	private $folder;
 	private $appcontext;
 
-	public function __construct(HestiaApp $appcontext, $data, $destination) {
+	public function __construct(LokahostApp $appcontext, $data, $destination) {
 		$this->folder = dirname($destination);
 		$this->project = basename($destination);
 		$this->appcontext = $appcontext;

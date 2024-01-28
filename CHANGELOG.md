@@ -1591,7 +1591,7 @@ apt update && apt upgrade
 - Administrators now have control over software update notifications through the following settings in `$LOKAHOST/conf/lokahost.conf` and through the Control Panel web interface:
   - `UPGRADE_SEND_EMAIL` = Sends an email notification to primary admin account's email address
   - `UPGRADE_SEND_EMAIL_LOG` = Sends installation log output to the primary admin account's email address
-- The upgrade process will now save installation logs to the `/root/hst_backups` directory by default for post-install troubleshooting.
+- The upgrade process will now save installation logs to the `/root/lcp_backups` directory by default for post-install troubleshooting.
   - **Note:** We may adjust this path in the future and will document such changes as they happen.
 - We've introduced the ability to assign Administrator rights to other user accounts, enabling them to perform tasks under the Server Settings tab.
 - We've introduced a more robust translation system which will allow us to provide higher quality translations in future releases.

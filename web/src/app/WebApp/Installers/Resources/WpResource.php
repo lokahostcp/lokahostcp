@@ -2,13 +2,13 @@
 
 namespace Lokahost\WebApp\Installers\Resources;
 
-use Lokahost\System\HestiaApp;
+use Lokahost\System\LokahostApp;
 
 class WpResource {
 	private $appcontext;
 	private $options;
 
-	public function __construct(HestiaApp $appcontext, $data, $destination, $options, $appinfo) {
+	public function __construct(LokahostApp $appcontext, $data, $destination, $options, $appinfo) {
 		$this->appcontext = $appcontext;
 		$this->appcontext->runWp(
 			[

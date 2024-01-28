@@ -23,8 +23,8 @@ function setup() {
         echo 'LOKAHOST=/usr/local/lokahost' >> /tmp/lokahost-test-env.sh
         echo 'domain=test-5285.lokahost.com' >> /tmp/lokahost-test-env.sh
         echo 'domainuk=test-5285.lokahost.com.uk' >> /tmp/lokahost-test-env.sh
-        echo 'rootdomain=testhestiacp.com' >> /tmp/lokahost-test-env.sh
-        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'rootdomain=testlokahostcp.com' >> /tmp/lokahost-test-env.sh
+        echo 'subdomain=cdn.testlokahostcp.com' >> /tmp/lokahost-test-env.sh
         echo 'database=test-5285_database' >> /tmp/lokahost-test-env.sh
         echo 'dbuser=test-5285_dbuser' >> /tmp/lokahost-test-env.sh
     fi
@@ -40,23 +40,23 @@ function setup() {
     assert_success
     refute_output
 
-    run v-add-web-domain $user 'testhestiacp.com'
+    run v-add-web-domain $user 'testlokahostcp.com'
     assert_success
     refute_output
 
-    ssl=$(v-generate-ssl-cert "testhestiacp.com" "info@testhestiacp.com" US CA "Orange County" LokahostCP IT "mail.$domain" | tail -n1 | awk '{print $2}')
-    mv $ssl/testhestiacp.com.crt /tmp/testhestiacp.com.crt
-    mv $ssl/testhestiacp.com.key /tmp/testhestiacp.com.key
+    ssl=$(v-generate-ssl-cert "testlokahostcp.com" "info@testlokahostcp.com" US CA "Orange County" LokahostCP IT "mail.$domain" | tail -n1 | awk '{print $2}')
+    mv $ssl/testlokahostcp.com.crt /tmp/testlokahostcp.com.crt
+    mv $ssl/testlokahostcp.com.key /tmp/testlokahostcp.com.key
 
     # Use self signed certificates during last test
-    run v-add-web-domain-ssl $user testhestiacp.com /tmp
+    run v-add-web-domain-ssl $user testlokahostcp.com /tmp
     assert_success
     refute_output
 }
 
 @test "Web Config test" {
     for template in $(v-list-web-templates plain); do
-        run v-change-web-domain-tpl $user testhestiacp.com $template
+        run v-change-web-domain-tpl $user testlokahostcp.com $template
         assert_success
         refute_output
     done
@@ -65,7 +65,7 @@ function setup() {
 @test "Proxy Config test" {
     if [ "$PROXY_SYSTEM" = "nginx" ]; then
         for template in $(v-list-proxy-templates plain); do
-            run v-change-web-domain-proxy-tpl $user testhestiacp.com $template
+            run v-change-web-domain-proxy-tpl $user testlokahostcp.com $template
             assert_success
             refute_output
         done

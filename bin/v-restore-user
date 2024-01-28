@@ -909,7 +909,7 @@ chmod 700 $HOMEDIR/$user/tmp
 chown -R $user:$user $HOMEDIR/$user/tmp
 
 # Delete Lokahost File manager key
-rm -f $HOMEDIR/$user/.ssh/hst-filemanager-key
+rm -f $HOMEDIR/$user/.ssh/lcp-filemanager-key
 
 # Sending mail notification
 subj="$user → restore has been completed"

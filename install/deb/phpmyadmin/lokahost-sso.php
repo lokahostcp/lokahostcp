@@ -154,10 +154,10 @@ $api = new Lokahost_API();
 if (!empty($_GET)) {
 	if (isset($_GET["logout"])) {
 		$api->delete_temp_user(
-			$_SESSION["HESTIA_sso_database"],
-			$_SESSION["HESTIA_sso_user"],
+			$_SESSION["LOKAHOST_sso_database"],
+			$_SESSION["LOKAHOST_sso_user"],
 			$_SESSION["PMA_single_signon_user"],
-			$_SESSION["HESTIA_sso_host"],
+			$_SESSION["LOKAHOST_sso_host"],
 		);
 		//remove session
 		session_invalid();
@@ -185,9 +185,9 @@ if (!empty($_GET)) {
 					$_SESSION["PMA_single_signon_password"] = $data->login->password;
 					$_SESSION["PMA_single_signon_host"] = $host;
 					//save database / username to be used for sending logout notification.
-					$_SESSION["HESTIA_sso_user"] = $user;
-					$_SESSION["HESTIA_sso_database"] = $database;
-					$_SESSION["HESTIA_sso_host"] = $host;
+					$_SESSION["LOKAHOST_sso_user"] = $user;
+					$_SESSION["LOKAHOST_sso_database"] = $database;
+					$_SESSION["LOKAHOST_sso_host"] = $host;
 
 					@session_write_close();
 					setcookie($session_name, $id, 0, "/");

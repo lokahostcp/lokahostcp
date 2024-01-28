@@ -18,9 +18,9 @@ export DEBIAN_FRONTEND=noninteractive
 RHOST='apt.lokahost.com'
 VERSION='debian'
 LOKAHOST='/usr/local/lokahost'
-LOG="/root/hst_install_backups/hst_install-$(date +%d%m%Y%H%M).log"
+LOG="/root/lcp_install_backups/lcp_install-$(date +%d%m%Y%H%M).log"
 memory=$(grep 'MemTotal' /proc/meminfo | tr ' ' '\n' | grep [0-9])
-hst_backups="/root/hst_install_backups/$(date +%d%m%Y%H%M)"
+lcp_backups="/root/lcp_install_backups/$(date +%d%m%Y%H%M)"
 spinner="/-\|"
 os='debian'
 release="$(cat /etc/debian_version | tr "." "\n" | head -n1)"
@@ -438,7 +438,7 @@ echo
 apt-get -qq update
 
 # Creating backup directory
-mkdir -p "$hst_backups"
+mkdir -p "$lcp_backups"
 
 # Pre-install packages
 echo "[ * ] Installing dependencies..."
@@ -529,11 +529,11 @@ if [ -z "$withdebs" ] || [ ! -d "$withdebs" ]; then
 		echo -e "\e[33mERROR: Install script version does not match package version!\e[0m"
 		echo -e "\e[33mPlease download the installer from the release branch in order to continue:\e[0m"
 		echo ""
-		echo -e "\e[33mhttps://raw.githubusercontent.com/lokahost/lokahost/release/install/hst-install.sh\e[0m"
+		echo -e "\e[33mhttps://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install.sh\e[0m"
 		echo ""
 		echo -e "\e[33mTo test pre-release versions, build the .deb packages and re-run the installer:\e[0m"
-		echo -e "  \e[33m./hst_autocompile.sh \e[1m--lokahost branchname no\e[21m\e[0m"
-		echo -e "  \e[33m./hst-install.sh .. \e[1m--with-debs /tmp/lokahost-src/debs\e[21m\e[0m"
+		echo -e "  \e[33m./lcp_autocompile.sh \e[1m--lokahost branchname no\e[21m\e[0m"
+		echo -e "  \e[33m./lcp-install.sh .. \e[1m--with-debs /tmp/lokahost-src/debs\e[21m\e[0m"
 		echo ""
 		check_result 1 "Installation aborted"
 	fi
@@ -775,7 +775,7 @@ if [[ -z "$email" ]]; then
 fi
 
 # Defining backup directory
-echo -e "Installation backup directory: $hst_backups"
+echo -e "Installation backup directory: $lcp_backups"
 
 # Print Log File Path
 echo "Installation log file: $LOG"
@@ -903,66 +903,66 @@ check_result $? 'apt-get upgrade failed'
 #----------------------------------------------------------#
 
 # Creating backup directory tree
-mkdir -p $hst_backups
-cd $hst_backups
+mkdir -p $lcp_backups
+cd $lcp_backups
 mkdir nginx apache2 php vsftpd proftpd bind exim4 dovecot clamd
 mkdir spamassassin mysql postgresql openssl lokahost
 
 # Backup OpenSSL configuration
-cp /etc/ssl/openssl.cnf $hst_backups/openssl > /dev/null 2>&1
+cp /etc/ssl/openssl.cnf $lcp_backups/openssl > /dev/null 2>&1
 
 # Backup nginx configuration
 systemctl stop nginx > /dev/null 2>&1
-cp -r /etc/nginx/* $hst_backups/nginx > /dev/null 2>&1
+cp -r /etc/nginx/* $lcp_backups/nginx > /dev/null 2>&1
 
 # Backup Apache configuration
 systemctl stop apache2 > /dev/null 2>&1
-cp -r /etc/apache2/* $hst_backups/apache2 > /dev/null 2>&1
+cp -r /etc/apache2/* $lcp_backups/apache2 > /dev/null 2>&1
 rm -f /etc/apache2/conf.d/* > /dev/null 2>&1
 
 # Backup PHP-FPM configuration
 systemctl stop php*-fpm > /dev/null 2>&1
-cp -r /etc/php/* $hst_backups/php > /dev/null 2>&1
+cp -r /etc/php/* $lcp_backups/php > /dev/null 2>&1
 
 # Backup Bind configuration
 systemctl stop bind9 > /dev/null 2>&1
-cp -r /etc/bind/* $hst_backups/bind > /dev/null 2>&1
+cp -r /etc/bind/* $lcp_backups/bind > /dev/null 2>&1
 
 # Backup Vsftpd configuration
 systemctl stop vsftpd > /dev/null 2>&1
-cp /etc/vsftpd.conf $hst_backups/vsftpd > /dev/null 2>&1
+cp /etc/vsftpd.conf $lcp_backups/vsftpd > /dev/null 2>&1
 
 # Backup ProFTPD configuration
 systemctl stop proftpd > /dev/null 2>&1
-cp /etc/proftpd/* $hst_backups/proftpd > /dev/null 2>&1
+cp /etc/proftpd/* $lcp_backups/proftpd > /dev/null 2>&1
 
 # Backup Exim configuration
 systemctl stop exim4 > /dev/null 2>&1
-cp -r /etc/exim4/* $hst_backups/exim4 > /dev/null 2>&1
+cp -r /etc/exim4/* $lcp_backups/exim4 > /dev/null 2>&1
 
 # Backup ClamAV configuration
 systemctl stop clamav-daemon > /dev/null 2>&1
-cp -r /etc/clamav/* $hst_backups/clamav > /dev/null 2>&1
+cp -r /etc/clamav/* $lcp_backups/clamav > /dev/null 2>&1
 
 # Backup SpamAssassin configuration
 systemctl stop spamassassin > /dev/null 2>&1
-cp -r /etc/spamassassin/* $hst_backups/spamassassin > /dev/null 2>&1
+cp -r /etc/spamassassin/* $lcp_backups/spamassassin > /dev/null 2>&1
 
 # Backup Dovecot configuration
 systemctl stop dovecot > /dev/null 2>&1
-cp /etc/dovecot.conf $hst_backups/dovecot > /dev/null 2>&1
-cp -r /etc/dovecot/* $hst_backups/dovecot > /dev/null 2>&1
+cp /etc/dovecot.conf $lcp_backups/dovecot > /dev/null 2>&1
+cp -r /etc/dovecot/* $lcp_backups/dovecot > /dev/null 2>&1
 
 # Backup MySQL/MariaDB configuration and data
 systemctl stop mysql > /dev/null 2>&1
 killall -9 mysqld > /dev/null 2>&1
-mv /var/lib/mysql $hst_backups/mysql/mysql_datadir > /dev/null 2>&1
-cp -r /etc/mysql/* $hst_backups/mysql > /dev/null 2>&1
-mv -f /root/.my.cnf $hst_backups/mysql > /dev/null 2>&1
+mv /var/lib/mysql $lcp_backups/mysql/mysql_datadir > /dev/null 2>&1
+cp -r /etc/mysql/* $lcp_backups/mysql > /dev/null 2>&1
+mv -f /root/.my.cnf $lcp_backups/mysql > /dev/null 2>&1
 
 # Backup Lokahost
 systemctl stop lokahost > /dev/null 2>&1
-cp -r $LOKAHOST/* $hst_backups/lokahost > /dev/null 2>&1
+cp -r $LOKAHOST/* $lcp_backups/lokahost > /dev/null 2>&1
 apt-get -y purge lokahost lokahost-nginx lokahost-php > /dev/null 2>&1
 rm -rf $LOKAHOST > /dev/null 2>&1
 
@@ -1466,25 +1466,25 @@ fi
 # Generating SSL certificate
 echo "[ * ] Generating default self-signed SSL certificate..."
 $LOKAHOST/bin/v-generate-ssl-cert $(hostname) '' 'US' 'California' \
-	'San Francisco' 'Lokahost Control Panel' 'IT' > /tmp/hst.pem
+	'San Francisco' 'Lokahost Control Panel' 'IT' > /tmp/lcp.pem
 
-crt_end=$(grep -n "END CERTIFICATE-" /tmp/hst.pem | cut -f 1 -d:)
+crt_end=$(grep -n "END CERTIFICATE-" /tmp/lcp.pem | cut -f 1 -d:)
 if [ "$release" = "12" ]; then
-	key_start=$(grep -n "BEGIN PRIVATE KEY" /tmp/hst.pem | cut -f 1 -d:)
-	key_end=$(grep -n "END PRIVATE KEY" /tmp/hst.pem | cut -f 1 -d:)
+	key_start=$(grep -n "BEGIN PRIVATE KEY" /tmp/lcp.pem | cut -f 1 -d:)
+	key_end=$(grep -n "END PRIVATE KEY" /tmp/lcp.pem | cut -f 1 -d:)
 else
-	key_start=$(grep -n "BEGIN RSA" /tmp/hst.pem | cut -f 1 -d:)
-	key_end=$(grep -n "END RSA" /tmp/hst.pem | cut -f 1 -d:)
+	key_start=$(grep -n "BEGIN RSA" /tmp/lcp.pem | cut -f 1 -d:)
+	key_end=$(grep -n "END RSA" /tmp/lcp.pem | cut -f 1 -d:)
 fi
 
 # Adding SSL certificate
 echo "[ * ] Adding SSL certificate to Lokahost Control Panel..."
 cd $LOKAHOST/ssl
-sed -n "1,${crt_end}p" /tmp/hst.pem > certificate.crt
-sed -n "$key_start,${key_end}p" /tmp/hst.pem > certificate.key
+sed -n "1,${crt_end}p" /tmp/lcp.pem > certificate.crt
+sed -n "$key_start,${key_end}p" /tmp/lcp.pem > certificate.key
 chown root:mail $LOKAHOST/ssl/*
 chmod 660 $LOKAHOST/ssl/*
-rm /tmp/hst.pem
+rm /tmp/lcp.pem
 
 # Install dhparam.pem
 cp -f $LOKAHOST_INSTALL_DIR/ssl/dhparam.pem /etc/ssl

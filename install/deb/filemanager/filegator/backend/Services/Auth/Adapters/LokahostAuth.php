@@ -56,17 +56,17 @@ class LokahostAuth implements Service, AuthInterface {
 
 		if ($return_var == 0) {
 			$data = json_decode(implode("", $output), true);
-			$hestia_user_info = $data[$this->lokahost_user];
-			return $this->transformUser($hestia_user_info);
+			$lokahost_user_info = $data[$this->lokahost_user];
+			return $this->transformUser($lokahost_user_info);
 		}
 
 		return $this->getGuest();
 	}
 
-	public function transformUser($hstuser): User {
+	public function transformUser($lcpuser): User {
 		$user = new User();
 		$user->setUsername($this->lokahost_user);
-		$user->setName($this->lokahost_user . " (" . $hstuser["NAME"] . ")");
+		$user->setName($this->lokahost_user . " (" . $lcpuser["NAME"] . ")");
 		$user->setRole("user");
 		$user->setPermissions($this->permissions);
 		$user->setHomedir("/");

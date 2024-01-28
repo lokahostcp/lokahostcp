@@ -5,8 +5,8 @@
 # For building from local source folder use "~localsrc" keyword as hesia branch name,
 #   and the script will not try to download the arhive from github, since '~' char is
 #   not accepted in branch name.
-# Compile but dont install -> ./hst_autocompile.sh --lokahost --noinstall --keepbuild '~localsrc'
-# Compile and install -> ./hst_autocompile.sh --lokahost --install '~localsrc'
+# Compile but dont install -> ./lcp_autocompile.sh --lokahost --noinstall --keepbuild '~localsrc'
+# Compile and install -> ./lcp_autocompile.sh --lokahost --install '~localsrc'
 
 # Clear previous screen output
 clear
@@ -102,7 +102,7 @@ usage() {
 	echo "after one of the above flags. To install the packages, specify 'Y'"
 	echo "following the branch name."
 	echo ""
-	echo "Example: bash hst_autocompile.sh --lokahost develop Y"
+	echo "Example: bash lcp_autocompile.sh --lokahost develop Y"
 	echo "This would install a Lokahost Control Panel package compiled with the"
 	echo "develop branch code."
 }
@@ -138,7 +138,7 @@ for i in $*; do
 			NGINX_B='true'
 			PHP_B='true'
 			WEB_TERMINAL_B='true'
-			HESTIA_B='true'
+			LOKAHOST_B='true'
 			;;
 		--nginx)
 			NGINX_B='true'
@@ -150,7 +150,7 @@ for i in $*; do
 			WEB_TERMINAL_B='true'
 			;;
 		--lokahost)
-			HESTIA_B='true'
+			LOKAHOST_B='true'
 			;;
 		--debug)
 			LOKAHOST_DEBUG='true'
@@ -368,22 +368,22 @@ if [ "$NGINX_B" = true ]; then
 		# Change to build directory
 		cd $BUILD_DIR
 
-		BUILD_DIR_HESTIANGINX=$BUILD_DIR/lokahost-nginx_$NGINX_V
+		BUILD_DIR_LOKAHOSTNGINX=$BUILD_DIR/lokahost-nginx_$NGINX_V
 		if [[ $NGINX_V =~ - ]]; then
 			BUILD_DIR_NGINX=$BUILD_DIR/nginx-$(echo $NGINX_V | cut -d"-" -f1)
 		else
 			BUILD_DIR_NGINX=$BUILD_DIR/nginx-$(echo $NGINX_V | cut -d"~" -f1)
 		fi
 
-		if [ "$KEEPBUILD" != 'true' ] || [ ! -d "$BUILD_DIR_HESTIANGINX" ]; then
+		if [ "$KEEPBUILD" != 'true' ] || [ ! -d "$BUILD_DIR_LOKAHOSTNGINX" ]; then
 			# Check if target directory exist
-			if [ -d "$BUILD_DIR_HESTIANGINX" ]; then
+			if [ -d "$BUILD_DIR_LOKAHOSTNGINX" ]; then
 				#mv $BUILD_DIR/lokahost-nginx_$NGINX_V $BUILD_DIR/lokahost-nginx_$NGINX_V-$(timestamp)
-				rm -r "$BUILD_DIR_HESTIANGINX"
+				rm -r "$BUILD_DIR_LOKAHOSTNGINX"
 			fi
 
 			# Create directory
-			mkdir -p $BUILD_DIR_HESTIANGINX
+			mkdir -p $BUILD_DIR_LOKAHOSTNGINX
 
 			# Download and unpack source files
 			download_file $NGINX '-' | tar xz
@@ -428,45 +428,45 @@ if [ "$NGINX_B" = true ]; then
 		if [ "$KEEPBUILD" != 'true' ]; then
 			rm -r $BUILD_DIR_NGINX $BUILD_DIR/openssl-$OPENSSL_V $BUILD_DIR/pcre2-$PCRE_V $BUILD_DIR/zlib-$ZLIB_V
 		fi
-		cd $BUILD_DIR_HESTIANGINX
+		cd $BUILD_DIR_LOKAHOSTNGINX
 
 		# Move nginx directory
-		mkdir -p $BUILD_DIR_HESTIANGINX/usr/local/lokahost
-		rm -rf $BUILD_DIR_HESTIANGINX/usr/local/lokahost/nginx
-		mv $BUILD_DIR/usr/local/lokahost/nginx $BUILD_DIR_HESTIANGINX/usr/local/lokahost/
+		mkdir -p $BUILD_DIR_LOKAHOSTNGINX/usr/local/lokahost
+		rm -rf $BUILD_DIR_LOKAHOSTNGINX/usr/local/lokahost/nginx
+		mv $BUILD_DIR/usr/local/lokahost/nginx $BUILD_DIR_LOKAHOSTNGINX/usr/local/lokahost/
 
 		# Remove original nginx.conf (will use custom)
-		rm -f $BUILD_DIR_HESTIANGINX/usr/local/lokahost/nginx/conf/nginx.conf
+		rm -f $BUILD_DIR_LOKAHOSTNGINX/usr/local/lokahost/nginx/conf/nginx.conf
 
 		# copy binary
-		mv $BUILD_DIR_HESTIANGINX/usr/local/lokahost/nginx/sbin/nginx $BUILD_DIR_HESTIANGINX/usr/local/lokahost/nginx/sbin/lokahost-nginx
+		mv $BUILD_DIR_LOKAHOSTNGINX/usr/local/lokahost/nginx/sbin/nginx $BUILD_DIR_LOKAHOSTNGINX/usr/local/lokahost/nginx/sbin/lokahost-nginx
 
 		# change permission and build the package
 		cd $BUILD_DIR
-		chown -R root:root $BUILD_DIR_HESTIANGINX
+		chown -R root:root $BUILD_DIR_LOKAHOSTNGINX
 		# Get Debian package files
-		mkdir -p $BUILD_DIR_HESTIANGINX/DEBIAN
-		get_branch_file 'src/deb/nginx/control' "$BUILD_DIR_HESTIANGINX/DEBIAN/control"
+		mkdir -p $BUILD_DIR_LOKAHOSTNGINX/DEBIAN
+		get_branch_file 'src/deb/nginx/control' "$BUILD_DIR_LOKAHOSTNGINX/DEBIAN/control"
 		if [ "$BUILD_ARCH" != "amd64" ]; then
-			sed -i "s/amd64/${BUILD_ARCH}/g" "$BUILD_DIR_HESTIANGINX/DEBIAN/control"
+			sed -i "s/amd64/${BUILD_ARCH}/g" "$BUILD_DIR_LOKAHOSTNGINX/DEBIAN/control"
 		fi
-		get_branch_file 'src/deb/nginx/copyright' "$BUILD_DIR_HESTIANGINX/DEBIAN/copyright"
-		get_branch_file 'src/deb/nginx/postinst' "$BUILD_DIR_HESTIANGINX/DEBIAN/postinst"
-		get_branch_file 'src/deb/nginx/postrm' "$BUILD_DIR_HESTIANGINX/DEBIAN/portrm"
-		chmod +x "$BUILD_DIR_HESTIANGINX/DEBIAN/postinst"
-		chmod +x "$BUILD_DIR_HESTIANGINX/DEBIAN/portrm"
+		get_branch_file 'src/deb/nginx/copyright' "$BUILD_DIR_LOKAHOSTNGINX/DEBIAN/copyright"
+		get_branch_file 'src/deb/nginx/postinst' "$BUILD_DIR_LOKAHOSTNGINX/DEBIAN/postinst"
+		get_branch_file 'src/deb/nginx/postrm' "$BUILD_DIR_LOKAHOSTNGINX/DEBIAN/portrm"
+		chmod +x "$BUILD_DIR_LOKAHOSTNGINX/DEBIAN/postinst"
+		chmod +x "$BUILD_DIR_LOKAHOSTNGINX/DEBIAN/portrm"
 
 		# Init file
-		mkdir -p $BUILD_DIR_HESTIANGINX/etc/init.d
-		get_branch_file 'src/deb/nginx/lokahost' "$BUILD_DIR_HESTIANGINX/etc/init.d/lokahost"
-		chmod +x "$BUILD_DIR_HESTIANGINX/etc/init.d/lokahost"
+		mkdir -p $BUILD_DIR_LOKAHOSTNGINX/etc/init.d
+		get_branch_file 'src/deb/nginx/lokahost' "$BUILD_DIR_LOKAHOSTNGINX/etc/init.d/lokahost"
+		chmod +x "$BUILD_DIR_LOKAHOSTNGINX/etc/init.d/lokahost"
 
 		# Custom config
-		get_branch_file 'src/deb/nginx/nginx.conf' "${BUILD_DIR_HESTIANGINX}/usr/local/lokahost/nginx/conf/nginx.conf"
+		get_branch_file 'src/deb/nginx/nginx.conf' "${BUILD_DIR_LOKAHOSTNGINX}/usr/local/lokahost/nginx/conf/nginx.conf"
 
 		# Build the package
 		echo Building Nginx DEB
-		dpkg-deb -Zxz --build $BUILD_DIR_HESTIANGINX $DEB_DIR
+		dpkg-deb -Zxz --build $BUILD_DIR_LOKAHOSTNGINX $DEB_DIR
 
 		rm -r $BUILD_DIR/usr
 
@@ -513,7 +513,7 @@ if [ "$PHP_B" = true ]; then
 	echo "Building lokahost-php package..."
 
 	if [ "$BUILD_DEB" = true ]; then
-		BUILD_DIR_HESTIAPHP=$BUILD_DIR/lokahost-php_$PHP_V
+		BUILD_DIR_LOKAHOSTPHP=$BUILD_DIR/lokahost-php_$PHP_V
 
 		BUILD_DIR_PHP=$BUILD_DIR/php-$(echo $PHP_V | cut -d"~" -f1)
 
@@ -523,14 +523,14 @@ if [ "$PHP_B" = true ]; then
 			BUILD_DIR_PHP=$BUILD_DIR/php-$(echo $PHP_V | cut -d"~" -f1)
 		fi
 
-		if [ "$KEEPBUILD" != 'true' ] || [ ! -d "$BUILD_DIR_HESTIAPHP" ]; then
+		if [ "$KEEPBUILD" != 'true' ] || [ ! -d "$BUILD_DIR_LOKAHOSTPHP" ]; then
 			# Check if target directory exist
-			if [ -d $BUILD_DIR_HESTIAPHP ]; then
-				rm -r $BUILD_DIR_HESTIAPHP
+			if [ -d $BUILD_DIR_LOKAHOSTPHP ]; then
+				rm -r $BUILD_DIR_LOKAHOSTPHP
 			fi
 
 			# Create directory
-			mkdir -p $BUILD_DIR_HESTIAPHP
+			mkdir -p $BUILD_DIR_LOKAHOSTPHP
 
 			# Download and unpack source files
 			cd $BUILD_DIR
@@ -563,56 +563,56 @@ if [ "$PHP_B" = true ]; then
 			cp -rf "$SRC_DIR/" $BUILD_DIR/lokahost-$branch_dash
 		fi
 		# Move php directory
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_HESTIAPHP/usr/local/lokahost
-		mkdir -p $BUILD_DIR_HESTIAPHP/usr/local/lokahost
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost
+		mkdir -p $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost
 
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: rm -r $BUILD_DIR_HESTIAPHP/usr/local/lokahost/php
-		if [ -d $BUILD_DIR_HESTIAPHP/usr/local/lokahost/php ]; then
-			rm -r $BUILD_DIR_HESTIAPHP/usr/local/lokahost/php
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: rm -r $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost/php
+		if [ -d $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost/php ]; then
+			rm -r $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost/php
 		fi
 
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mv ${BUILD_DIR}/usr/local/lokahost/php ${BUILD_DIR_HESTIAPHP}/usr/local/lokahost/
-		mv ${BUILD_DIR}/usr/local/lokahost/php ${BUILD_DIR_HESTIAPHP}/usr/local/lokahost/
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mv ${BUILD_DIR}/usr/local/lokahost/php ${BUILD_DIR_LOKAHOSTPHP}/usr/local/lokahost/
+		mv ${BUILD_DIR}/usr/local/lokahost/php ${BUILD_DIR_LOKAHOSTPHP}/usr/local/lokahost/
 
 		# copy binary
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: cp $BUILD_DIR_HESTIAPHP/usr/local/lokahost/php/sbin/php-fpm $BUILD_DIR_HESTIAPHP/usr/local/lokahost/php/sbin/lokahost-php
-		cp $BUILD_DIR_HESTIAPHP/usr/local/lokahost/php/sbin/php-fpm $BUILD_DIR_HESTIAPHP/usr/local/lokahost/php/sbin/lokahost-php
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: cp $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost/php/sbin/php-fpm $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost/php/sbin/lokahost-php
+		cp $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost/php/sbin/php-fpm $BUILD_DIR_LOKAHOSTPHP/usr/local/lokahost/php/sbin/lokahost-php
 
 		# Change permissions and build the package
-		chown -R root:root $BUILD_DIR_HESTIAPHP
+		chown -R root:root $BUILD_DIR_LOKAHOSTPHP
 		# Get Debian package files
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_HESTIAPHP/DEBIAN
-		mkdir -p $BUILD_DIR_HESTIAPHP/DEBIAN
-		get_branch_file 'src/deb/php/control' "$BUILD_DIR_HESTIAPHP/DEBIAN/control"
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_LOKAHOSTPHP/DEBIAN
+		mkdir -p $BUILD_DIR_LOKAHOSTPHP/DEBIAN
+		get_branch_file 'src/deb/php/control' "$BUILD_DIR_LOKAHOSTPHP/DEBIAN/control"
 		if [ "$BUILD_ARCH" != "amd64" ]; then
-			sed -i "s/amd64/${BUILD_ARCH}/g" "$BUILD_DIR_HESTIAPHP/DEBIAN/control"
+			sed -i "s/amd64/${BUILD_ARCH}/g" "$BUILD_DIR_LOKAHOSTPHP/DEBIAN/control"
 		fi
 
 		os=$(lsb_release -is)
 		release=$(lsb_release -rs)
 		if [[ "$os" = "Ubuntu" ]] && [[ "$release" = "20.04" ]]; then
-			sed -i "/Conflicts: libzip5/d" "$BUILD_DIR_HESTIAPHP/DEBIAN/control"
-			sed -i "s/libzip4/libzip5/g" "$BUILD_DIR_HESTIAPHP/DEBIAN/control"
+			sed -i "/Conflicts: libzip5/d" "$BUILD_DIR_LOKAHOSTPHP/DEBIAN/control"
+			sed -i "s/libzip4/libzip5/g" "$BUILD_DIR_LOKAHOSTPHP/DEBIAN/control"
 		fi
 
-		get_branch_file 'src/deb/php/copyright' "$BUILD_DIR_HESTIAPHP/DEBIAN/copyright"
-		get_branch_file 'src/deb/php/postinst' "$BUILD_DIR_HESTIAPHP/DEBIAN/postinst"
-		chmod +x $BUILD_DIR_HESTIAPHP/DEBIAN/postinst
+		get_branch_file 'src/deb/php/copyright' "$BUILD_DIR_LOKAHOSTPHP/DEBIAN/copyright"
+		get_branch_file 'src/deb/php/postinst' "$BUILD_DIR_LOKAHOSTPHP/DEBIAN/postinst"
+		chmod +x $BUILD_DIR_LOKAHOSTPHP/DEBIAN/postinst
 		# Get custom config
-		get_branch_file 'src/deb/php/php-fpm.conf' "${BUILD_DIR_HESTIAPHP}/usr/local/lokahost/php/etc/php-fpm.conf"
-		get_branch_file 'src/deb/php/php.ini' "${BUILD_DIR_HESTIAPHP}/usr/local/lokahost/php/lib/php.ini"
+		get_branch_file 'src/deb/php/php-fpm.conf' "${BUILD_DIR_LOKAHOSTPHP}/usr/local/lokahost/php/etc/php-fpm.conf"
+		get_branch_file 'src/deb/php/php.ini' "${BUILD_DIR_LOKAHOSTPHP}/usr/local/lokahost/php/lib/php.ini"
 
 		# Build the package
 		echo Building PHP DEB
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: dpkg-deb -Zxz --build $BUILD_DIR_HESTIAPHP $DEB_DIR
-		dpkg-deb -Zxz --build $BUILD_DIR_HESTIAPHP $DEB_DIR
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: dpkg-deb -Zxz --build $BUILD_DIR_LOKAHOSTPHP $DEB_DIR
+		dpkg-deb -Zxz --build $BUILD_DIR_LOKAHOSTPHP $DEB_DIR
 
 		rm -r $BUILD_DIR/usr
 
 		# clear up the source folder
 		if [ "$KEEPBUILD" != 'true' ]; then
 			rm -r $BUILD_DIR/php-$(echo $PHP_V | cut -d"~" -f1)
-			rm -r $BUILD_DIR_HESTIAPHP
+			rm -r $BUILD_DIR_LOKAHOSTPHP
 			if [ "$use_src_folder" == 'true' ] && [ -d $BUILD_DIR/lokahost-$branch_dash ]; then
 				rm -r $BUILD_DIR/lokahost-$branch_dash
 			fi
@@ -653,53 +653,53 @@ if [ "$WEB_TERMINAL_B" = true ]; then
 	echo "Building lokahost-web-terminal package..."
 
 	if [ "$BUILD_DEB" = true ]; then
-		BUILD_DIR_HESTIA_TERMINAL=$BUILD_DIR/lokahost-web-terminal_$WEB_TERMINAL_V
+		BUILD_DIR_LOKAHOST_TERMINAL=$BUILD_DIR/lokahost-web-terminal_$WEB_TERMINAL_V
 
 		# Check if target directory exist
-		if [ -d $BUILD_DIR_HESTIA_TERMINAL ]; then
-			rm -r $BUILD_DIR_HESTIA_TERMINAL
+		if [ -d $BUILD_DIR_LOKAHOST_TERMINAL ]; then
+			rm -r $BUILD_DIR_LOKAHOST_TERMINAL
 		fi
 
 		# Create directory
-		mkdir -p $BUILD_DIR_HESTIA_TERMINAL
-		chown -R root:root $BUILD_DIR_HESTIA_TERMINAL
+		mkdir -p $BUILD_DIR_LOKAHOST_TERMINAL
+		chown -R root:root $BUILD_DIR_LOKAHOST_TERMINAL
 
 		# Get Debian package files
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_HESTIA_TERMINAL/DEBIAN
-		mkdir -p $BUILD_DIR_HESTIA_TERMINAL/DEBIAN
-		get_branch_file 'src/deb/web-terminal/control' "$BUILD_DIR_HESTIA_TERMINAL/DEBIAN/control"
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_LOKAHOST_TERMINAL/DEBIAN
+		mkdir -p $BUILD_DIR_LOKAHOST_TERMINAL/DEBIAN
+		get_branch_file 'src/deb/web-terminal/control' "$BUILD_DIR_LOKAHOST_TERMINAL/DEBIAN/control"
 		if [ "$BUILD_ARCH" != "amd64" ]; then
-			sed -i "s/amd64/${BUILD_ARCH}/g" "$BUILD_DIR_HESTIA_TERMINAL/DEBIAN/control"
+			sed -i "s/amd64/${BUILD_ARCH}/g" "$BUILD_DIR_LOKAHOST_TERMINAL/DEBIAN/control"
 		fi
 
-		get_branch_file 'src/deb/web-terminal/copyright' "$BUILD_DIR_HESTIA_TERMINAL/DEBIAN/copyright"
-		get_branch_file 'src/deb/web-terminal/postinst' "$BUILD_DIR_HESTIA_TERMINAL/DEBIAN/postinst"
-		chmod +x $BUILD_DIR_HESTIA_TERMINAL/DEBIAN/postinst
+		get_branch_file 'src/deb/web-terminal/copyright' "$BUILD_DIR_LOKAHOST_TERMINAL/DEBIAN/copyright"
+		get_branch_file 'src/deb/web-terminal/postinst' "$BUILD_DIR_LOKAHOST_TERMINAL/DEBIAN/postinst"
+		chmod +x $BUILD_DIR_LOKAHOST_TERMINAL/DEBIAN/postinst
 
 		# Get server files
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p "${BUILD_DIR_HESTIA_TERMINAL}/usr/local/lokahost/web-terminal"
-		mkdir -p "${BUILD_DIR_HESTIA_TERMINAL}/usr/local/lokahost/web-terminal"
-		get_branch_file 'src/deb/web-terminal/package.json' "${BUILD_DIR_HESTIA_TERMINAL}/usr/local/lokahost/web-terminal/package.json"
-		get_branch_file 'src/deb/web-terminal/package-lock.json' "${BUILD_DIR_HESTIA_TERMINAL}/usr/local/lokahost/web-terminal/package-lock.json"
-		get_branch_file 'src/deb/web-terminal/server.js' "${BUILD_DIR_HESTIA_TERMINAL}/usr/local/lokahost/web-terminal/server.js"
-		chmod +x "${BUILD_DIR_HESTIA_TERMINAL}/usr/local/lokahost/web-terminal/server.js"
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p "${BUILD_DIR_LOKAHOST_TERMINAL}/usr/local/lokahost/web-terminal"
+		mkdir -p "${BUILD_DIR_LOKAHOST_TERMINAL}/usr/local/lokahost/web-terminal"
+		get_branch_file 'src/deb/web-terminal/package.json' "${BUILD_DIR_LOKAHOST_TERMINAL}/usr/local/lokahost/web-terminal/package.json"
+		get_branch_file 'src/deb/web-terminal/package-lock.json' "${BUILD_DIR_LOKAHOST_TERMINAL}/usr/local/lokahost/web-terminal/package-lock.json"
+		get_branch_file 'src/deb/web-terminal/server.js' "${BUILD_DIR_LOKAHOST_TERMINAL}/usr/local/lokahost/web-terminal/server.js"
+		chmod +x "${BUILD_DIR_LOKAHOST_TERMINAL}/usr/local/lokahost/web-terminal/server.js"
 
-		cd $BUILD_DIR_HESTIA_TERMINAL/usr/local/lokahost/web-terminal
+		cd $BUILD_DIR_LOKAHOST_TERMINAL/usr/local/lokahost/web-terminal
 		npm ci --omit=dev
 
 		# Systemd service
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_HESTIA_TERMINAL/etc/systemd/system
-		mkdir -p $BUILD_DIR_HESTIA_TERMINAL/etc/systemd/system
-		get_branch_file 'src/deb/web-terminal/lokahost-web-terminal.service' "$BUILD_DIR_HESTIA_TERMINAL/etc/systemd/system/lokahost-web-terminal.service"
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: mkdir -p $BUILD_DIR_LOKAHOST_TERMINAL/etc/systemd/system
+		mkdir -p $BUILD_DIR_LOKAHOST_TERMINAL/etc/systemd/system
+		get_branch_file 'src/deb/web-terminal/lokahost-web-terminal.service' "$BUILD_DIR_LOKAHOST_TERMINAL/etc/systemd/system/lokahost-web-terminal.service"
 
 		# Build the package
 		echo Building Web Terminal DEB
-		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: dpkg-deb -Zxz --build $BUILD_DIR_HESTIA_TERMINAL $DEB_DIR
-		dpkg-deb -Zxz --build $BUILD_DIR_HESTIA_TERMINAL $DEB_DIR
+		[ "$LOKAHOST_DEBUG" ] && echo DEBUG: dpkg-deb -Zxz --build $BUILD_DIR_LOKAHOST_TERMINAL $DEB_DIR
+		dpkg-deb -Zxz --build $BUILD_DIR_LOKAHOST_TERMINAL $DEB_DIR
 
 		# clear up the source folder
 		if [ "$KEEPBUILD" != 'true' ]; then
-			rm -r $BUILD_DIR_HESTIA_TERMINAL
+			rm -r $BUILD_DIR_LOKAHOST_TERMINAL
 			if [ "$use_src_folder" == 'true' ] && [ -d $BUILD_DIR/lokahost-$branch_dash ]; then
 				rm -r $BUILD_DIR/lokahost-$branch_dash
 			fi
@@ -715,7 +715,7 @@ fi
 
 arch="$BUILD_ARCH"
 
-if [ "$HESTIA_B" = true ]; then
+if [ "$LOKAHOST_B" = true ]; then
 	if [ "$CROSS" = "true" ]; then
 		arch="amd64 arm64"
 	fi

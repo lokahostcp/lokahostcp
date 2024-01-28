@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lokahost\System;
 use function Lokahostcp\quoteshellarg\quoteshellarg;
 
-class HestiaApp {
+class LokahostApp {
 	/** @var string[] */
 	public $errors;
 	protected const TMPDIR_DOWNLOADS = "/tmp/lokahost-webapp";
@@ -16,9 +16,9 @@ class HestiaApp {
 	}
 
 	public function run(string $cmd, $args, &$cmd_result = null): bool {
-		$cli_script = realpath(HESTIA_DIR_BIN . $cmd);
-		if (!str_starts_with((string) $cli_script, HESTIA_DIR_BIN)) {
-			$errstr = "$cmd is trying to traverse outside of " . HESTIA_DIR_BIN;
+		$cli_script = realpath(LOKAHOST_DIR_BIN . $cmd);
+		if (!str_starts_with((string) $cli_script, LOKAHOST_DIR_BIN)) {
+			$errstr = "$cmd is trying to traverse outside of " . LOKAHOST_DIR_BIN;
 			trigger_error($errstr);
 			throw new \Exception($errstr);
 		}
@@ -87,7 +87,7 @@ class HestiaApp {
 		$install_folder = $this->getUserHomeDir() . DIRECTORY_SEPARATOR . ".composer";
 
 		if (!file_exists($install_folder)) {
-			exec(HESTIA_CMD . "v-rebuild-user " . $this->user(), $output, $return_code);
+			exec(LOKAHOST_CMD . "v-rebuild-user " . $this->user(), $output, $return_code);
 			if ($return_code !== 0) {
 				throw new \Exception("Unable to rebuild user");
 			}
@@ -202,7 +202,7 @@ class HestiaApp {
 		string $dbtype = "mysql",
 		string $charset = "utf8mb4",
 	) {
-		$v_password = tempnam("/tmp", "hst");
+		$v_password = tempnam("/tmp", "lcp");
 		$fp = fopen($v_password, "w");
 		fwrite($fp, $dbpass . "\n");
 		fclose($fp);

@@ -4,5 +4,5 @@ declare(strict_types=1);
 
 namespace Lokahost\System;
 
-class HestiaCLI {
+class LokahostCLI {
 }

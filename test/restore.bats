@@ -23,8 +23,8 @@ function setup() {
         echo 'LOKAHOST=/usr/local/lokahost' >> /tmp/lokahost-test-env.sh
         echo 'domain=test-5285.lokahost.com' >> /tmp/lokahost-test-env.sh
         echo 'domainuk=test-5285.lokahost.com.uk' >> /tmp/lokahost-test-env.sh
-        echo 'rootdomain=testhestiacp.com' >> /tmp/lokahost-test-env.sh
-        echo 'subdomain=cdn.testhestiacp.com' >> /tmp/lokahost-test-env.sh
+        echo 'rootdomain=testlokahostcp.com' >> /tmp/lokahost-test-env.sh
+        echo 'subdomain=cdn.testlokahostcp.com' >> /tmp/lokahost-test-env.sh
         echo 'database=test-5285_database' >> /tmp/lokahost-test-env.sh
         echo 'dbuser=test-5285_dbuser' >> /tmp/lokahost-test-env.sh
     fi
@@ -90,7 +90,7 @@ function validate_web_domain() {
 
 #Test backup
 #  Lokahost v1.1.1 archive contains:
-#    user: hestia111
+#    user: lokahost111
 #    web:
 #      - test.lokahost.com (+SSL self-signed)
 #    dns:
@@ -100,11 +100,11 @@ function validate_web_domain() {
 #    mail acc:
 #      - testaccount@test.lokahost.com
 #    db:
-#      - hestia111_db
+#      - lokahost111_db
 #    cron:
 #      - 1: /bin/true
 #  Lokahost 1.7.0 archive contains (As zstd format)
-#    user: hestia131
+#    user: lokahost131
 #    web:
 #      - test.lokahost.com (+SSL self-signed)
 #        FTP Account
@@ -120,7 +120,7 @@ function validate_web_domain() {
 #           Ratelimit: 20
 #      - support@test.lokahost.com
 #    db:
-#      - hestia170_db
+#      - lokahost170_db
 #    cron:
 #      - 1: /bin/true
 #  Vesta 0.9.8-23 archive contains:
@@ -149,7 +149,7 @@ function validate_web_domain() {
 
     mkdir -p /backup
 
-    local archive_name="hestia111.2020-03-26"
+    local archive_name="lokahost111.2020-03-26"
     run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
@@ -219,7 +219,7 @@ function validate_web_domain() {
 
     mkdir -p /backup
 
-    local archive_name="hestia111.2020-03-26"
+    local archive_name="lokahost111.2020-03-26"
     run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
@@ -283,7 +283,7 @@ function validate_web_domain() {
 
     mkdir -p /backup
 
-    local archive_name="hestia170.2022-08-23"
+    local archive_name="lokahost170.2022-08-23"
     run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 
@@ -376,7 +376,7 @@ function validate_web_domain() {
 
     mkdir -p /backup
 
-    local archive_name="hestia170.2022-08-23"
+    local archive_name="lokahost170.2022-08-23"
     run wget --quiet --tries=3 --timeout=15 --read-timeout=15 --waitretry=3 --no-dns-cache "https://storage.lokahost.com/testing/data/${archive_name}.tar" -O "/backup/${archive_name}.tar"
     assert_success
 

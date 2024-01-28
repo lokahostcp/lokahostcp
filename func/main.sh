@@ -40,7 +40,7 @@ RRD_STEP=300
 BIN=$LOKAHOST/bin
 LOKAHOST_INSTALL_DIR="$LOKAHOST/install/deb"
 LOKAHOST_COMMON_DIR="$LOKAHOST/install/common"
-LOKAHOST_BACKUP="/root/hst_backups/$(date +%d%m%Y%H%M)"
+LOKAHOST_BACKUP="/root/lcp_backups/$(date +%d%m%Y%H%M)"
 LOKAHOST_PHP="$LOKAHOST/php/bin/php"
 USER_DATA=$LOKAHOST/data/users/$user
 WEBTPL=$LOKAHOST/data/templates/web
@@ -1411,11 +1411,11 @@ check_access_key_cmd() {
 		local allowed_commands
 		if [[ -n "$PERMISSIONS" ]]; then
 			allowed_commands="$(get_apis_commands "$PERMISSIONS")"
-			if [[ -z "$(echo ",${allowed_commands}," | grep ",${hst_command},")" ]]; then
-				check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $hst_command"
+			if [[ -z "$(echo ",${allowed_commands}," | grep ",${lcp_command},")" ]]; then
+				check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $lcp_command"
 			fi
 		elif [[ -z "$PERMISSIONS" && "$USER" != "$ROOT_USER" ]]; then
-			check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $hst_command"
+			check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $lcp_command"
 		fi
 		user_arg_position="0"
 	elif [[ ! -e "$BIN/$cmd" ]]; then
@@ -1427,20 +1427,20 @@ check_access_key_cmd() {
 		local allowed_commands
 		if [[ -n "$PERMISSIONS" ]]; then
 			allowed_commands="$(get_apis_commands "$PERMISSIONS")"
-			if [[ -z "$(echo ",${allowed_commands}," | grep ",${hst_command},")" ]]; then
-				check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $hst_command"
+			if [[ -z "$(echo ",${allowed_commands}," | grep ",${lcp_command},")" ]]; then
+				check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $lcp_command"
 			fi
 		elif [[ -z "$PERMISSIONS" && "$USER" != "$ROOT_USER" ]]; then
-			check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $hst_command"
+			check_result "$E_FORBIDEN" "Key $access_key_id don't have permission to run the command $lcp_command"
 		fi
 
 		if [[ "$USER" == "$ROOT_USER" ]]; then
 			# Admin can run commands for any user
 			user_arg_position="0"
 		else
-			user_arg_position="$(search_command_arg_position "$hst_command" "USER")"
+			user_arg_position="$(search_command_arg_position "$lcp_command" "USER")"
 			if ! [[ "$user_arg_position" =~ ^[0-9]+$ ]]; then
-				check_result "$E_FORBIDEN" "Command $hst_command not found"
+				check_result "$E_FORBIDEN" "Command $lcp_command not found"
 			fi
 		fi
 	fi
@@ -1738,11 +1738,11 @@ get_apis_commands() {
 # * 0:   It doesn't have the argument;
 # * 1-9: The position of the argument in the command.
 search_command_arg_position() {
-	local hst_command="$(basename "$1")"
+	local lcp_command="$(basename "$1")"
 	local arg_name="$2"
 
-	local command_path="$BIN/$hst_command"
-	if [[ -z "$hst_command" || ! -e "$command_path" ]]; then
+	local command_path="$BIN/$lcp_command"
+	if [[ -z "$lcp_command" || ! -e "$command_path" ]]; then
 		echo "-1"
 		return
 	fi

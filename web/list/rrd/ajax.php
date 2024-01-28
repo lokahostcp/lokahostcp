@@ -27,7 +27,7 @@ if (!empty($requestPayload["service"])) {
 
 // Data
 exec(
-	HESTIA_CMD . "v-export-rrd " . quoteshellarg($service) . " " . quoteshellarg($period),
+	LOKAHOST_CMD . "v-export-rrd " . quoteshellarg($service) . " " . quoteshellarg($period),
 	$output,
 	$return_var,
 );

@@ -23,7 +23,7 @@ if [ -z "$script" ]; then
 	echo "Usage:    v-generate-debug-report v-script-name LOG_OUTPUT"
 	echo ""
 	echo "Example:  v-generate-debug-report v-add-user yes"
-	echo "          Log output to file located in ~/hst-debug/"
+	echo "          Log output to file located in ~/lcp-debug/"
 	echo ""
 	echo "Example:  v-generate-debug-report v-list-web-domains"
 	echo "          Show output in console."
@@ -41,7 +41,7 @@ if [ -z "$package_check" ]; then
 fi
 
 # Set debug path and ensure it exists
-DEBUG_PATH="$HOME/hst-debug/"
+DEBUG_PATH="$HOME/lcp-debug/"
 if [ ! -d "$DEBUG_PATH" ]; then
 	mkdir "$DEBUG_PATH"
 fi

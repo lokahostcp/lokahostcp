@@ -36,12 +36,12 @@ If you want to install a new Lokahost installation form the beta server.
 
 ```bash
 # Debian
-wget https://beta-apt.lokahost.com/hst-install-debian.sh
+wget https://beta-apt.lokahost.com/lcp-install-debian.sh
 # or Ubuntu
-wget https://beta-apt.lokahost.com/hst-install-ubuntu.sh
+wget https://beta-apt.lokahost.com/lcp-install-ubuntu.sh
 ```
 
-Then install via bash hst-install-debian.sh or bash hst-install-ubuntu.sh
+Then install via bash lcp-install-debian.sh or bash lcp-install-ubuntu.sh
 
 ## Disabling the beta repo
 

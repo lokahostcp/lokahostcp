@@ -25,7 +25,7 @@ steps:
       - git submodule update --init --recursive
   - name: Build Lokahost package and install
     commands:
-      - ./src/hst_autocompile.sh --lokahost --install '~localsrc'
+      - ./src/lcp_autocompile.sh --lokahost --install '~localsrc'
   - name: Reset Web templates
     commands:
       - rm /usr/local/lokahost/data/templates/web/nginx/php-fpm/*.*
@@ -81,7 +81,7 @@ steps:
       - git submodule update --init --recursive
   - name: Build Lokahost package install
     commands:
-      - ./src/hst_autocompile.sh --lokahost --install '~localsrc'
+      - ./src/lcp_autocompile.sh --lokahost --install '~localsrc'
   - name: Reset Web templates
     commands:
       - rm /usr/local/lokahost/data/templates/web/nginx/php-fpm/*.*
@@ -133,7 +133,7 @@ steps:
     image: debian:bullseye
     commands:
       - ln -snf /etc/localtime && echo CET > /etc/timezone
-      - ./src/hst_autocompile.sh --dontinstalldeps --lokahost --debug --cross --noinstall --keepbuild '~localsrc'
+      - ./src/lcp_autocompile.sh --dontinstalldeps --lokahost --debug --cross --noinstall --keepbuild '~localsrc'
       - mkdir -p ./lokahost/
       - mv /tmp/lokahostcp-src/deb/*.deb ./lokahost/
   - name: Upload

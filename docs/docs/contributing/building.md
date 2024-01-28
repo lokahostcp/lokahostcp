@@ -23,11 +23,11 @@ git checkout main
 cd ./src/
 
 # Compile packages
-./hst_autocompile.sh --all --noinstall --keepbuild '~localsrc'
+./lcp_autocompile.sh --all --noinstall --keepbuild '~localsrc'
 
 cd ../install
 
-bash hst-install-{os}.sh --with-debs /tmp/lokahost-src/deb/
+bash lcp-install-{os}.sh --with-debs /tmp/lokahost-src/deb/
 ```
 
 Any option can be appended to the installer command. [See the complete list](../introduction/getting-started#list-of-installation-options).
@@ -36,12 +36,12 @@ Any option can be appended to the installer command. [See the complete list](../
 
 ```bash
 # Only Lokahost
-./hst_autocompile.sh --lokahost --noinstall --keepbuild '~localsrc'
+./lcp_autocompile.sh --lokahost --noinstall --keepbuild '~localsrc'
 ```
 
 ```bash
 # Lokahost + lokahost-nginx and lokahost-php
-./hst_autocompile.sh --all --noinstall --keepbuild '~localsrc'
+./lcp_autocompile.sh --all --noinstall --keepbuild '~localsrc'
 ```
 
 ## Build and install packages
@@ -52,12 +52,12 @@ Use if you have Lokahost already installed, for your changes to take effect.
 
 ```bash
 # Only Lokahost
-./hst_autocompile.sh --lokahost --install '~localsrc'
+./lcp_autocompile.sh --lokahost --install '~localsrc'
 ```
 
 ```bash
 # Lokahost + lokahost-nginx and lokahost-php
-./hst_autocompile.sh --all --install '~localsrc'
+./lcp_autocompile.sh --all --install '~localsrc'
 ```
 
 ## Updating Lokahost from GitHub

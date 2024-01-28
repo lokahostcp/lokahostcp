@@ -20,7 +20,7 @@ if (!empty($_POST["save"])) {
 		fwrite($fp, str_replace("\r\n", "\n", $_POST["v_config"]));
 		fclose($fp);
 		exec(
-			HESTIA_CMD . "v-change-sys-service-config " . $new_conf . " lokahostweb no",
+			LOKAHOST_CMD . "v-change-sys-service-config " . $new_conf . " lokahostweb no",
 			$output,
 			$return_var,
 		);
@@ -34,7 +34,7 @@ $v_config_path = "/var/spool/cron/crontabs/lokahostweb";
 $v_service_name = _("Panel Cronjobs");
 
 // Read config
-$v_config = shell_exec(HESTIA_CMD . "v-open-fs-config " . $v_config_path);
+$v_config = shell_exec(LOKAHOST_CMD . "v-open-fs-config " . $v_config_path);
 
 // Render page
 render_page($user, $TAB, "edit_server_service");

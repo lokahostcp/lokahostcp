@@ -3,7 +3,7 @@
 namespace Lokahost\WebApp\Installers;
 
 use Lokahost\System\Util;
-use Lokahost\System\HestiaApp;
+use Lokahost\System\LokahostApp;
 use Lokahost\WebApp\InstallerInterface;
 use Lokahost\Models\WebDomain;
 
@@ -56,7 +56,7 @@ abstract class BaseSetup implements InstallerInterface {
 		}
 		return $this->appInfo;
 	}
-	public function __construct($domain, HestiaApp $appcontext) {
+	public function __construct($domain, LokahostApp $appcontext) {
 		if (filter_var($domain, FILTER_VALIDATE_DOMAIN) === false) {
 			throw new \Exception("Invalid domain name");
 		}
@@ -180,7 +180,7 @@ abstract class BaseSetup implements InstallerInterface {
 	}
 
 	public function saveTempFile(string $data) {
-		$tmp_file = tempnam("/tmp", "hst.");
+		$tmp_file = tempnam("/tmp", "lcp.");
 		if (empty($tmp_file)) {
 			throw new \Exception("Error creating temp file");
 		}

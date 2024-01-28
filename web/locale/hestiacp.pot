@@ -610,7 +610,7 @@ msgstr ""
 msgid "Unable to add database! Limit reached!"
 msgstr ""
 
-#: ../../web/src/app/System/HestiaApp.php:218
+#: ../../web/src/app/System/LokahostApp.php:218
 msgid "Unable to add database!"
 msgstr ""
 

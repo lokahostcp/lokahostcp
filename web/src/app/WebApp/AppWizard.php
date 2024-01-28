@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lokahost\WebApp;
 
-use Lokahost\System\HestiaApp;
+use Lokahost\System\LokahostApp;
 
 class AppWizard {
 	private $domain;
@@ -19,7 +19,7 @@ class AppWizard {
 		"database_password" => ["type" => "password", "placeholder" => "auto"],
 	];
 
-	public function __construct(InstallerInterface $app, string $domain, HestiaApp $context) {
+	public function __construct(InstallerInterface $app, string $domain, LokahostApp $context) {
 		$this->domain = $domain;
 		$this->appcontext = $context;
 

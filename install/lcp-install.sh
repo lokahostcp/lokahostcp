@@ -97,21 +97,21 @@ check_wget_curl() {
 	# Check wget
 	if [ -e '/usr/bin/wget' ]; then
 		if [ -e '/etc/redhat-release' ]; then
-			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/hst-install-rhel.sh -O hst-install-rhel.sh
+			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-rhel.sh -O lcp-install-rhel.sh
 			if [ "$?" -eq '0' ]; then
-				bash hst-install-rhel.sh $*
+				bash lcp-install-rhel.sh $*
 				exit
 			else
-				echo "Error: hst-install-rhel.sh download failed."
+				echo "Error: lcp-install-rhel.sh download failed."
 				exit 1
 			fi
 		else
-			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/hst-install-$type.sh -O hst-install-$type.sh
+			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-$type.sh -O lcp-install-$type.sh
 			if [ "$?" -eq '0' ]; then
-				bash hst-install-$type.sh $*
+				bash lcp-install-$type.sh $*
 				exit
 			else
-				echo "Error: hst-install-$type.sh download failed."
+				echo "Error: lcp-install-$type.sh download failed."
 				exit 1
 			fi
 		fi
@@ -120,21 +120,21 @@ check_wget_curl() {
 	# Check curl
 	if [ -e '/usr/bin/curl' ]; then
 		if [ -e '/etc/redhat-release' ]; then
-			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/hst-install-rhel.sh
+			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-rhel.sh
 			if [ "$?" -eq '0' ]; then
-				bash hst-install-rhel.sh $*
+				bash lcp-install-rhel.sh $*
 				exit
 			else
-				echo "Error: hst-install-rhel.sh download failed."
+				echo "Error: lcp-install-rhel.sh download failed."
 				exit 1
 			fi
 		else
-			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/hst-install-$type.sh
+			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-$type.sh
 			if [ "$?" -eq '0' ]; then
-				bash hst-install-$type.sh $*
+				bash lcp-install-$type.sh $*
 				exit
 			else
-				echo "Error: hst-install-$type.sh download failed."
+				echo "Error: lcp-install-$type.sh download failed."
 				exit 1
 			fi
 		fi

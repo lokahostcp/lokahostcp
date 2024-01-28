@@ -125,7 +125,7 @@ function get_real_user_ip() {
  * @param string $user A username for save in the user history ou 'system' to save in Lokahost history.
  * @return int The script result code.
  */
-function hst_add_history_log($message, $category = "System", $level = "Info", $user = "system") {
+function lcp_add_history_log($message, $category = "System", $level = "Info", $user = "system") {
 	//$message = ucfirst($message);
 	//$message = str_replace("'", "`", $message);
 	$category = ucfirst(strtolower($category));
@@ -139,7 +139,7 @@ function hst_add_history_log($message, $category = "System", $level = "Info", $u
 		quoteshellarg($category) .
 		" " .
 		quoteshellarg($message);
-	exec(HESTIA_CMD . "v-log-action " . $command_args, $output, $return_var);
+	exec(LOKAHOST_CMD . "v-log-action " . $command_args, $output, $return_var);
 	unset($output);
 
 	return $return_var;
