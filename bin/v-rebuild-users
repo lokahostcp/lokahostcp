@@ -1,0 +1,51 @@
+#!/bin/bash
+# info: rebuild system users
+# options: [RESTART]
+#
+# example: v-rebuild-users
+#
+# This function rebuilds user configuration for all users.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+restart=$1
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# shellcheck source=/usr/local/lokahost/func/rebuild.sh
+source $LOKAHOST/func/rebuild.sh
+# shellcheck source=/usr/local/lokahost/func/syshealth.sh
+source $LOKAHOST/func/syshealth.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Rebuild loop
+for user in $("$BIN/v-list-users" list); do
+	$BIN/v-rebuild-user "$user" "$restart"
+done
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+log_event "$OK" "$ARGUMENTS"
+
+exit

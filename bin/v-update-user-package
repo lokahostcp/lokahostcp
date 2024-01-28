@@ -1,0 +1,50 @@
+#!/bin/bash
+# info: update user package
+# options: PACKAGE
+#
+# example: v-update-user-package default
+#
+# This function propagates package to connected users.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+package=$1
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+check_args '1' "$#" 'PACKAGE'
+is_format_valid 'package'
+is_package_valid
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+for user in $("$BIN/v-list-users" list); do
+	check_package=$(grep "PACKAGE='$package'" $USER_DATA/$user/user.conf)
+	if [ -n "$check_package" ]; then
+		"$BIN/v-change-user-package" "$user" "$package" 'yes'
+	fi
+done
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+log_event "$OK" "$ARGUMENTS"
+
+exit

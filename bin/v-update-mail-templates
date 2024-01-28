@@ -1,0 +1,53 @@
+#!/bin/bash
+# info: update mail templates
+# options: [RESTART] [SKIP]
+#
+# example: v-update-mail-templates
+#
+# This function for obtaining updated webmail templates from Lokahost package.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+restart=$1
+skip=$2
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Update templates
+cp -rf $LOKAHOST_INSTALL_DIR/templates/mail $LOKAHOST/data/templates/
+
+# Rebuild mail domains if mail services are enabled
+if [ -z "$skip" ]; then
+	if [ -n "$MAIL_SYSTEM" ]; then
+		for user in $("$BIN/v-list-users" list); do
+			$BIN/v-rebuild-mail-domains "$user" no
+		done
+	fi
+fi
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+if [ -n "$restart" ] || [ "$restart" == "yes" ]; then
+	# Restarting web server
+	$BIN/v-restart-web "$restart"
+	check_result $? "restart" > /dev/null 2>&1
+
+	$BIN/v-restart-proxy "$restart"
+	check_result $? "restart" > /dev/null 2>&1
+fi
+$BIN/v-log-action "system" "Info" "Updates" "Default mail domain templates updated."
+exit

@@ -1,0 +1,78 @@
+#!/bin/bash
+# info: disables support for single sign on PHPMYADMIN
+# options: [mode]
+#
+# example: v-delete-sys-pma-sso
+#
+# Disables support for SSO to phpMyAdmin
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+MODE=$1
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+PMA_INSTALL="/usr/share/phpmyadmin"
+PMA_CONFIG="/etc/phpmyadmin"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+if [ "x$(id -u)" != 'x0' ]; then
+	echo "Error: Script can be run executed only by root"
+	exit 10
+fi
+
+if [ ! -e "$PMA_INSTALL/lokahost-sso.php" ]; then
+	echo 'Error:  PMA Single Sign On already disabled'
+	exit 1
+fi
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+apikey=$(grep -Po "'API_KEY', '(.*)'" /usr/share/phpmyadmin/lokahost-sso.php | cut "-d'" -f4)
+
+if [ -z $(echo $apikey | grep ":") ]; then
+	$BIN/v-revoke-api-key "$apikey"
+else
+	apikey=$(grep -Po "'API_KEY', '(.*)'" /usr/share/phpmyadmin/lokahost-sso.php | cut "-d'" -f4 | cut -d ":" -f1)
+	$BIN/v-delete-access-key "$apikey"
+fi
+
+#remove new files
+rm /usr/share/phpmyadmin/lokahost-sso.php
+rm /etc/phpmyadmin/lokahost-sso.inc.php
+
+#revert config
+sed -i "/lokahost-sso.inc.php/d" $PMA_CONFIG/config.inc.php
+
+# disable key
+$BIN/v-change-sys-config-value 'PHPMYADMIN_KEY' ""
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+if [ "$MODE" != "quiet" ]; then
+	echo "PMA Lokahost-SSO plugin has been successfully removed/disabled"
+fi
+
+# Logging
+$BIN/v-log-action "system" "Info" "Plugins" "phpMyAdmin Single Sign-On (SSO) disabled."
+log_event "$OK" "$ARGUMENTS"
+
+exit

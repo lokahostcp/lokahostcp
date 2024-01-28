@@ -1,0 +1,56 @@
+#!/bin/bash
+
+set -e
+
+if [ "$1" != "configure" ]; then
+	exit 0
+fi
+
+# Touch and set permisions on default log files on installation
+update-rc.d lokahost defaults > /dev/null
+invoke-rc.d lokahost start || true
+
+# Adapt Port Listing in LOKAHOST NGINX Backend
+source /usr/local/lokahost/func/syshealth.sh # Load syshealth functions
+syshealth_adapt_lokahost_nginx_listen_ports  # Adapt port listing
+syshealth_adapt_nginx_resolver
+
+# Run triggers only on updates
+if [ ! -e "/usr/local/lokahost/data/users/" ]; then
+	exit
+fi
+
+###############################################################
+#                Initialize functions/variables               #
+###############################################################
+
+if [ -z "$LOKAHOST" ]; then
+	export LOKAHOST='/usr/local/lokahost'
+	PATH=$PATH:/usr/local/lokahost/bin
+	export PATH
+fi
+
+# Check if preinstall hook exists
+if [ -e "/etc/lokahost/hooks/nginx/pre_install.sh" ]; then
+	/etc/lokahost/hooks/nginx/pre_install.sh
+fi
+
+# Load upgrade functions and variables
+source /usr/local/lokahost/func/main.sh
+source /usr/local/lokahost/func/upgrade.sh
+source /usr/local/lokahost/conf/lokahost.conf
+source /usr/local/lokahost/install/upgrade/upgrade.conf
+
+# Reset backend port
+if [ -n "$BACKEND_PORT" ]; then
+	/usr/local/lokahost/bin/v-change-sys-port $BACKEND_PORT
+fi
+
+if [ -e "/etc/lokahost/hooks/nginx/post_install.sh" ]; then
+	/etc/lokahost/hooks/nginx/post_install.sh
+fi
+
+# Restart lokahost service
+if [ -f "/etc/init.d/lokahost" ]; then
+	systemctl restart lokahost > /dev/null 2>&1
+fi

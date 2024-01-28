@@ -1,0 +1,89 @@
+#!/bin/bash
+# info: change system web terminal backend port
+# options: PORT
+#
+# example: v-change-sys-web-terminal-port 5678
+#
+# This function for changing the system's web terminal backend port in NGINX configuration.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+PORT=$1
+NGINX_CONFIG="$LOKAHOST/nginx/conf/nginx.conf"
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+# Functions
+is_port_valid() {
+	# Check if PORT is numeric
+	if [[ ! "$PORT" =~ ^[0-9]+$ ]]; then
+		echo "Port should contains a numeric value only!"
+		log_event "$E_INVALID" "$ARGUMENTS"
+		exit "$E_INVALID"
+	fi
+
+	# Check if PORT is already used
+	BUSY_PORT=$(lsof -i:"$PORT")
+	if [ -n "$BUSY_PORT" ] && [ "$PORT" != "$BACKEND_PORT" ]; then
+		echo "Port is already used by Lokahost, please set another one!"
+		log_event "$E_INUSE" "$ARGUMENTS"
+		exit "$E_INUSE"
+	fi
+}
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+check_args '1' "$#" 'PORT'
+is_port_valid
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Get original port
+ORIGINAL_PORT=$(cat ${NGINX_CONFIG} | grep -m1 "proxy_pass http://localhost:" | sed 's/[^0-9]*//g')
+
+# Check if port is different to nginx.conf
+if [ "$ORIGINAL_PORT" = "$PORT" ]; then
+	# Nothing to do, exit
+	exit
+else
+	# Set new port in config via v-change-sys-config-value
+	$BIN/v-change-sys-config-value "WEB_TERMINAL_PORT" "$PORT"
+	# Replace port in config files.
+	sed -i "s/\(proxy_pass http:\/\/localhost:\)[0-9][0-9]*\([^0-9]*\;$\)/\1$PORT\2/" ${NGINX_CONFIG}
+
+	# Check if the web terminal backend is running
+	if [[ $(ps -eaf | grep -i lokahost/web-terminal | sed '/^$/d' | wc -l) -gt 1 ]]; then
+		$BIN/v-restart-service lokahost-web-terminal
+	fi
+
+	# Check if Lokahost is running
+	if [[ $(ps -eaf | grep -i lokahost | sed '/^$/d' | wc -l) -gt 1 ]]; then
+		$BIN/v-restart-service lokahost
+	fi
+fi
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+$BIN/v-log-action "system" "Warning" "System" "Lokahost Control Panel web terminal port changed (New Value: $PORT, Old Value: $ORIGINAL_PORT)."
+log_event "$OK" "$ARGUMENTS"
+
+exit

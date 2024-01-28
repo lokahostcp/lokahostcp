@@ -1,0 +1,30 @@
+#!/bin/bash
+# info: change active system theme
+# options: NONE
+#
+# example: v-refresh-sys-theme
+#
+# This function for changing the currently active system theme.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Store current theme name
+CURRENT_THEME=$THEME
+
+# Cycle theme to regenerate (helps if cache is stuck)
+$BIN/v-change-sys-theme "default"
+$BIN/v-change-sys-theme "$CURRENT_THEME"

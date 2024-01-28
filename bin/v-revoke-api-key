@@ -1,0 +1,56 @@
+#!/bin/bash
+# info: revokes api key
+# options: [HASH]
+#
+# example: v-revoke-api-key mykey
+#
+# This function removes a key from in $LOKAHOST/data/keys/
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+hash=$1
+
+args_usage='HASH'
+check_args '1' "$#" "$args_usage"
+is_format_valid 'hash'
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+if [ ! -d "$LOKAHOST/data/keys/" ]; then
+	exit "$E_NOTEXIST"
+fi
+
+if [[ -e "$LOKAHOST/data/keys/$hash" ]]; then
+	rm $LOKAHOST/data/keys/$hash
+else
+	exit "$E_NOTEXIST"
+fi
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+$BIN/v-log-action "system" "Info" "System" "System API key revoked (Key: $hash)."
+log_event "$OK" "$ARGUMENTS"
+
+exit

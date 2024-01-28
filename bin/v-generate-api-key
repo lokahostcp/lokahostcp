@@ -1,0 +1,56 @@
+#!/bin/bash
+# info: generate api key
+# options: NONE
+#
+# example: v-generate-api-key
+#
+# This function creates a key file in $LOKAHOST/data/keys/
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+keygen() {
+	tr < /dev/urandom -dc _A-Z-a-z-0-9 | head -c 32
+	echo
+}
+HASH=$(keygen)
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+if [ ! -d "$LOKAHOST/data/keys/" ]; then
+	mkdir -p $LOKAHOST/data/keys/
+	chown lokahostweb:root $LOKAHOST/data/keys/
+	chmod 750 $LOKAHOST/data/keys/
+fi
+
+if [[ -e "$LOKAHOST/data/keys/$HASH" ]]; then
+	while [[ -e "$LOKAHOST/data/keys/$HASH" ]]; do
+		HASH=$(keygen)
+	done
+fi
+
+touch $LOKAHOST/data/keys/$HASH
+echo "$HASH"
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+$BIN/v-log-action "system" "Warning" "System" "New system API key generated (Key: ${HASH})."
+
+exit

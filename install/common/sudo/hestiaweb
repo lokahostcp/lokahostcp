@@ -1,0 +1,4 @@
+Defaults:root !requiretty
+
+# sudo is limited to lokahost scripts
+lokahostweb   ALL=NOPASSWD:/usr/local/lokahost/bin/*

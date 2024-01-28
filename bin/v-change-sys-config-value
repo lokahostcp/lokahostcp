@@ -1,0 +1,56 @@
+#!/bin/bash
+# info: change sysconfig value
+# options: KEY VALUE
+#
+# example: v-change-sys-config-value VERSION 1.0
+#
+# This function is for changing main config settings such as COMPANY_NAME or
+# COMPANY_EMAIL and so on.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+key=$(echo "$1" | tr '[:lower:]' '[:upper:]')
+value=$2
+
+# Includes
+# shellcheck source=/etc/lokahost/lokahost.conf
+source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahost/func/main.sh
+source $LOKAHOST/func/main.sh
+# load config file
+source_conf "$LOKAHOST/conf/lokahost.conf"
+
+# Perform verification if read-only mode is enabled
+check_lokahost_demo_mode
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+check_args '2' "$#" 'KEY VALUE'
+is_common_format_valid "$key" 'key'
+format_no_quotes "$value" 'value'
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+change_sys_value "$key" "$value"
+
+# Sort configuration file in alphabetical order on change
+sort $LOKAHOST/conf/lokahost.conf -o /tmp/updconf
+mv $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/lokahost.conf.bak
+mv /tmp/updconf $LOKAHOST/conf/lokahost.conf
+rm -f $LOKAHOST/conf/lokahost.conf.bak
+
+#----------------------------------------------------------#
+#                       Lokahost                             #
+#----------------------------------------------------------#
+
+# Logging
+$BIN/v-log-action "system" "Info" "System" "System configuration value changed (Key: $key, Value: $value)."
+log_event "$OK" "$ARGUMENTS"
+
+exit
