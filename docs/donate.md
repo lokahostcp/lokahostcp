@@ -9,9 +9,8 @@ By donating to Lokahost, you help maintain server costs, development time, and m
 
 Here are our official donation platforms:
 
-- [PayPal](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=ST87LQH2CHGLA)
 - Crypto
-  - Bitcoin: bc1q48jt5wg5jaj8g9zy7c3j03cv57j2m2u5anlutu
-  - Ethereum: 0xfF3Dd2c889bd0Ff73d8085B84A314FC7c88e5D51
-  - Binance: bnb1l4ywvw5ejfmsgjdcx8jn5lxj7zsun8ktfu7rh8
-  - Smart Chain: 0xfF3Dd2c889bd0Ff73d8085B84A314FC7c88e5D51
+ - Bitcoin (BTC): 3D3h9bn8sGFTpH8prZZ5NYtY8CUBywPzjr
+ - Ethereum (ERC20): 0x7a8d7f7da88e94bcf90ecba94ded6ab318e14ef5
+ - Binance Smart Chain (BEP20): 0xc998315a5e739007ddb0b2c9762fb7c1bff4004d
+ - Solana (SOL): DDQbkwghHxDTngPuiBCCF9eC6HpsEutm3Ryywnscrfp5

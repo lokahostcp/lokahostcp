@@ -555,13 +555,13 @@ esac
 install_welcome_message() {
 	DISPLAY_VER=$(echo $LOKAHOST_INSTALL_VER | sed "s|~alpha||g" | sed "s|~beta||g")
 	echo
-	echo '                _   _           _   _        ____ ____                  '
-	echo '               | | | | ___  ___| |_(_) __ _ / ___|  _ \                 '
-	echo '               | |_| |/ _ \/ __| __| |/ _` | |   | |_) |                '
-	echo '               |  _  |  __/\__ \ |_| | (_| | |___|  __/                 '
-	echo '               |_| |_|\___||___/\__|_|\__,_|\____|_|                    '
+	echo '         _           _          _                _    ____ ____         '
+	echo '        | |     ___ | | __ __ _| |__   ___   ___| |_ / ___|  _ \        '
+	echo '        | |    / _ \| |/ // _` |  _ \ / _ \ / __|  _) |   | |_) |       '
+	echo '        | |___| |_| | | \| (_| | | | | |_| |\__ \ |_| |___|  __/        '
+	echo '        |_____|\___/|_|\_\\__,_|_| |_|\___/ |___/|__)\____|_|           '
 	echo "                                                                        "
-	echo "                          Lokahost Control Panel                          "
+	echo "                          Lokahost Control Panel                        "
 	if [[ "$LOKAHOST_INSTALL_VER" =~ "beta" ]]; then
 		echo "                              BETA RELEASE                          "
 	fi
