@@ -56,13 +56,13 @@ upgrade_health_check() {
 
 upgrade_welcome_message() {
 	echo
-	echo '                  _   _           _   _        ____ ____                      '
-	echo '                 | | | | ___  ___| |_(_) __ _ / ___|  _ \                     '
-	echo '                 | |_| |/ _ \/ __| __| |/ _` | |   | |_) |                    '
-	echo '                 |  _  |  __/\__ \ |_| | (_| | |___|  __/                     '
-	echo '                 |_| |_|\___||___/\__|_|\__,_|\____|_|                        '
-	echo "                                                                              "
-	echo "                    Lokahost Control Panel Software Update                      "
+	echo '         _           _          _                _    ____ ____                  '
+	echo '        | |     ___ | | __ __ _| |__   ___   ___| |_ / ___|  _ \                 '
+	echo '        | |    / _ \| |/ // _` |  _ \ / _ \ / __|  _) |   | |_) |                '
+	echo '        | |___| |_| | | \| (_| | | | | |_| |\__ \ |_| |___|  __/                 '
+	echo '        |_____|\___/|_|\_\\__,_|_| |_|\___/ |___/|__)\____|_|                    '
+	echo "                                                                                 "
+	echo "                    Lokahost Control Panel Software Update                       "
 	echo "                               Version: ${DISPLAY_VER}"
 	if [[ "$new_version" =~ "beta" ]]; then
 		echo "                                BETA RELEASE                                 "
@@ -233,7 +233,7 @@ upgrade_send_notification_to_email() {
 		echo "- Check our forums for possible solutions: https://forum.lokahost.com" >> $message_tmp_file
 		echo "- File an issue report on GitHub: https://github.com/lokahost/lokahost/issues" >> $message_tmp_file
 		echo "" >> $message_tmp_file
-		echo "Help support the Lokahost Control Panel project by donating via PayPal: https://www.lokahost.com/donate" >> $message_tmp_file
+		echo "Help support the Lokahost Control Panel project by donating: https://www.lokahost.com/donate" >> $message_tmp_file
 		echo "===================================================" >> $message_tmp_file
 		echo "Have a wonderful day," >> $message_tmp_file
 		echo "The Lokahost Control Panel development team" >> $message_tmp_file
