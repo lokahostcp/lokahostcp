@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 # Variables and arguments
-LOKAHOST="/usr/local/lokahost"
+LOKAHOSTCP="/usr/local/lokahostcp"
 script=$1
 log=$2
 mode=${3-$2}

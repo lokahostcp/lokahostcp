@@ -27,7 +27,7 @@ if (!empty($requestPayload["service"])) {
 
 // Data
 exec(
-	LOKAHOST_CMD . "v-export-rrd " . quoteshellarg($service) . " " . quoteshellarg($period),
+	LOKAHOSTCP_CMD . "v-export-rrd " . quoteshellarg($service) . " " . quoteshellarg($period),
 	$output,
 	$return_var,
 );

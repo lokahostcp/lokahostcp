@@ -1,10 +1,10 @@
-# Created by lokahost installer
+# Created by lokahostcp installer
 Defaults env_keep="VESTA"
-Defaults env_keep+="LOKAHOST"
+Defaults env_keep+="LOKAHOSTCP"
 Defaults:admin !syslog
 Defaults:admin !requiretty
 Defaults:root !requiretty
 
-# sudo is limited to lokahost scripts
+# sudo is limited to lokahostcp scripts
 admin   ALL=NOPASSWD:/usr/local/vesta/bin/*
-admin   ALL=NOPASSWD:/usr/local/lokahost/bin/*
+admin   ALL=NOPASSWD:/usr/local/lokahostcp/bin/*

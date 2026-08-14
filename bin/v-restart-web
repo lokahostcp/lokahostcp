@@ -11,17 +11,17 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 date=$(date +"%Y-%m-%d %H:%M:%S")
 
 send_email_report() {
-	email=$(grep CONTACT "$LOKAHOST/data/users/$ROOT_USER/user.conf")
+	email=$(grep CONTACT "$LOKAHOSTCP/data/users/$ROOT_USER/user.conf")
 	email=$(echo "$email" | cut -f 2 -d "'")
 	tmpfile=$(mktemp)
 	subj="$(hostname): $WEB_SYSTEM restart failed"
@@ -35,8 +35,8 @@ send_email_report() {
 	fi
 	cat "$tmpfile" | $SENDMAIL -s "$subj" "$email"
 	if [ "$DEBUG_MODE" = "true" ]; then
-		echo "[ $date | $WEB_SYSTEM | WEB ]" >> /var/log/lokahost/debug.log 2>&1
-		cat $tmpfile >> /var/log/lokahost/debug.log 2>&1
+		echo "[ $date | $WEB_SYSTEM | WEB ]" >> /var/log/lokahostcp/debug.log 2>&1
+		cat $tmpfile >> /var/log/lokahostcp/debug.log 2>&1
 	fi
 	rm -f $tmpfile
 }
@@ -57,14 +57,14 @@ fi
 restart=$1
 # Schedule restart
 if [ "$1" = 'scheduled' ] || [ -z "$1" ] && [ "$SCHEDULED_RESTART" = 'yes' ]; then
-	sed -i "/\/$SCRIPT now/d" $LOKAHOST/data/queue/restart.pipe
-	echo "$BIN/$SCRIPT now" >> $LOKAHOST/data/queue/restart.pipe
+	sed -i "/\/$SCRIPT now/d" $LOKAHOSTCP/data/queue/restart.pipe
+	echo "$BIN/$SCRIPT now" >> $LOKAHOSTCP/data/queue/restart.pipe
 	exit
 fi
 
 if [ "$1" = "updatessl" ]; then
-	sed -i "/\/$SCRIPT ssl/d" $LOKAHOST/data/queue/restart.pipe
-	echo "$BIN/$SCRIPT ssl" >> $LOKAHOST/data/queue/restart.pipe
+	sed -i "/\/$SCRIPT ssl/d" $LOKAHOSTCP/data/queue/restart.pipe
+	echo "$BIN/$SCRIPT ssl" >> $LOKAHOSTCP/data/queue/restart.pipe
 	exit
 fi
 
@@ -73,8 +73,8 @@ if [ $WEB_SYSTEM = 'nginx' ]; then
 		restart="ssl"
 	fi
 	if [ "$DEBUG_MODE" = "true" ]; then
-		echo "[  $date | $WEB_SYSTEM | WEB ]" >> /var/log/lokahost/debug.log 2>&1
-		service $WEB_SYSTEM configtest >> /var/log/lokahost/debug.log 2>&1
+		echo "[  $date | $WEB_SYSTEM | WEB ]" >> /var/log/lokahostcp/debug.log 2>&1
+		service $WEB_SYSTEM configtest >> /var/log/lokahostcp/debug.log 2>&1
 	else
 		service $WEB_SYSTEM configtest > /dev/null 2>&1
 	fi
@@ -84,8 +84,8 @@ if [ $WEB_SYSTEM = 'nginx' ]; then
 	fi
 elif [ $WEB_SYSTEM = 'apache2' ]; then
 	if [ "$DEBUG_MODE" = "true" ]; then
-		echo "[  $date | $WEB_SYSTEM | WEB ]" >> /var/log/lokahost/debug.log 2>&1
-		apache2ctl configtest >> /var/log/lokahost/debug.log 2>&1
+		echo "[  $date | $WEB_SYSTEM | WEB ]" >> /var/log/lokahostcp/debug.log 2>&1
+		apache2ctl configtest >> /var/log/lokahostcp/debug.log 2>&1
 	else
 		apache2ctl configtest > /dev/null 2>&1
 	fi
@@ -103,13 +103,13 @@ if [ $? -ne 0 ]; then
 fi
 
 # Update restart queue
-if [ -e "$LOKAHOST/data/queue/restart.pipe" ]; then
-	sed -i "/\/$SCRIPT now/d" $LOKAHOST/data/queue/restart.pipe
-	sed -i "/\/$SCRIPT ssl/d" $LOKAHOST/data/queue/restart.pipe
+if [ -e "$LOKAHOSTCP/data/queue/restart.pipe" ]; then
+	sed -i "/\/$SCRIPT now/d" $LOKAHOSTCP/data/queue/restart.pipe
+	sed -i "/\/$SCRIPT ssl/d" $LOKAHOSTCP/data/queue/restart.pipe
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

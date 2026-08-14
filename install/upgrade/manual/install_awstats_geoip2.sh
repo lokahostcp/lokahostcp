@@ -9,17 +9,17 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
-source $LOKAHOST/conf/lokahost.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/conf/lokahostcp.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 
 #----------------------------------------------------------#
 #                    Verifications                         #
 #----------------------------------------------------------#
 
 #check if string already exists
-if grep "geoip2" $LOKAHOST/data/templates/web/awstats/awstats.tpl; then
+if grep "geoip2" $LOKAHOSTCP/data/templates/web/awstats/awstats.tpl; then
 	echo "Plugin allready enabled"
 	exit 0
 fi
@@ -32,7 +32,7 @@ if [ -d /etc/awstats ]; then
 	apt-get install make libssl-dev zlib1g-dev libdata-validate-ip-perl
 	perl -MCPAN -f -e "GeoIP2::Database::Reader"
 	sed -i '/LoadPlugin=\"geoip2_country \/pathto\/GeoLite2-Country.mmdb\"/s/^#//g;s/pathto/usr\/share\/GeoIP/g' /etc/awstats/awstats.conf
-	echo "LoadPlugin=\"geoip2_country /usr/share/GeoIP/GeoLite2-Country.mmdb\"" >> $LOKAHOST/data/templates/web/awstats/awstats.tpl
+	echo "LoadPlugin=\"geoip2_country /usr/share/GeoIP/GeoLite2-Country.mmdb\"" >> $LOKAHOSTCP/data/templates/web/awstats/awstats.tpl
 
 	for user in $($BIN/v-list-sys-users plain); do
 		$BIN/v-rebuild-web-domains $user no
@@ -40,7 +40,7 @@ if [ -d /etc/awstats ]; then
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

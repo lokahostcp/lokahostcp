@@ -47,8 +47,8 @@
 
 ## Community
 
-- [Lokahost Nginx Cache](/docs/community/lokahost-nginx-cache)
-- [Ioncube installer for Lokahost](/docs/community/ioncube-lokahost-installer)
+- [Lokahostcp Nginx Cache](/docs/community/lokahostcp-nginx-cache)
+- [Ioncube installer for Lokahostcp](/docs/community/ioncube-lokahostcp-installer)
 - [Install script generator](/docs/community/install-script-generator)
 
 ## Reference

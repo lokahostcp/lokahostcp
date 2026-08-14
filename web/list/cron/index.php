@@ -5,7 +5,7 @@ $TAB = "CRON";
 include $_SERVER["DOCUMENT_ROOT"] . "/inc/main.php";
 
 // Data
-exec(LOKAHOST_CMD . "v-list-cron-jobs $user json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-cron-jobs $user json", $output, $return_var);
 $data = json_decode(implode("", $output), true);
 if ($_SESSION["userSortOrder"] == "name") {
 	ksort($data);

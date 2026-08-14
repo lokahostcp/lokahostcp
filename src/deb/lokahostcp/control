@@ -1,0 +1,14 @@
+Source: lokahostcp
+Package: lokahostcp
+Priority: optional
+Version: 1.0.0
+Section: admin
+Maintainer: Lokahostcp <info@lokahost.online>
+Homepage: https://www.lokahost.online
+Architecture: amd64
+Depends: bash, awk, sed, acl, sysstat, setpriv | util-linux (>= 2.33), zstd, lsb-release, idn2, jq, jailkit
+Description: lokahostcp
+ lokahostcp is an open source hosting control panel.
+ lokahostcp has a clean and focused interface without the clutter.
+ lokahostcp has the latest of very innovative technologies.
+ lokahostcp is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin

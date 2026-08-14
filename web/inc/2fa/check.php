@@ -13,7 +13,7 @@ if (isset($argv[1]) && isset($argv[2])) {
 	exit();
 }
 
-$tfa = new TwoFactorAuth("Lokahost Control Panel");
+$tfa = new TwoFactorAuth("Lokahostcp Control Panel");
 
 // Verify code
 $result = $tfa->verifyCode($secret, $token);

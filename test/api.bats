@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-if [ "${PATH#*/usr/local/lokahost/bin*}" = "$PATH" ]; then
-    . /etc/profile.d/lokahost.sh
+if [ "${PATH#*/usr/local/lokahostcp/bin*}" = "$PATH" ]; then
+    . /etc/profile.d/lokahostcp.sh
 fi
 
 load 'test_helper/bats-support/load'
@@ -14,10 +14,10 @@ function random() {
 }
 
 function setup() {
-    source /tmp/lokahost-api-env.sh
-    source $LOKAHOST/func/main.sh
-    source $LOKAHOST/conf/lokahost.conf
-    source $LOKAHOST/func/ip.sh
+    source /tmp/lokahostcp-api-env.sh
+    source $LOKAHOSTCP/func/main.sh
+    source $LOKAHOSTCP/conf/lokahostcp.conf
+    source $LOKAHOSTCP/func/ip.sh
 }
 
 @test "[Success][ Admin/password ] List users" {
@@ -33,7 +33,7 @@ function setup() {
 }
 
 @test "[Fail][ APIV2 ] Create new user" {
-    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$accesskey&returncode=yes&cmd=v-add-user&arg1=lokahosttest&arg2=strongpassword&arg3=info@lokahost.com" "https://$server:$port/api/index.php"
+    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$accesskey&returncode=yes&cmd=v-add-user&arg1=lokahostcptest&arg2=strongpassword&arg3=info@lokahost.online" "https://$server:$port/api/index.php"
     assert_success
     assert_output --partial "don't have permission to run the command v-add-user"
 }
@@ -45,30 +45,30 @@ function setup() {
 }
 
 @test "[Success][ Hash ] Create new user" {
-    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$apikey&cmd=v-add-user&arg1=lokahosttest&arg2=/tmp/clusterpassword&arg3=info@lokahost.com&arg4=default" "https://$server:$port/api/index.php"
+    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$apikey&cmd=v-add-user&arg1=lokahostcptest&arg2=/tmp/clusterpassword&arg3=info@lokahost.online&arg4=default" "https://$server:$port/api/index.php"
     assert_success
     assert_output --partial "OK"
 }
 
 @test "[Success][ Hash ] Check password" {
-    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$apikey&cmd=v-check-user-password&arg1=lokahosttest&arg2=strongpassword" "https://$server:$port/api/index.php"
+    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$apikey&cmd=v-check-user-password&arg1=lokahostcptest&arg2=strongpassword" "https://$server:$port/api/index.php"
     assert_success
     assert_output --partial "OK"
 }
 
 
 @test "[Success][ Local ] Add user" {
-    run v-add-user lokahosttest 1234BCD info@lokahost.com
+    run v-add-user lokahostcptest 1234BCD info@lokahost.online
     assert_success
 }
 
 @test "[Success][ Local ] Add DNS domain" {
-    run v-add-dns-domain lokahosttest ilovelokahostcp.com 127.0.0.1
+    run v-add-dns-domain lokahostcptest ilovelokahostcp.com 127.0.0.1
     assert_success
 }
 
 @test "[Success][ APIV2 ] Add remote DNS host" {
-    run v-add-remote-dns-host $server $port "$accesskey" '' api 'lokahosttest'
+    run v-add-remote-dns-host $server $port "$accesskey" '' api 'lokahostcptest'
     assert_success
 }
 
@@ -84,12 +84,12 @@ function setup() {
 }
 
 @test "[Success][ Local ] Add DNS domain 2" {
-    run v-add-dns-domain lokahosttest ilovelokahostcp.org 127.0.0.1
+    run v-add-dns-domain lokahostcptest ilovelokahostcp.org 127.0.0.1
     assert_success
 }
 
 @test "[Success][ Local ] Add DNS record" {
-    run v-add-dns-record lokahosttest ilovelokahostcp.org test A 127.0.0.1 yes 20
+    run v-add-dns-record lokahostcptest ilovelokahostcp.org test A 127.0.0.1 yes 20
     assert_success
 }
 
@@ -113,7 +113,7 @@ function setup() {
 }
 
 @test "[Success][ Local ] Delete DNS record" {
-    run v-delete-dns-record lokahosttest ilovelokahostcp.org 20
+    run v-delete-dns-record lokahostcptest ilovelokahostcp.org 20
     assert_success
 }
 
@@ -142,10 +142,10 @@ function setup() {
 
 
 @test "[Success][ Local ] Delete user" {
-    run v-delete-user lokahosttest
+    run v-delete-user lokahostcptest
     assert_success
 }
 
 @test "[Success][ Hash ] Delete user" {
-    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$apikey&cmd=v-delete-user&arg1=lokahosttest" "https://$server:$port/api/index.php"
+    run curl -k -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "hash=$apikey&cmd=v-delete-user&arg1=lokahostcptest" "https://$server:$port/api/index.php"
 }

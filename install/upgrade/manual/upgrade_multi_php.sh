@@ -22,5 +22,5 @@ if [ ! -f /etc/php/$version/fpm/pool.d/dummy.conf ]; then
 fi
 
 rm -f /etc/php/*/fpm/pool.d/www.conf
-cp -f $LOKAHOST/install/deb/php-fpm/www.conf /etc/php/$version/fpm/pool.d/www.conf
-$LOKAHOST/bin/v-restart-web-backend
+cp -f $LOKAHOSTCP/install/deb/php-fpm/www.conf /etc/php/$version/fpm/pool.d/www.conf
+$LOKAHOSTCP/bin/v-restart-web-backend

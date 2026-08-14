@@ -1,7 +1,7 @@
 # Operating system upgrades
 
 ::: danger
-Before upgrading your operating system make sure to make a backup! We do not provide support for broken operating system installations. We only provide this page for information about Lokahost issues that may come up while upgrading.
+Before upgrading your operating system make sure to make a backup! We do not provide support for broken operating system installations. We only provide this page for information about Lokahostcp issues that may come up while upgrading.
 :::
 
 ## General
@@ -10,7 +10,7 @@ Before upgrading your operating system make sure to make a backup! We do not pro
 Make sure to verify that MariaDB is running on a supported version for the new operating system. If that is not the case, update MariaDB version to a supported version before upgrading your OS!
 :::
 
-Once a backup has been made, update Lokahost to the last supported version:
+Once a backup has been made, update Lokahostcp to the last supported version:
 
 ```bash
 apt update && apt upgrade
@@ -30,12 +30,12 @@ sed -i "s/obscure yescrypt/obscure sha512/g" /etc/pam.d/common-password
 
 ```bash
 rm -f /etc/exim4/exim4.conf.template
-cp -f /usr/local/lokahost/install/deb/exim/exim4.conf.4.94.template /etc/exim4/exim4.conf.template
+cp -f /usr/local/lokahostcp/install/deb/exim/exim4.conf.4.94.template /etc/exim4/exim4.conf.template
 ```
 
 ### ProFTPD
 
-Comment out [line 29](https://github.com/lokahost/lokahost/blob/1ff8a4e5207aae1e241954a83b7e8070bcdca788/install/deb/proftpd/proftpd.conf#L29) in `/etc/profpd/prodtpd.conf`.
+Comment out [line 29](https://github.com/lokahostcp/lokahostcp/blob/1ff8a4e5207aae1e241954a83b7e8070bcdca788/install/deb/proftpd/proftpd.conf#L29) in `/etc/profpd/prodtpd.conf`.
 
 ## Debian 9 Stretch to Debian 10 Buster
 
@@ -57,12 +57,12 @@ sed -i "s/obscure yescrypt/obscure sha512/g" /etc/pam.d/common-password
 
 ```bash
 rm -f /etc/exim4/exim4.conf.template
-cp -f /usr/local/lokahost/install/deb/exim/exim4.conf.4.94.template /etc/exim4/exim4.conf.template
+cp -f /usr/local/lokahostcp/install/deb/exim/exim4.conf.4.94.template /etc/exim4/exim4.conf.template
 ```
 
 ### ProFTPD
 
-Comment out [line 29](https://github.com/lokahost/lokahost/blob/1ff8a4e5207aae1e241954a83b7e8070bcdca788/install/deb/proftpd/proftpd.conf#L29) in `/etc/profpd/prodtpd.conf`.
+Comment out [line 29](https://github.com/lokahostcp/lokahostcp/blob/1ff8a4e5207aae1e241954a83b7e8070bcdca788/install/deb/proftpd/proftpd.conf#L29) in `/etc/profpd/prodtpd.conf`.
 
 ## Ubuntu 18.04 Bionic to Ubuntu 20.04 Focal
 

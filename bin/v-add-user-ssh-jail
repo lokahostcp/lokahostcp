@@ -15,12 +15,12 @@ user=$1
 restart=$3
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 chroot="/srv/jail/$user"
 
@@ -37,7 +37,7 @@ check_args '1' "$#" 'USER'
 is_format_valid 'user'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -72,10 +72,10 @@ if [ ! -d "$chroot" ]; then
 	# Jailing user to make sure passwd and groups are set correctly within the jail.
 	# This command also does a little too much by changing the users homedir and
 	# shell in /etc/passwd. The next commands reverts those changes for compatibility
-	# with lokahost.
+	# with lokahostcp.
 	/sbin/jk_jailuser -n -s "$shell_path" -j "$chroot" "$user"
 
-	# Reset home directory and shell again for lokahost because jailkit changes these.
+	# Reset home directory and shell again for lokahostcp because jailkit changes these.
 	# Normally these are needed to redirect the ssh user to it's chroot but because we
 	# use a custom sshd_config to redirect the user to it's chroot we don't need it to be
 	# changed in /etc/passwd for the user.
@@ -89,7 +89,7 @@ else
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Enabling user jail

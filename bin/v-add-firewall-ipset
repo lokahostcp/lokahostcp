@@ -17,12 +17,12 @@ autoupdate=${4:-yes}
 refresh=${5:-no}
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -35,12 +35,12 @@ is_boolean_format_valid "$refresh" 'Refresh IP list (yes/no)'
 is_system_enabled "$FIREWALL_SYSTEM" 'FIREWALL_SYSTEM'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 # Define variables for ipset configuration
 ipset_lcpobject='../../../data/firewall/ipset'
 IPSET_BIN="$(command -v ipset)"
-IPSET_PATH="$LOKAHOST/data/firewall/ipset"
+IPSET_PATH="$LOKAHOSTCP/data/firewall/ipset"
 
 # Ensure ipset is installed
 if [ -z "$IPSET_BIN" ]; then
@@ -57,8 +57,8 @@ fi
 
 # Ensure ipset configuration path and master file exist before attempting to parse
 mkdir -p "$IPSET_PATH"
-if [ ! -f "$LOKAHOST/data/firewall/ipset.conf" ]; then
-	touch $LOKAHOST/data/firewall/ipset.conf
+if [ ! -f "$LOKAHOSTCP/data/firewall/ipset.conf" ]; then
+	touch $LOKAHOSTCP/data/firewall/ipset.conf
 fi
 
 if [ -z "$data_source" ]; then
@@ -165,7 +165,7 @@ if [ ! -f "${IPSET_PATH}.conf" ] || [ -z "$(get_object_value "$ipset_lcpobject" 
 	str="LISTNAME='$ip_name' IP_VERSION='$ip_version' SOURCE='$data_source'"
 	str="$str AUTOUPDATE='$autoupdate' SUSPENDED='no'"
 	str="$str TIME='$time' DATE='$date'"
-	echo "$str" >> $LOKAHOST/data/firewall/ipset.conf
+	echo "$str" >> $LOKAHOSTCP/data/firewall/ipset.conf
 	log_type="added"
 
 elif [ "$refresh" = "yes" ]; then
@@ -178,17 +178,17 @@ elif [ "$refresh" = "yes" ]; then
 fi
 
 # Changing permissions
-chmod 660 $LOKAHOST/data/firewall/ipset.conf
+chmod 660 $LOKAHOSTCP/data/firewall/ipset.conf
 chmod 660 "${IPSET_PATH}/${IPSET_FILE}.iplist"
 
 # Install ipset daily cron updater
-if ! grep --silent --no-messages "v-update-firewall-ipset" $LOKAHOST/data/queue/daily.pipe; then
+if ! grep --silent --no-messages "v-update-firewall-ipset" $LOKAHOSTCP/data/queue/daily.pipe; then
 	cmd="$BIN/v-update-firewall-ipset yes"
-	echo "$cmd" >> $LOKAHOST/data/queue/daily.pipe
+	echo "$cmd" >> $LOKAHOSTCP/data/queue/daily.pipe
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

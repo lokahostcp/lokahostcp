@@ -7,37 +7,37 @@ if [ "$1" != "configure" ]; then
 fi
 
 # Run triggers below only on updates
-if [ ! -e "/usr/local/lokahost/data/users/" ]; then
+if [ ! -e "/usr/local/lokahostcp/data/users/" ]; then
 	exit
 fi
 
 # Check if preinstall hook exists
-if [ -e "/etc/lokahost/hooks/php/pre_install.sh" ]; then
-	/etc/lokahost/hooks/php/pre_install.sh
+if [ -e "/etc/lokahostcp/hooks/php/pre_install.sh" ]; then
+	/etc/lokahostcp/hooks/php/pre_install.sh
 fi
 
 ###############################################################
 #                Initialize functions/variables               #
 ###############################################################
 
-if [ -z "$LOKAHOST" ]; then
-	export LOKAHOST='/usr/local/lokahost'
-	PATH=$PATH:/usr/local/lokahost/bin
+if [ -z "$LOKAHOSTCP" ]; then
+	export LOKAHOSTCP='/usr/local/lokahostcp'
+	PATH=$PATH:/usr/local/lokahostcp/bin
 	export PATH
 fi
 
 # Load upgrade functions and variables
-source /usr/local/lokahost/func/main.sh
-source /usr/local/lokahost/func/upgrade.sh
-source /usr/local/lokahost/conf/lokahost.conf
-source /usr/local/lokahost/install/upgrade/upgrade.conf
+source /usr/local/lokahostcp/func/main.sh
+source /usr/local/lokahostcp/func/upgrade.sh
+source /usr/local/lokahostcp/conf/lokahostcp.conf
+source /usr/local/lokahostcp/install/upgrade/upgrade.conf
 
-# Restart lokahost service
-if [ -f "/etc/init.d/lokahost" ]; then
-	systemctl restart lokahost > /dev/null 2>&1
+# Restart lokahostcp service
+if [ -f "/etc/init.d/lokahostcp" ]; then
+	systemctl restart lokahostcp > /dev/null 2>&1
 fi
 
 # Check if preinstall hook exists
-if [ -e "/etc/lokahost/hooks/php/post_install.sh" ]; then
-	/etc/lokahost/hooks/php/post_install.sh
+if [ -e "/etc/lokahostcp/hooks/php/post_install.sh" ]; then
+	/etc/lokahostcp/hooks/php/post_install.sh
 fi

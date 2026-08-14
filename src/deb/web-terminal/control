@@ -1,14 +1,14 @@
-Source: lokahost-web-terminal
-Package: lokahost-web-terminal
+Source: lokahostcp-web-terminal
+Package: lokahostcp-web-terminal
 Priority: optional
 Version: 1.0.0
 Section: admin
-Maintainer: LokahostCP <info@lokahost.com>
-Homepage: https://www.lokahost.com
+Maintainer: Lokahostcp <info@lokahost.online>
+Homepage: https://www.lokahost.online
 Architecture: amd64
-Depends: lokahost, nodejs (>= 18.0.0)
-Description: lokahost web terminal
- lokahost is an open source hosting control panel.
- lokahost has a clean and focused interface without the clutter.
- lokahost has the latest of very innovative technologies.
- lokahost is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin
+Depends: lokahostcp, nodejs (>= 18.0.0)
+Description: lokahostcp web terminal
+ lokahostcp is an open source hosting control panel.
+ lokahostcp has a clean and focused interface without the clutter.
+ lokahostcp has the latest of very innovative technologies.
+ lokahostcp is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin

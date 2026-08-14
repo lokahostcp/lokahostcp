@@ -57,7 +57,7 @@ if ($_SESSION["userContext"] === "admin") {
 
 foreach ($database as $value) {
 	$value = quoteshellarg($value);
-	exec(LOKAHOST_CMD . $cmd . " " . $user . " " . $value, $output, $return_var);
+	exec(LOKAHOSTCP_CMD . $cmd . " " . $user . " " . $value, $output, $return_var);
 }
 
 header("Location: /list/db/");

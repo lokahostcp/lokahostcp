@@ -1,9 +1,9 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\DokuWiki;
+namespace Lokahostcp\WebApp\Installers\DokuWiki;
 
-use Lokahost\System\Util;
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\System\Util;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class DokuWikiSetup extends BaseSetup {
 	protected $appInfo = [

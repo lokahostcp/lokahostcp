@@ -10,7 +10,7 @@ verify_csrf($_GET);
 // Mail domain
 if (!empty($_GET["domain"]) && empty($_GET["account"])) {
 	$v_domain = quoteshellarg($_GET["domain"]);
-	exec(LOKAHOST_CMD . "v-suspend-mail-domain " . $user . " " . $v_domain, $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-suspend-mail-domain " . $user . " " . $v_domain, $output, $return_var);
 	check_return_code($return_var, $output);
 	unset($output);
 	$back = getenv("HTTP_REFERER");
@@ -28,7 +28,7 @@ if (!empty($_GET["domain"]) && !empty($_GET["account"])) {
 	$v_domain = quoteshellarg($_GET["domain"]);
 	$v_account = quoteshellarg($_GET["account"]);
 	exec(
-		LOKAHOST_CMD . "v-suspend-mail-account " . $user . " " . $v_domain . " " . $v_account,
+		LOKAHOSTCP_CMD . "v-suspend-mail-account " . $user . " " . $v_domain . " " . $v_account,
 		$output,
 		$return_var,
 	);

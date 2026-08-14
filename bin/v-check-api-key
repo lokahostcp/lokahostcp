@@ -4,25 +4,25 @@
 #
 # example: v-check-api-key random_key 127.0.0.1
 #
-# This function checks a key file in $LOKAHOST/data/keys/
+# This function checks a key file in $LOKAHOSTCP/data/keys/
 
 #----------------------------------------------------------#
 #                Variables & Functions                     #
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 new_timestamp
 
 abort_missmatch() {
 	echo "Error: key missmatch"
-	echo "$date $time api $ip failed to login" >> $LOKAHOST/log/auth.log
+	echo "$date $time api $ip failed to login" >> $LOKAHOSTCP/log/auth.log
 	exit "$E_PASSWORD"
 }
 
@@ -32,7 +32,7 @@ time=$(echo "$time_n_date" | cut -f 1 -d \ )
 date=$(echo "$time_n_date" | cut -f 2 -d \ )
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -44,19 +44,19 @@ key="$(basename "$1")"
 [[ -z $key || ${#key} -lt 16 ]] && abort_missmatch
 
 # Key file must exist
-maybe_key_path="$(readlink -e "${LOKAHOST}/data/keys/${key}")"
+maybe_key_path="$(readlink -e "${LOKAHOSTCP}/data/keys/${key}")"
 [[ -z $maybe_key_path ]] && abort_missmatch
 
 # Key file cannot be the key store
-[[ $maybe_key_path == "${LOKAHOST}/data/keys" ]] && abort_missmatch
+[[ $maybe_key_path == "${LOKAHOSTCP}/data/keys" ]] && abort_missmatch
 
 # Key file must be in the key store
-[[ $maybe_key_path == "${LOKAHOST}/data/keys/"* ]] || abort_missmatch
+[[ $maybe_key_path == "${LOKAHOSTCP}/data/keys/"* ]] || abort_missmatch
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
-echo "$date $time api $ip successfully launched" >> $LOKAHOST/log/auth.log
+echo "$date $time api $ip successfully launched" >> $LOKAHOSTCP/log/auth.log
 
 exit

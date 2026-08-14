@@ -5,7 +5,7 @@ lastUpdated: false
 
 # Donate to the project
 
-By donating to Lokahost, you help maintain server costs, development time, and more!
+By donating to Lokahostcp, you help maintain server costs, development time, and more!
 
 Here are our official donation platforms:
 

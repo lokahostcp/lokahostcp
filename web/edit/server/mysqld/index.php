@@ -30,7 +30,7 @@ if (!empty($_POST["save"])) {
 		fwrite($fp, str_replace("\r\n", "\n", $_POST["v_config"]));
 		fclose($fp);
 		exec(
-			LOKAHOST_CMD . "v-change-sys-service-config " . $new_conf . " mysqld " . $v_restart,
+			LOKAHOSTCP_CMD . "v-change-sys-service-config " . $new_conf . " mysqld " . $v_restart,
 			$output,
 			$return_var,
 		);
@@ -46,7 +46,7 @@ if (!empty($_POST["save"])) {
 }
 
 // List config
-exec(LOKAHOST_CMD . "v-list-sys-mysql-config json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-sys-mysql-config json", $output, $return_var);
 $data = json_decode(implode("", $output), true);
 unset($output);
 $v_max_user_connections = $data["CONFIG"]["max_user_connections"];
@@ -58,7 +58,7 @@ $v_config_path = $data["CONFIG"]["config_path"];
 $v_service_name = strtoupper("mysql");
 
 # Read config
-$v_config = shell_exec(LOKAHOST_CMD . "v-open-fs-config " . $v_config_path);
+$v_config = shell_exec(LOKAHOSTCP_CMD . "v-open-fs-config " . $v_config_path);
 
 // Render page
 render_page($user, $TAB, "edit_server_mysql");

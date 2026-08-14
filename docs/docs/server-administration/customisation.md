@@ -6,7 +6,7 @@ We currently only support changing the layout via CSS. You can customise HTML fi
 
 ## Adding a new theme
 
-Create a new theme in `/usr/local/lokahost/web/css/theme/custom/my_theme.css`
+Create a new theme in `/usr/local/lokahostcp/web/css/theme/custom/my_theme.css`
 
 ```css
 .page-login,
@@ -20,7 +20,7 @@ Create a new theme in `/usr/local/lokahost/web/css/theme/custom/my_theme.css`
 
 ## Customising a default theme
 
-Changes to default themes are always overwritten during updates. Custom CSS files can be uploaded to `/usr/local/lokahost/web/css/custom` in `.css` or `.min.css` format.
+Changes to default themes are always overwritten during updates. Custom CSS files can be uploaded to `/usr/local/lokahostcp/web/css/custom` in `.css` or `.min.css` format.
 
 Please note that `default.css` base theme is always loaded. Other default and custom themes override the rules in this file.
 
@@ -34,29 +34,29 @@ nano /var/www/html/index.html
 
 ## Customising the default domain skeleton structure
 
-The default structure that will be added to a domain when it gets created is located in `/usr/local/lokahost/data/templates/web/skel/public_html`.
+The default structure that will be added to a domain when it gets created is located in `/usr/local/lokahostcp/data/templates/web/skel/public_html`.
 
 ## Running commands before and after updates
 
-With the release of Lokahost 1.4.6 we have added pre-install and post-install hooks. For example, you can use hooks to:
+With the release of Lokahostcp 1.4.6 we have added pre-install and post-install hooks. For example, you can use hooks to:
 
 - Disable and enable demo mode before and after an update.
 - Restore a customised skeleton page.
 
 Hooks are located in one of the following files:
 
-- `/etc/lokahost/hooks/pre_install.sh`
-- `/etc/lokahost/hooks/post_install.sh`
+- `/etc/lokahostcp/hooks/pre_install.sh`
+- `/etc/lokahostcp/hooks/post_install.sh`
 
 ::: tip
-Don’t forget to make the file executable by running `chmod +x /etc/lokahost/hooks/[file].sh`.
+Don’t forget to make the file executable by running `chmod +x /etc/lokahostcp/hooks/[file].sh`.
 :::
 
 For example, to disable demo mode on pre-install:
 
-```bash /etc/lokahost/hooks/pre_install.sh
+```bash /etc/lokahostcp/hooks/pre_install.sh
 #!/bin/bash
-sed -i "s|^DEMO_MODE=.*'|DEMO_MODE='no'|g" $LOKAHOST/conf/lokahost.conf
+sed -i "s|^DEMO_MODE=.*'|DEMO_MODE='no'|g" $LOKAHOSTCP/conf/lokahostcp.conf
 ```
 
 ::: warning

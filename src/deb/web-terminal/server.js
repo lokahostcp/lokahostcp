@@ -5,13 +5,13 @@ import { readFileSync } from 'node:fs';
 import { spawn } from 'node-pty';
 import { WebSocketServer } from 'ws';
 
-const sessionName = 'LOKAHOSTSID';
+const sessionName = 'LOKAHOSTCPSID';
 const hostname = execSync('hostname', { silent: true }).toString().trim();
 const systemIPs = JSON.parse(
-	execSync(`${process.env.LOKAHOST}/bin/v-list-sys-ips json`, { silent: true }).toString(),
+	execSync(`${process.env.LOKAHOSTCP}/bin/v-list-sys-ips json`, { silent: true }).toString(),
 );
 const { config } = JSON.parse(
-	execSync(`${process.env.LOKAHOST}/bin/v-list-sys-config json`, { silent: true }).toString(),
+	execSync(`${process.env.LOKAHOSTCP}/bin/v-list-sys-config json`, { silent: true }).toString(),
 );
 
 const wss = new WebSocketServer({
@@ -51,7 +51,7 @@ wss.on('connection', (ws, req) => {
 	const sessionID = req.headers.cookie.split(`${sessionName}=`)[1].split(';')[0];
 	console.log(`New connection from ${remoteIP} (${sessionID})`);
 
-	const file = readFileSync(`${process.env.LOKAHOST}/data/sessions/sess_${sessionID}`);
+	const file = readFileSync(`${process.env.LOKAHOSTCP}/data/sessions/sess_${sessionID}`);
 	if (!file) {
 		console.error(`Invalid session ID ${sessionID}, refusing connection`);
 		ws.close(1000, 'Your session has expired.');
@@ -92,7 +92,7 @@ wss.on('connection', (ws, req) => {
 			USER: username,
 			HOME: homedir,
 			PWD: homedir,
-			LOKAHOST: process.env.LOKAHOST,
+			LOKAHOSTCP: process.env.LOKAHOSTCP,
 		},
 	});
 	console.log(`New pty (${pty.pid}): ${shell} as ${username} (${uid}:${gid}) in ${homedir}`);

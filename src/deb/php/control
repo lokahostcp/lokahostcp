@@ -1,15 +1,15 @@
-Source: lokahost-php
-Package: lokahost-php
+Source: lokahostcp-php
+Package: lokahostcp-php
 Priority: optional
 Version: 8.2.11-1
 Section: admin
-Maintainer: HestaCP <info@lokahost.com>
-Homepage: https://www.lokahost.com
+Maintainer: HestaCP <info@lokahost.online>
+Homepage: https://www.lokahost.online
 Architecture: amd64
-Depends: lokahost, libzip4, unzip, libonig5 | libonig4 | libonig2
+Depends: lokahostcp, libzip4, unzip, libonig5 | libonig4 | libonig2
 Conflct: libzip5
-Description: lokahost php-fpm
- lokahost is an open source hosting control panel.
- lokahost has a clean and focused interface without the clutter.
- lokahost has the latest of very innovative technologies.
- lokahost is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin
+Description: lokahostcp php-fpm
+ lokahostcp is an open source hosting control panel.
+ lokahostcp has a clean and focused interface without the clutter.
+ lokahostcp has the latest of very innovative technologies.
+ lokahostcp is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin

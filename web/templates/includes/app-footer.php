@@ -1,8 +1,8 @@
 <footer class="app-footer">
 	<div class="container">
 		<p>
-			<a href="https://lokahost.com/" class="app-footer-link" target="_blank">
-				Lokahost Control Panel
+			<a href="https://lokahost.online/" class="app-footer-link" target="_blank">
+				Lokahostcp Control Panel
 			</a>
 			v<?= $_SESSION["VERSION"] ?>
 		</p>

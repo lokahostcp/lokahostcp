@@ -18,14 +18,14 @@ chain=$(echo $2 | tr '[:lower:]' '[:upper:]')
 iptables="/sbin/iptables"
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/firewall.sh
-source $LOKAHOST/func/firewall.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/firewall.sh
+source $LOKAHOSTCP/func/firewall.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -36,7 +36,7 @@ is_format_valid 'ip' 'chain'
 is_system_enabled "$FIREWALL_SYSTEM" 'FIREWALL_SYSTEM'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -45,7 +45,7 @@ check_lokahost_demo_mode
 # Self heal iptables links
 heal_iptables_links
 
-conf="$LOKAHOST/data/firewall/banlist.conf"
+conf="$LOKAHOSTCP/data/firewall/banlist.conf"
 if [ "$chain" == "ALL" ]; then
 	check_ip=$(grep "IP='$ip' CHAIN='*'" $conf)
 	if [ -z "$check_ip" ]; then
@@ -78,7 +78,7 @@ fi
 chmod 660 $conf
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

@@ -16,15 +16,15 @@ key=$(echo "$1" | tr '[:lower:]' '[:upper:]')
 value=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -40,13 +40,13 @@ format_no_quotes "$value" 'value'
 change_sys_value "$key" "$value"
 
 # Sort configuration file in alphabetical order on change
-sort $LOKAHOST/conf/lokahost.conf -o /tmp/updconf
-mv $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/lokahost.conf.bak
-mv /tmp/updconf $LOKAHOST/conf/lokahost.conf
-rm -f $LOKAHOST/conf/lokahost.conf.bak
+sort $LOKAHOSTCP/conf/lokahostcp.conf -o /tmp/updconf
+mv $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/lokahostcp.conf.bak
+mv /tmp/updconf $LOKAHOSTCP/conf/lokahostcp.conf
+rm -f $LOKAHOSTCP/conf/lokahostcp.conf.bak
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

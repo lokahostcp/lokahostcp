@@ -6,7 +6,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/inc/main.php";
 // Check token
 verify_csrf($_GET);
 
-exec(LOKAHOST_CMD . "v-delete-cron-reports " . $user, $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-delete-cron-reports " . $user, $output, $return_var);
 unset($output);
 
 header("Location: /list/cron/");

@@ -30,7 +30,7 @@ if (!empty($_POST["save"])) {
 		fwrite($fp, str_replace("\r\n", "\n", $_POST["v_config"]));
 		fclose($fp);
 		exec(
-			LOKAHOST_CMD . "v-change-sys-service-config " . $new_conf . " vsftpd " . $v_restart,
+			LOKAHOSTCP_CMD . "v-change-sys-service-config " . $new_conf . " vsftpd " . $v_restart,
 			$output,
 			$return_var,
 		);
@@ -45,11 +45,11 @@ if (!empty($_POST["save"])) {
 	}
 }
 
-$v_config_path = shell_exec(LOKAHOST_CMD . "v-list-sys-vsftpd-config plain");
+$v_config_path = shell_exec(LOKAHOSTCP_CMD . "v-list-sys-vsftpd-config plain");
 $v_service_name = strtoupper("vsftpd");
 
 // Read config
-$v_config = shell_exec(LOKAHOST_CMD . "v-open-fs-config " . $v_config_path);
+$v_config = shell_exec(LOKAHOSTCP_CMD . "v-open-fs-config " . $v_config_path);
 
 // Render page
 render_page($user, $TAB, "edit_server_service");

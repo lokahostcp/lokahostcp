@@ -38,7 +38,7 @@ if ($_SESSION["userContext"] === "admin") {
 
 	if (!empty($_POST["system"]) && $action == "restart") {
 		$_SESSION["error_srv"] = _("The system is going down for reboot NOW!");
-		exec(LOKAHOST_CMD . "v-restart-system yes", $output, $return_var);
+		exec(LOKAHOSTCP_CMD . "v-restart-system yes", $output, $return_var);
 		unset($output);
 		header("Location: /list/server/");
 		exit();
@@ -46,7 +46,7 @@ if ($_SESSION["userContext"] === "admin") {
 
 	foreach ($service as $value) {
 		$value = quoteshellarg($value);
-		exec(LOKAHOST_CMD . $cmd . " " . $value, $output, $return_var);
+		exec(LOKAHOSTCP_CMD . $cmd . " " . $value, $output, $return_var);
 	}
 }
 

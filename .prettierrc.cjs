@@ -18,9 +18,9 @@ module.exports = {
 				singleQuote: true,
 			},
 		},
-		// Lokahost CLI
+		// Lokahostcp CLI
 		{
-			files: ['bin/v-*', 'src/deb/*/{postinst,preinst,lokahost,postrm}', 'install/common/api/*'],
+			files: ['bin/v-*', 'src/deb/*/{postinst,preinst,lokahostcp,postrm}', 'install/common/api/*'],
 			options: {
 				parser: 'sh',
 			},

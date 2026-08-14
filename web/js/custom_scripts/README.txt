@@ -2,8 +2,8 @@
 
 subfolders will be ignored (recursive file loading is not supported. you're free to create sub-folders, but they will not be invoked automatically.)
 
-These custom files will persist across LokahostCP upgrades.
+These custom files will persist across Lokahostcp upgrades.
 
-This directory is not meant for LokahostCP development, but meant for people wanting to customize their own LokahostCP control panel.
+This directory is not meant for Lokahostcp development, but meant for people wanting to customize their own Lokahostcp control panel.
 
-Warning: modifications to this README.txt may be lost during LokahostCP upgrades.
+Warning: modifications to this README.txt may be lost during Lokahostcp upgrades.

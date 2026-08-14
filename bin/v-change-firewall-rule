@@ -21,19 +21,19 @@ protocol=$(echo $protocol | tr '[:lower:]' '[:upper:]')
 comment=$6
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 # Sort function
 sort_fw_rules() {
-	cat $LOKAHOST/data/firewall/rules.conf \
-		| sort -n -k 2 -t \' > $LOKAHOST/data/firewall/rules.conf.tmp
-	mv -f $LOKAHOST/data/firewall/rules.conf.tmp \
-		$LOKAHOST/data/firewall/rules.conf
+	cat $LOKAHOSTCP/data/firewall/rules.conf \
+		| sort -n -k 2 -t \' > $LOKAHOSTCP/data/firewall/rules.conf.tmp
+	mv -f $LOKAHOSTCP/data/firewall/rules.conf.tmp \
+		$LOKAHOSTCP/data/firewall/rules.conf
 }
 
 #----------------------------------------------------------#
@@ -57,7 +57,7 @@ else
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -74,10 +74,10 @@ str="$str IP='$ip' COMMENT='$comment' SUSPENDED='no'"
 str="$str TIME='$time' DATE='$date'"
 
 # Deleting old rule
-sed -i "/RULE='$rule' /d" $LOKAHOST/data/firewall/rules.conf
+sed -i "/RULE='$rule' /d" $LOKAHOSTCP/data/firewall/rules.conf
 
 # Adding new
-echo "$str" >> $LOKAHOST/data/firewall/rules.conf
+echo "$str" >> $LOKAHOSTCP/data/firewall/rules.conf
 
 # Sorting firewall rules by id number
 sort_fw_rules
@@ -86,7 +86,7 @@ sort_fw_rules
 $BIN/v-update-firewall
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

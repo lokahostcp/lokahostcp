@@ -1,8 +1,8 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Opencart;
+namespace Lokahostcp\WebApp\Installers\Opencart;
 
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class OpencartSetup extends BaseSetup {
 	protected $appInfo = [

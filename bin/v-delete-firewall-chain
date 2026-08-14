@@ -15,14 +15,14 @@ chain=$(echo "$1" | tr '[:lower:]' '[:upper:]')
 
 iptables='/sbin/iptables'
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source "$LOKAHOST/func/main.sh"
-# shellcheck source=/usr/local/lokahost/func/firewall.sh
-source "$LOKAHOST/func/firewall.sh"
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source "$LOKAHOSTCP/func/main.sh"
+# shellcheck source=/usr/local/lokahostcp/func/firewall.sh
+source "$LOKAHOSTCP/func/firewall.sh"
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -33,7 +33,7 @@ is_format_valid 'chain'
 is_system_enabled "$FIREWALL_SYSTEM" 'FIREWALL_SYSTEM'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -43,8 +43,8 @@ check_lokahost_demo_mode
 heal_iptables_links
 
 # Deleting chain
-chains="$LOKAHOST/data/firewall/chains.conf"
-banlist="$LOKAHOST/data/firewall/banlist.conf"
+chains="$LOKAHOSTCP/data/firewall/chains.conf"
+banlist="$LOKAHOSTCP/data/firewall/banlist.conf"
 chain_param=""
 [ -f "$chains" ] && chain_param=$(grep "CHAIN='$chain'" "$chains")
 if [ -n "$chain_param" ]; then
@@ -63,7 +63,7 @@ $iptables -X fail2ban-$CHAIN 2> /dev/null
 [ -f "$chains" ] && chmod 660 "$chains"
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

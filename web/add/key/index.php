@@ -34,7 +34,7 @@ if (!empty($_POST["ok"])) {
 	if (empty($_SESSION["error_msg"])) {
 		if ($_POST) {
 			//key if key already exists
-			exec(LOKAHOST_CMD . "v-list-user-ssh-key " . $user . " json", $output, $return_var);
+			exec(LOKAHOSTCP_CMD . "v-list-user-ssh-key " . $user . " json", $output, $return_var);
 			$data = json_decode(implode("", $output), true);
 			unset($output);
 			$keylist = [];
@@ -64,7 +64,7 @@ if (!empty($_POST["ok"])) {
 	}
 
 	if (empty($_SESSION["error_msg"])) {
-		exec(LOKAHOST_CMD . "v-add-user-ssh-key " . $user . " " . $v_key, $output, $return_var);
+		exec(LOKAHOSTCP_CMD . "v-add-user-ssh-key " . $user . " " . $v_key, $output, $return_var);
 		check_return_code($return_var, $output);
 	}
 	unset($output);

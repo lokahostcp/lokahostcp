@@ -1,0 +1,37 @@
+#!/bin/bash
+# info: update all lokahostcp packages
+# options: NONE
+#
+# example: v-update-sys-lokahostcp-all
+#
+# This function of updating all lokahostcp packages
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Includes
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# load config file
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
+
+# Perform verification if read-only mode is enabled
+check_lokahostcp_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Starting update loop
+for package in lokahostcp lokahostcp-nginx lokahostcp-php; do
+	$BIN/v-update-sys-lokahostcp "$package"
+done
+
+#----------------------------------------------------------#
+#                       Lokahostcp                             #
+#----------------------------------------------------------#
+
+exit

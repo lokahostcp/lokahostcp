@@ -1,7 +1,7 @@
 {
     "autoload": {
         "psr-4": {
-            "Lokahost\\": "app/"
+            "Lokahostcp\\": "app/"
         }
     },
     "require-dev": {

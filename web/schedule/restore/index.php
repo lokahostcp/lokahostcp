@@ -38,7 +38,7 @@ if ($_GET["type"] == "udir") {
 
 if (!empty($_GET["type"])) {
 	$restore_cmd =
-		LOKAHOST_CMD .
+		LOKAHOSTCP_CMD .
 		"v-schedule-user-restore " .
 		$user .
 		" " .
@@ -56,7 +56,7 @@ if (!empty($_GET["type"])) {
 		" " .
 		$udir;
 } else {
-	$restore_cmd = LOKAHOST_CMD . "v-schedule-user-restore " . $user . " " . $backup;
+	$restore_cmd = LOKAHOSTCP_CMD . "v-schedule-user-restore " . $user . " " . $backup;
 }
 
 exec($restore_cmd, $output, $return_var);
@@ -67,7 +67,7 @@ if ($return_var == 0) {
 } else {
 	$_SESSION["error_msg"] = implode("<br>", $output);
 	if (empty($_SESSION["error_msg"])) {
-		$_SESSION["error_msg"] = _("Error: Lokahost did not return any output.");
+		$_SESSION["error_msg"] = _("Error: Lokahostcp did not return any output.");
 	}
 	if ($return_var == 4) {
 		$_SESSION["error_msg"] = _(

@@ -2,8 +2,8 @@
 
 # ======================================================== #
 #
-# Lokahost Control Panel Installer for Ubuntu
-# https://www.lokahost.com/
+# Lokahostcp Control Panel Installer for Ubuntu
+# https://www.lokahost.online/
 #
 # Currently Supported Versions:
 # Ubuntu 20.04, 22.04 LTS
@@ -15,9 +15,9 @@
 #----------------------------------------------------------#
 export PATH=$PATH:/sbin
 export DEBIAN_FRONTEND=noninteractive
-RHOST='apt.lokahost.com'
+RHOST='apt.lokahost.online'
 VERSION='ubuntu'
-LOKAHOST='/usr/local/lokahost'
+LOKAHOSTCP='/usr/local/lokahostcp'
 LOG="/root/lcp_install_backups/lcp_install-$(date +%d%m%Y%H%M).log"
 memory=$(grep 'MemTotal' /proc/meminfo | tr ' ' '\n' | grep [0-9])
 lcp_backups="/root/lcp_install_backups/$(date +%d%m%Y%H%M)"
@@ -26,12 +26,12 @@ os='ubuntu'
 release="$(lsb_release -s -r)"
 codename="$(lsb_release -s -c)"
 architecture="$(arch)"
-LOKAHOST_INSTALL_DIR="$LOKAHOST/install/deb"
-LOKAHOST_COMMON_DIR="$LOKAHOST/install/common"
+LOKAHOSTCP_INSTALL_DIR="$LOKAHOSTCP/install/deb"
+LOKAHOSTCP_COMMON_DIR="$LOKAHOSTCP/install/common"
 VERBOSE='no'
 
 # Define software versions
-LOKAHOST_INSTALL_VER='1.9.0~alpha'
+LOKAHOSTCP_INSTALL_VER='1.0.0'
 # Supported PHP versions
 multiphp_v=("5.6" "7.0" "7.1" "7.2" "7.3" "7.4" "8.0" "8.1" "8.2","8.3")
 # One of the following PHP versions is required for Roundcube / phpmyadmin
@@ -45,7 +45,7 @@ mariadb_v="10.11"
 # Defining software pack for all distros
 software="acl apache2 apache2.2-common apache2-suexec-custom apache2-utils apparmor-utils awstats bc bind9 bsdmainutils bsdutils
   clamav-daemon cron curl dnsutils dovecot-imapd dovecot-managesieved dovecot-pop3d dovecot-sieve e2fslibs e2fsprogs
-  exim4 exim4-daemon-heavy expect fail2ban flex ftp git lokahost=${LOKAHOST_INSTALL_VER} lokahost-nginx lokahost-php lokahost-web-terminal
+  exim4 exim4-daemon-heavy expect fail2ban flex ftp git lokahostcp=${LOKAHOSTCP_INSTALL_VER} lokahostcp-nginx lokahostcp-php lokahostcp-web-terminal
   idn2 imagemagick ipset jq libapache2-mod-fcgid libapache2-mod-php$fpm_v libapache2-mod-rpaf libonig5 libzip4 lsb-release
   lsof mariadb-client mariadb-common mariadb-server mc mysql-client mysql-common mysql-server nginx nodejs openssh-server
   php$fpm_v php$fpm_v-apcu php$fpm_v-bz2 php$fpm_v-cgi php$fpm_v-cli php$fpm_v-common php$fpm_v-curl php$fpm_v-gd
@@ -84,11 +84,11 @@ help() {
   -e, --email             Set admin email
   -u, --username          Set admin user
   -p, --password          Set admin password
-  -D, --with-debs         Path to Lokahost debs
+  -D, --with-debs         Path to Lokahostcp debs
   -f, --force             Force installation
   -h, --help              Print this help
 
-  Example: bash $0 -e demo@lokahost.com -p p4ssw0rd --multiphp yes"
+  Example: bash $0 -e demo@lokahost.online -p p4ssw0rd --multiphp yes"
 	exit 1
 }
 
@@ -160,25 +160,25 @@ set_default_port() {
 	fi
 }
 
-# Write configuration KEY/VALUE pair to $LOKAHOST/conf/lokahost.conf
+# Write configuration KEY/VALUE pair to $LOKAHOSTCP/conf/lokahostcp.conf
 write_config_value() {
 	local key="$1"
 	local value="$2"
-	echo "$key='$value'" >> $LOKAHOST/conf/lokahost.conf
+	echo "$key='$value'" >> $LOKAHOSTCP/conf/lokahostcp.conf
 }
 
 # Sort configuration file values
-# Write final copy to $LOKAHOST/conf/lokahost.conf for active usage
-# Duplicate file to $LOKAHOST/conf/defaults/lokahost.conf to restore known good installation values
+# Write final copy to $LOKAHOSTCP/conf/lokahostcp.conf for active usage
+# Duplicate file to $LOKAHOSTCP/conf/defaults/lokahostcp.conf to restore known good installation values
 sort_config_file() {
-	sort $LOKAHOST/conf/lokahost.conf -o /tmp/updconf
-	mv $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/lokahost.conf.bak
-	mv /tmp/updconf $LOKAHOST/conf/lokahost.conf
-	rm -f $LOKAHOST/conf/lokahost.conf.bak
-	if [ ! -d "$LOKAHOST/conf/defaults/" ]; then
-		mkdir -p "$LOKAHOST/conf/defaults/"
+	sort $LOKAHOSTCP/conf/lokahostcp.conf -o /tmp/updconf
+	mv $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/lokahostcp.conf.bak
+	mv /tmp/updconf $LOKAHOSTCP/conf/lokahostcp.conf
+	rm -f $LOKAHOSTCP/conf/lokahostcp.conf.bak
+	if [ ! -d "$LOKAHOSTCP/conf/defaults/" ]; then
+		mkdir -p "$LOKAHOSTCP/conf/defaults/"
 	fi
-	cp $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+	cp $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
 }
 
 # todo add check for usernames that are blocked
@@ -308,7 +308,7 @@ while getopts "a:w:v:j:k:m:M:g:d:x:z:Z:c:t:i:b:r:o:q:l:y:s:u:e:p:W:D:fh" Option;
 		e) email=$OPTARG ;;       # Admin email
 		u) username=$OPTARG ;;    # Admin username
 		p) vpass=$OPTARG ;;       # Admin password
-		D) withdebs=$OPTARG ;;    # Lokahost debs path
+		D) withdebs=$OPTARG ;;    # Lokahostcp debs path
 		f) force='yes' ;;         # Force install
 		h) help ;;                # Help
 		*) help ;;                # Print help (default)
@@ -412,8 +412,8 @@ if [ "x$(id -u)" != 'x0' ]; then
 	check_result 1 "Script can be run executed only by root"
 fi
 
-if [ -d "/usr/local/lokahost" ]; then
-	check_result 1 "Lokahost install detected. Unable to continue"
+if [ -d "/usr/local/lokahostcp" ]; then
+	check_result 1 "Lokahostcp install detected. Unable to continue"
 fi
 
 # Clear the screen once launch permissions have been verified
@@ -425,7 +425,7 @@ if [ ! -f /etc/apt/apt.conf.d/80-retries ]; then
 fi
 
 # Welcome message
-echo "Welcome to the Lokahost Control Panel installer!"
+echo "Welcome to the Lokahostcp Control Panel installer!"
 echo
 echo "Please wait, the installer is now checking for missing dependencies..."
 echo
@@ -443,12 +443,12 @@ check_result $? "Package installation failed, check log file for more details."
 
 # Check repository availability
 wget --quiet "https://$RHOST" -O /dev/null
-check_result $? "Unable to connect to the Lokahost APT repository"
+check_result $? "Unable to connect to the Lokahostcp APT repository"
 
 # Check installed packages
 tmpfile=$(mktemp -p /tmp)
 dpkg --get-selections > $tmpfile
-conflicts_pkg="exim4 mariadb-server apache2 nginx lokahost postfix ufw"
+conflicts_pkg="exim4 mariadb-server apache2 nginx lokahostcp postfix ufw"
 
 # Drop postfix from the list if exim should not be installed
 if [ "$exim" = 'no' ]; then
@@ -477,7 +477,7 @@ if [ -n "$conflicts" ] && [ -z "$force" ]; then
 		check_result $? 'apt-get remove failed'
 		unset $answer
 	else
-		check_result 1 "Lokahost Control Panel should be installed on a clean server."
+		check_result 1 "Lokahostcp Control Panel should be installed on a clean server."
 	fi
 fi
 
@@ -510,19 +510,19 @@ fi
 
 # Validate whether installation script matches release version before continuing with install
 if [ -z "$withdebs" ] || [ ! -d "$withdebs" ]; then
-	release_branch_ver=$(curl -s https://raw.githubusercontent.com/lokahost/lokahost/release/src/deb/lokahost/control | grep "Version:" | awk '{print $2}')
-	if [ "$LOKAHOST_INSTALL_VER" != "$release_branch_ver" ]; then
+	release_branch_ver=$(curl -s https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/src/deb/lokahostcp/control | grep "Version:" | awk '{print $2}')
+	if [ "$LOKAHOSTCP_INSTALL_VER" != "$release_branch_ver" ]; then
 		echo
 		echo -e "\e[91mInstallation aborted\e[0m"
 		echo "===================================================================="
 		echo -e "\e[33mERROR: Install script version does not match package version!\e[0m"
 		echo -e "\e[33mPlease download the installer from the release branch in order to continue:\e[0m"
 		echo ""
-		echo -e "\e[33mhttps://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install.sh\e[0m"
+		echo -e "\e[33mhttps://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install.sh\e[0m"
 		echo ""
 		echo -e "\e[33mTo test pre-release versions, build the .deb packages and re-run the installer:\e[0m"
-		echo -e "  \e[33m./lcp_autocompile.sh \e[1m--lokahost branchname no\e[21m\e[0m"
-		echo -e "  \e[33m./lcp-install.sh .. \e[1m--with-debs /tmp/lokahost-src/debs\e[21m\e[0m"
+		echo -e "  \e[33m./lcp_autocompile.sh \e[1m--lokahostcp branchname no\e[21m\e[0m"
+		echo -e "  \e[33m./lcp-install.sh .. \e[1m--with-debs /tmp/lokahostcp-src/debs\e[21m\e[0m"
 		echo ""
 		check_result 1 "Installation aborted"
 	fi
@@ -542,7 +542,7 @@ case $architecture in
 		echo -e "\e[33mERROR: $architecture is currently not supported!\e[0m"
 		echo -e "\e[33mPlease verify the achitecture used is currenlty supported\e[0m"
 		echo ""
-		echo -e "\e[33mhttps://github.com/lokahost/lokahost/blob/main/README.md\e[0m"
+		echo -e "\e[33mhttps://github.com/lokahostcp/lokahostcp/blob/main/README.md\e[0m"
 		echo ""
 		check_result 1 "Installation aborted"
 		;;
@@ -553,7 +553,7 @@ esac
 #----------------------------------------------------------#
 
 install_welcome_message() {
-	DISPLAY_VER=$(echo $LOKAHOST_INSTALL_VER | sed "s|~alpha||g" | sed "s|~beta||g")
+	DISPLAY_VER=$(echo $LOKAHOSTCP_INSTALL_VER | sed "s|~alpha||g" | sed "s|~beta||g")
 	echo
 	echo '                _   _           _   _        ____ ____                  '
 	echo '               | | | | ___  ___| |_(_) __ _ / ___|  _ \                 '
@@ -561,21 +561,21 @@ install_welcome_message() {
 	echo '               |  _  |  __/\__ \ |_| | (_| | |___|  __/                 '
 	echo '               |_| |_|\___||___/\__|_|\__,_|\____|_|                    '
 	echo "                                                                        "
-	echo "                          Lokahost Control Panel                          "
-	if [[ "$LOKAHOST_INSTALL_VER" =~ "beta" ]]; then
+	echo "                          Lokahostcp Control Panel                          "
+	if [[ "$LOKAHOSTCP_INSTALL_VER" =~ "beta" ]]; then
 		echo "                              BETA RELEASE                          "
 	fi
-	if [[ "$LOKAHOST_INSTALL_VER" =~ "alpha" ]]; then
+	if [[ "$LOKAHOSTCP_INSTALL_VER" =~ "alpha" ]]; then
 		echo "                          DEVELOPMENT SNAPSHOT                      "
 		echo "                    NOT INTENDED FOR PRODUCTION USE                 "
 		echo "                          USE AT YOUR OWN RISK                      "
 	fi
 	echo "                                  ${DISPLAY_VER}                        "
-	echo "                            www.lokahost.com                            "
+	echo "                            www.lokahost.online                            "
 	echo
 	echo "========================================================================"
 	echo
-	echo "Thank you for downloading Lokahost Control Panel! In a few moments,"
+	echo "Thank you for downloading Lokahostcp Control Panel! In a few moments,"
 	echo "we will begin installing the following components on your server:"
 	echo
 }
@@ -822,10 +822,10 @@ if [ "$mysql" = 'yes' ]; then
 	curl -s https://mariadb.org/mariadb_release_signing_key.asc | gpg --dearmor | tee /usr/share/keyrings/mariadb-keyring.gpg > /dev/null 2>&1
 fi
 
-# Installing LokahostCP repo
-echo "[ * ] Lokahost Control Panel"
-echo "deb [arch=$ARCH signed-by=/usr/share/keyrings/lokahost-keyring.gpg] https://$RHOST/ $codename main" > $apt/lokahost.list
-gpg --no-default-keyring --keyring /usr/share/keyrings/lokahost-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys A189E93654F0B0E5 > /dev/null 2>&1
+# Installing Lokahostcp repo
+echo "[ * ] Lokahostcp Control Panel"
+echo "deb [arch=$ARCH signed-by=/usr/share/keyrings/lokahostcp-keyring.gpg] https://$RHOST/ $codename main" > $apt/lokahostcp.list
+curl -s "https://$RHOST/pubkey.gpg" | gpg --dearmor | tee /usr/share/keyrings/lokahostcp-keyring.gpg > /dev/null 2>&1
 
 # Installing Node.js 20.x repo
 echo "[ * ] Node.js 20.x"
@@ -871,7 +871,7 @@ check_result $? 'apt-get upgrade failed'
 mkdir -p $lcp_backups
 cd $lcp_backups
 mkdir nginx apache2 php vsftpd proftpd bind exim4 dovecot clamd
-mkdir spamassassin mysql postgresql openssl lokahost
+mkdir spamassassin mysql postgresql openssl lokahostcp
 
 # Backup OpenSSL configuration
 cp /etc/ssl/openssl.cnf $lcp_backups/openssl > /dev/null 2>&1
@@ -925,11 +925,11 @@ mv /var/lib/mysql $lcp_backups/mysql/mysql_datadir > /dev/null 2>&1
 cp -r /etc/mysql/* $lcp_backups/mysql > /dev/null 2>&1
 mv -f /root/.my.cnf $lcp_backups/mysql > /dev/null 2>&1
 
-# Backup Lokahost
-systemctl stop lokahost > /dev/null 2>&1
-cp -r $LOKAHOST/* $lcp_backups/lokahost > /dev/null 2>&1
-apt-get -y purge lokahost lokahost-nginx lokahost-php > /dev/null 2>&1
-rm -rf $LOKAHOST > /dev/null 2>&1
+# Backup Lokahostcp
+systemctl stop lokahostcp > /dev/null 2>&1
+cp -r $LOKAHOSTCP/* $lcp_backups/lokahostcp > /dev/null 2>&1
+apt-get -y purge lokahostcp lokahostcp-nginx lokahostcp-php > /dev/null 2>&1
+rm -rf $LOKAHOSTCP > /dev/null 2>&1
 
 #----------------------------------------------------------#
 #                     Package Includes                     #
@@ -1028,7 +1028,7 @@ if [ "$iptables" = 'no' ]; then
 fi
 if [ "$webterminal" = 'no' ]; then
 	software=$(echo "$software" | sed -e "s/nodejs//")
-	software=$(echo "$software" | sed -e "s/lokahost-web-terminal//")
+	software=$(echo "$software" | sed -e "s/lokahostcp-web-terminal//")
 fi
 if [ "$phpfpm" = 'yes' ]; then
 	software=$(echo "$software" | sed -e "s/php$fpm_v-cgi//")
@@ -1036,10 +1036,10 @@ if [ "$phpfpm" = 'yes' ]; then
 	software=$(echo "$software" | sed -e "s/libapache2-mod-php$fpm_v//")
 fi
 if [ -d "$withdebs" ]; then
-	software=$(echo "$software" | sed -e "s/lokahost-nginx//")
-	software=$(echo "$software" | sed -e "s/lokahost-php//")
-	software=$(echo "$software" | sed -e "s/lokahost-web-terminal//")
-	software=$(echo "$software" | sed -e "s/lokahost=${LOKAHOST_INSTALL_VER}//")
+	software=$(echo "$software" | sed -e "s/lokahostcp-nginx//")
+	software=$(echo "$software" | sed -e "s/lokahostcp-php//")
+	software=$(echo "$software" | sed -e "s/lokahostcp-web-terminal//")
+	software=$(echo "$software" | sed -e "s/lokahostcp=${LOKAHOSTCP_INSTALL_VER}//")
 fi
 if [ "$release" = '20.04' ]; then
 	software=$(echo "$software" | sed -e "s/setpriv/util-linux/")
@@ -1097,35 +1097,35 @@ echo
 echo "========================================================================"
 echo
 
-# Install Lokahost packages from local folder
+# Install Lokahostcp packages from local folder
 if [ -n "$withdebs" ] && [ -d "$withdebs" ]; then
 	echo "[ * ] Installing local package files..."
-	echo "    - lokahost core package"
-	dpkg -i $withdebs/lokahost_*.deb > /dev/null 2>&1
+	echo "    - lokahostcp core package"
+	dpkg -i $withdebs/lokahostcp_*.deb > /dev/null 2>&1
 
-	if [ -z $(ls $withdebs/lokahost-php_*.deb 2> /dev/null) ]; then
-		echo "    - lokahost-php backend package (from apt)"
-		apt-get -y install lokahost-php > /dev/null 2>&1
+	if [ -z $(ls $withdebs/lokahostcp-php_*.deb 2> /dev/null) ]; then
+		echo "    - lokahostcp-php backend package (from apt)"
+		apt-get -y install lokahostcp-php > /dev/null 2>&1
 	else
-		echo "    - lokahost-php backend package"
-		dpkg -i $withdebs/lokahost-php_*.deb > /dev/null 2>&1
+		echo "    - lokahostcp-php backend package"
+		dpkg -i $withdebs/lokahostcp-php_*.deb > /dev/null 2>&1
 	fi
 
-	if [ -z $(ls $withdebs/lokahost-nginx_*.deb 2> /dev/null) ]; then
-		echo "    - lokahost-nginx backend package (from apt)"
-		apt-get -y install lokahost-nginx > /dev/null 2>&1
+	if [ -z $(ls $withdebs/lokahostcp-nginx_*.deb 2> /dev/null) ]; then
+		echo "    - lokahostcp-nginx backend package (from apt)"
+		apt-get -y install lokahostcp-nginx > /dev/null 2>&1
 	else
-		echo "    - lokahost-nginx backend package"
-		dpkg -i $withdebs/lokahost-nginx_*.deb > /dev/null 2>&1
+		echo "    - lokahostcp-nginx backend package"
+		dpkg -i $withdebs/lokahostcp-nginx_*.deb > /dev/null 2>&1
 	fi
 
 	if [ "$webterminal" = "yes" ]; then
-		if [ -z $(ls $withdebs/lokahost-web-terminal_*.deb 2> /dev/null) ]; then
-			echo "    - lokahost-web-terminal package (from apt)"
-			apt-get -y install lokahost-web-terminal > /dev/null 2>&1
+		if [ -z $(ls $withdebs/lokahostcp-web-terminal_*.deb 2> /dev/null) ]; then
+			echo "    - lokahostcp-web-terminal package (from apt)"
+			apt-get -y install lokahostcp-web-terminal > /dev/null 2>&1
 		else
-			echo "    - lokahost-web-terminal"
-			dpkg -i $withdebs/lokahost-web-terminal_*.deb > /dev/null 2>&1
+			echo "    - lokahostcp-web-terminal"
+			dpkg -i $withdebs/lokahostcp-web-terminal_*.deb > /dev/null 2>&1
 		fi
 	fi
 fi
@@ -1141,13 +1141,13 @@ echo "[ * ] Configuring system settings..."
 
 # Generate a random password
 random_password=$(gen_pass '32')
-# Create the new lokahostweb user
-/usr/sbin/useradd "lokahostweb" -c "$email" --no-create-home
-# do not allow login into lokahostweb user
-echo lokahostweb:$random_password | sudo chpasswd -e
+# Create the new lokahostcpweb user
+/usr/sbin/useradd "lokahostcpweb" -c "$email" --no-create-home
+# do not allow login into lokahostcpweb user
+echo lokahostcpweb:$random_password | sudo chpasswd -e
 
 # Create user for php-fpm configs
-/usr/sbin/useradd "lokahostmail" -c "$email" --no-create-home
+/usr/sbin/useradd "lokahostcpmail" -c "$email" --no-create-home
 
 # Enable SFTP subsystem for SSH
 sftp_subsys_enabled=$(grep -iE "^#?.*subsystem.+(sftp )?sftp-server" /etc/ssh/sshd_config)
@@ -1174,7 +1174,7 @@ systemctl restart ssh
 # Disable AWStats cron
 rm -f /etc/cron.d/awstats
 # Replace awstatst function
-cp -f $LOKAHOST_INSTALL_DIR/logrotate/httpd-prerotate/* /etc/logrotate.d/httpd-prerotate/
+cp -f $LOKAHOSTCP_INSTALL_DIR/logrotate/httpd-prerotate/* /etc/logrotate.d/httpd-prerotate/
 
 # Set directory color
 if [ -z "$(grep 'LS_COLORS="$LS_COLORS:di=00;33"' /etc/profile)" ]; then
@@ -1237,59 +1237,59 @@ mount -o remount,defaults,hidepid=2 /proc > /dev/null 2>&1
 if [ $? -ne 0 ]; then
 	echo "Info: Cannot remount /proc (LXC containers require additional perm added to host apparmor profile)"
 else
-	echo "@reboot root sleep 5 && mount -o remount,defaults,hidepid=2 /proc" > /etc/cron.d/lokahost-proc
+	echo "@reboot root sleep 5 && mount -o remount,defaults,hidepid=2 /proc" > /etc/cron.d/lokahostcp-proc
 fi
 
 #----------------------------------------------------------#
-#                     Configure Lokahost                     #
+#                     Configure Lokahostcp                     #
 #----------------------------------------------------------#
 
-echo "[ * ] Configuring Lokahost Control Panel..."
+echo "[ * ] Configuring Lokahostcp Control Panel..."
 # Installing sudo configuration
 mkdir -p /etc/sudoers.d
-cp -f $LOKAHOST_COMMON_DIR/sudo/lokahostweb /etc/sudoers.d/
-chmod 440 /etc/sudoers.d/lokahostweb
+cp -f $LOKAHOSTCP_COMMON_DIR/sudo/lokahostcpweb /etc/sudoers.d/
+chmod 440 /etc/sudoers.d/lokahostcpweb
 
-# Add Lokahost global config
-if [[ ! -e /etc/lokahost/lokahost.conf ]]; then
-	mkdir -p /etc/lokahost
-	echo -e "# Do not edit this file, will get overwritten on next upgrade, use /etc/lokahost/local.conf instead\n\nexport LOKAHOST='/usr/local/lokahost'\n\n[[ -f /etc/lokahost/local.conf ]] && source /etc/lokahost/local.conf" > /etc/lokahost/lokahost.conf
+# Add Lokahostcp global config
+if [[ ! -e /etc/lokahostcp/lokahostcp.conf ]]; then
+	mkdir -p /etc/lokahostcp
+	echo -e "# Do not edit this file, will get overwritten on next upgrade, use /etc/lokahostcp/local.conf instead\n\nexport LOKAHOSTCP='/usr/local/lokahostcp'\n\n[[ -f /etc/lokahostcp/local.conf ]] && source /etc/lokahostcp/local.conf" > /etc/lokahostcp/lokahostcp.conf
 fi
 
 # Configuring system env
-echo "export LOKAHOST='$LOKAHOST'" > /etc/profile.d/lokahost.sh
-echo 'PATH=$PATH:'$LOKAHOST'/bin' >> /etc/profile.d/lokahost.sh
-echo 'export PATH' >> /etc/profile.d/lokahost.sh
-chmod 755 /etc/profile.d/lokahost.sh
-source /etc/profile.d/lokahost.sh
+echo "export LOKAHOSTCP='$LOKAHOSTCP'" > /etc/profile.d/lokahostcp.sh
+echo 'PATH=$PATH:'$LOKAHOSTCP'/bin' >> /etc/profile.d/lokahostcp.sh
+echo 'export PATH' >> /etc/profile.d/lokahostcp.sh
+chmod 755 /etc/profile.d/lokahostcp.sh
+source /etc/profile.d/lokahostcp.sh
 
-# Configuring logrotate for Lokahost logs
-cp -f $LOKAHOST_INSTALL_DIR/logrotate/lokahost /etc/logrotate.d/lokahost
+# Configuring logrotate for Lokahostcp logs
+cp -f $LOKAHOSTCP_INSTALL_DIR/logrotate/lokahostcp /etc/logrotate.d/lokahostcp
 
 # Create log path and symbolic link
-rm -f /var/log/lokahost
-mkdir -p /var/log/lokahost
-ln -s /var/log/lokahost $LOKAHOST/log
+rm -f /var/log/lokahostcp
+mkdir -p /var/log/lokahostcp
+ln -s /var/log/lokahostcp $LOKAHOSTCP/log
 
-# Building directory tree and creating some blank files for Lokahost
-mkdir -p $LOKAHOST/conf $LOKAHOST/ssl $LOKAHOST/data/ips \
-	$LOKAHOST/data/queue $LOKAHOST/data/users $LOKAHOST/data/firewall \
-	$LOKAHOST/data/sessions
-touch $LOKAHOST/data/queue/backup.pipe $LOKAHOST/data/queue/disk.pipe \
-	$LOKAHOST/data/queue/webstats.pipe $LOKAHOST/data/queue/restart.pipe \
-	$LOKAHOST/data/queue/traffic.pipe $LOKAHOST/data/queue/daily.pipe $LOKAHOST/log/system.log \
-	$LOKAHOST/log/nginx-error.log $LOKAHOST/log/auth.log $LOKAHOST/log/backup.log
-chmod 750 $LOKAHOST/conf $LOKAHOST/data/users $LOKAHOST/data/ips $LOKAHOST/log
-chmod -R 750 $LOKAHOST/data/queue
-chmod 660 /var/log/lokahost/*
-chmod 770 $LOKAHOST/data/sessions
+# Building directory tree and creating some blank files for Lokahostcp
+mkdir -p $LOKAHOSTCP/conf $LOKAHOSTCP/ssl $LOKAHOSTCP/data/ips \
+	$LOKAHOSTCP/data/queue $LOKAHOSTCP/data/users $LOKAHOSTCP/data/firewall \
+	$LOKAHOSTCP/data/sessions
+touch $LOKAHOSTCP/data/queue/backup.pipe $LOKAHOSTCP/data/queue/disk.pipe \
+	$LOKAHOSTCP/data/queue/webstats.pipe $LOKAHOSTCP/data/queue/restart.pipe \
+	$LOKAHOSTCP/data/queue/traffic.pipe $LOKAHOSTCP/data/queue/daily.pipe $LOKAHOSTCP/log/system.log \
+	$LOKAHOSTCP/log/nginx-error.log $LOKAHOSTCP/log/auth.log $LOKAHOSTCP/log/backup.log
+chmod 750 $LOKAHOSTCP/conf $LOKAHOSTCP/data/users $LOKAHOSTCP/data/ips $LOKAHOSTCP/log
+chmod -R 750 $LOKAHOSTCP/data/queue
+chmod 660 /var/log/lokahostcp/*
+chmod 770 $LOKAHOSTCP/data/sessions
 
-# Generating Lokahost configuration
-rm -f $LOKAHOST/conf/lokahost.conf > /dev/null 2>&1
-touch $LOKAHOST/conf/lokahost.conf
-chmod 660 $LOKAHOST/conf/lokahost.conf
+# Generating Lokahostcp configuration
+rm -f $LOKAHOSTCP/conf/lokahostcp.conf > /dev/null 2>&1
+touch $LOKAHOSTCP/conf/lokahostcp.conf
+chmod 660 $LOKAHOSTCP/conf/lokahostcp.conf
 
-# Write default port value to lokahost.conf
+# Write default port value to lokahostcp.conf
 # If a custom port is specified it will be set at the end of the installation process.
 write_config_value "BACKEND_PORT" "8083"
 
@@ -1400,7 +1400,7 @@ write_config_value "THEME" "dark"
 write_config_value "INACTIVE_SESSION_TIMEOUT" "60"
 
 # Version & Release Branch
-write_config_value "VERSION" "${LOKAHOST_INSTALL_VER}"
+write_config_value "VERSION" "${LOKAHOSTCP_INSTALL_VER}"
 write_config_value "RELEASE_BRANCH" "release"
 
 # Email notifications after upgrade
@@ -1411,55 +1411,55 @@ write_config_value "UPGRADE_SEND_EMAIL_LOG" "false"
 write_config_value "ROOT_USER" "$username"
 
 # Installing hosting packages
-cp -rf $LOKAHOST_COMMON_DIR/packages $LOKAHOST/data/
+cp -rf $LOKAHOSTCP_COMMON_DIR/packages $LOKAHOSTCP/data/
 
 # Update nameservers in hosting package
 IFS='.' read -r -a domain_elements <<< "$servername"
 if [ -n "${domain_elements[-2]}" ] && [ -n "${domain_elements[-1]}" ]; then
 	serverdomain="${domain_elements[-2]}.${domain_elements[-1]}"
-	sed -i s/"domain.tld"/"$serverdomain"/g $LOKAHOST/data/packages/*.pkg
+	sed -i s/"domain.tld"/"$serverdomain"/g $LOKAHOSTCP/data/packages/*.pkg
 fi
 
 # Installing templates
-cp -rf $LOKAHOST_INSTALL_DIR/templates $LOKAHOST/data/
-cp -rf $LOKAHOST_COMMON_DIR/templates/web/ $LOKAHOST/data/templates
-cp -rf $LOKAHOST_COMMON_DIR/templates/dns/ $LOKAHOST/data/templates
+cp -rf $LOKAHOSTCP_INSTALL_DIR/templates $LOKAHOSTCP/data/
+cp -rf $LOKAHOSTCP_COMMON_DIR/templates/web/ $LOKAHOSTCP/data/templates
+cp -rf $LOKAHOSTCP_COMMON_DIR/templates/dns/ $LOKAHOSTCP/data/templates
 
 mkdir -p /var/www/html
 mkdir -p /var/www/document_errors
 
 # Install default success page
-cp -rf $LOKAHOST_COMMON_DIR/templates/web/unassigned/index.html /var/www/html/
-cp -rf $LOKAHOST_COMMON_DIR/templates/web/skel/document_errors/* /var/www/document_errors/
+cp -rf $LOKAHOSTCP_COMMON_DIR/templates/web/unassigned/index.html /var/www/html/
+cp -rf $LOKAHOSTCP_COMMON_DIR/templates/web/skel/document_errors/* /var/www/document_errors/
 
 # Installing firewall rules
-cp -rf $LOKAHOST_COMMON_DIR/firewall $LOKAHOST/data/
-rm -f $LOKAHOST/data/firewall/ipset/blacklist.sh $LOKAHOST/data/firewall/ipset/blacklist.ipv6.sh
+cp -rf $LOKAHOSTCP_COMMON_DIR/firewall $LOKAHOSTCP/data/
+rm -f $LOKAHOSTCP/data/firewall/ipset/blacklist.sh $LOKAHOSTCP/data/firewall/ipset/blacklist.ipv6.sh
 
 # Delete rules for services that are not installed
 if [ "$vsftpd" = "no" ] && [ "$proftpd" = "no" ]; then
 	# Remove FTP
-	sed -i "/COMMENT='FTP'/d" $LOKAHOST/data/firewall/rules.conf
+	sed -i "/COMMENT='FTP'/d" $LOKAHOSTCP/data/firewall/rules.conf
 fi
 if [ "$exim" = "no" ]; then
 	# Remove SMTP
-	sed -i "/COMMENT='SMTP'/d" $LOKAHOST/data/firewall/rules.conf
+	sed -i "/COMMENT='SMTP'/d" $LOKAHOSTCP/data/firewall/rules.conf
 fi
 if [ "$dovecot" = "no" ]; then
 	# Remove IMAP / Dovecot
-	sed -i "/COMMENT='IMAP'/d" $LOKAHOST/data/firewall/rules.conf
-	sed -i "/COMMENT='POP3'/d" $LOKAHOST/data/firewall/rules.conf
+	sed -i "/COMMENT='IMAP'/d" $LOKAHOSTCP/data/firewall/rules.conf
+	sed -i "/COMMENT='POP3'/d" $LOKAHOSTCP/data/firewall/rules.conf
 fi
 if [ "$named" = "no" ]; then
 	# Remove IMAP / Dovecot
-	sed -i "/COMMENT='DNS'/d" $LOKAHOST/data/firewall/rules.conf
+	sed -i "/COMMENT='DNS'/d" $LOKAHOSTCP/data/firewall/rules.conf
 fi
 
 # Installing apis
-cp -rf $LOKAHOST_COMMON_DIR/api $LOKAHOST/data/
+cp -rf $LOKAHOSTCP_COMMON_DIR/api $LOKAHOSTCP/data/
 
 # Configuring server hostname
-$LOKAHOST/bin/v-change-sys-hostname $servername > /dev/null 2>&1
+$LOKAHOSTCP/bin/v-change-sys-hostname $servername > /dev/null 2>&1
 
 # Configuring global OpenSSL options
 echo "[ * ] Configuring OpenSSL to improve TLS performance..."
@@ -1469,18 +1469,18 @@ if [ "$release" = "20.04" ]; then
 		sed -i '/^oid_section		= new_oids$/a \\n# System default\nopenssl_conf = default_conf' /etc/ssl/openssl.cnf
 	fi
 	if ! grep -qw "^[default_conf]$" /etc/ssl/openssl.cnf 2> /dev/null; then
-		sed -i '$a [default_conf]\nssl_conf = ssl_sect\n\n[ssl_sect]\nsystem_default = lokahost_openssl_sect\n\n[lokahost_openssl_sect]\nCiphersuites = '"$tls13_ciphers"'\nOptions = PrioritizeChaCha' /etc/ssl/openssl.cnf
+		sed -i '$a [default_conf]\nssl_conf = ssl_sect\n\n[ssl_sect]\nsystem_default = lokahostcp_openssl_sect\n\n[lokahostcp_openssl_sect]\nCiphersuites = '"$tls13_ciphers"'\nOptions = PrioritizeChaCha' /etc/ssl/openssl.cnf
 	elif grep -qw "^system_default = system_default_sect$" /etc/ssl/openssl.cnf 2> /dev/null; then
-		sed -i '/^system_default = system_default_sect$/a system_default = lokahost_openssl_sect\n\n[lokahost_openssl_sect]\nCiphersuites = '"$tls13_ciphers"'\nOptions = PrioritizeChaCha' /etc/ssl/openssl.cnf
+		sed -i '/^system_default = system_default_sect$/a system_default = lokahostcp_openssl_sect\n\n[lokahostcp_openssl_sect]\nCiphersuites = '"$tls13_ciphers"'\nOptions = PrioritizeChaCha' /etc/ssl/openssl.cnf
 	fi
 elif [ "$release" = "22.04" ]; then
-	sed -i '/^system_default = system_default_sect$/a system_default = lokahost_openssl_sect\n\n[lokahost_openssl_sect]\nCiphersuites = '"$tls13_ciphers"'\nOptions = PrioritizeChaCha' /etc/ssl/openssl.cnf
+	sed -i '/^system_default = system_default_sect$/a system_default = lokahostcp_openssl_sect\n\n[lokahostcp_openssl_sect]\nCiphersuites = '"$tls13_ciphers"'\nOptions = PrioritizeChaCha' /etc/ssl/openssl.cnf
 fi
 
 # Generating SSL certificate
 echo "[ * ] Generating default self-signed SSL certificate..."
-$LOKAHOST/bin/v-generate-ssl-cert $(hostname) '' 'US' 'California' \
-	'San Francisco' 'Lokahost Control Panel' 'IT' > /tmp/lcp.pem
+$LOKAHOSTCP/bin/v-generate-ssl-cert $(hostname) '' 'US' 'California' \
+	'San Francisco' 'Lokahostcp Control Panel' 'IT' > /tmp/lcp.pem
 
 # Parsing certificate file
 crt_end=$(grep -n "END CERTIFICATE-" /tmp/lcp.pem | cut -f 1 -d:)
@@ -1493,35 +1493,35 @@ else
 fi
 
 # Adding SSL certificate
-echo "[ * ] Adding SSL certificate to Lokahost Control Panel..."
-cd $LOKAHOST/ssl
+echo "[ * ] Adding SSL certificate to Lokahostcp Control Panel..."
+cd $LOKAHOSTCP/ssl
 sed -n "1,${crt_end}p" /tmp/lcp.pem > certificate.crt
 sed -n "$key_start,${key_end}p" /tmp/lcp.pem > certificate.key
-chown root:mail $LOKAHOST/ssl/*
-chmod 660 $LOKAHOST/ssl/*
+chown root:mail $LOKAHOSTCP/ssl/*
+chmod 660 $LOKAHOSTCP/ssl/*
 rm /tmp/lcp.pem
 
 # Install dhparam.pem
-cp -f $LOKAHOST_INSTALL_DIR/ssl/dhparam.pem /etc/ssl
+cp -f $LOKAHOSTCP_INSTALL_DIR/ssl/dhparam.pem /etc/ssl
 
 # Enable sftp jail
 echo "[ * ] Enabling SFTP jail..."
-$LOKAHOST/bin/v-add-sys-sftp-jail > /dev/null 2>&1
+$LOKAHOSTCP/bin/v-add-sys-sftp-jail > /dev/null 2>&1
 check_result $? "can't enable sftp jail"
 
 # Enable ssh jail
 echo "[ * ] Enabling SSH jail..."
-$LOKAHOST/bin/v-add-sys-ssh-jail > /dev/null 2>&1
+$LOKAHOSTCP/bin/v-add-sys-ssh-jail > /dev/null 2>&1
 check_result $? "can't enable ssh jail"
 
-# Adding Lokahost admin account
+# Adding Lokahostcp admin account
 echo "[ * ] Creating default admin account..."
-$LOKAHOST/bin/v-add-user $username $vpass $email "default" "System Administrator"
+$LOKAHOSTCP/bin/v-add-user $username $vpass $email "default" "System Administrator"
 check_result $? "can't create admin user"
-$LOKAHOST/bin/v-change-user-shell $username nologin no
-$LOKAHOST/bin/v-change-user-role $username admin
-$LOKAHOST/bin/v-change-user-language $username $lang
-$LOKAHOST/bin/v-change-sys-config-value 'POLICY_SYSTEM_PROTECTED_ADMIN' 'yes'
+$LOKAHOSTCP/bin/v-change-user-shell $username nologin no
+$LOKAHOSTCP/bin/v-change-user-role $username admin
+$LOKAHOSTCP/bin/v-change-user-language $username $lang
+$LOKAHOSTCP/bin/v-change-sys-config-value 'POLICY_SYSTEM_PROTECTED_ADMIN' 'yes'
 
 #----------------------------------------------------------#
 #                     Configure Nginx                      #
@@ -1529,15 +1529,15 @@ $LOKAHOST/bin/v-change-sys-config-value 'POLICY_SYSTEM_PROTECTED_ADMIN' 'yes'
 
 echo "[ * ] Configuring NGINX..."
 rm -f /etc/nginx/conf.d/*.conf
-cp -f $LOKAHOST_INSTALL_DIR/nginx/nginx.conf /etc/nginx/
-cp -f $LOKAHOST_INSTALL_DIR/nginx/status.conf /etc/nginx/conf.d/
-cp -f $LOKAHOST_INSTALL_DIR/nginx/0rtt-anti-replay.conf /etc/nginx/conf.d/
-cp -f $LOKAHOST_INSTALL_DIR/nginx/agents.conf /etc/nginx/conf.d/
+cp -f $LOKAHOSTCP_INSTALL_DIR/nginx/nginx.conf /etc/nginx/
+cp -f $LOKAHOSTCP_INSTALL_DIR/nginx/status.conf /etc/nginx/conf.d/
+cp -f $LOKAHOSTCP_INSTALL_DIR/nginx/0rtt-anti-replay.conf /etc/nginx/conf.d/
+cp -f $LOKAHOSTCP_INSTALL_DIR/nginx/agents.conf /etc/nginx/conf.d/
 # Copy over cloudflare.inc incase in the next step there are connection issues with CF
-cp -f $LOKAHOST_INSTALL_DIR/nginx/cloudflare.inc /etc/nginx/conf.d/
-cp -f $LOKAHOST_INSTALL_DIR/nginx/phpmyadmin.inc /etc/nginx/conf.d/
-cp -f $LOKAHOST_INSTALL_DIR/nginx/phppgadmin.inc /etc/nginx/conf.d/
-cp -f $LOKAHOST_INSTALL_DIR/logrotate/nginx /etc/logrotate.d/
+cp -f $LOKAHOSTCP_INSTALL_DIR/nginx/cloudflare.inc /etc/nginx/conf.d/
+cp -f $LOKAHOSTCP_INSTALL_DIR/nginx/phpmyadmin.inc /etc/nginx/conf.d/
+cp -f $LOKAHOSTCP_INSTALL_DIR/nginx/phppgadmin.inc /etc/nginx/conf.d/
+cp -f $LOKAHOSTCP_INSTALL_DIR/logrotate/nginx /etc/logrotate.d/
 mkdir -p /etc/nginx/conf.d/domains
 mkdir -p /etc/nginx/conf.d/main
 mkdir -p /etc/nginx/modules-enabled
@@ -1594,10 +1594,10 @@ if [ "$apache" = 'yes' ]; then
 	mkdir -p /etc/apache2/conf.d/domains
 
 	# Copy configuration files
-	cp -f $LOKAHOST_INSTALL_DIR/apache2/apache2.conf /etc/apache2/
-	cp -f $LOKAHOST_INSTALL_DIR/apache2/status.conf /etc/apache2/mods-available/lokahost-status.conf
-	cp -f /etc/apache2/mods-available/status.load /etc/apache2/mods-available/lokahost-status.load
-	cp -f $LOKAHOST_INSTALL_DIR/logrotate/apache2 /etc/logrotate.d/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/apache2/apache2.conf /etc/apache2/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/apache2/status.conf /etc/apache2/mods-available/lokahostcp-status.conf
+	cp -f /etc/apache2/mods-available/status.load /etc/apache2/mods-available/lokahostcp-status.load
+	cp -f $LOKAHOSTCP_INSTALL_DIR/logrotate/apache2 /etc/logrotate.d/
 
 	# Enable needed modules
 	a2enmod rewrite > /dev/null 2>&1
@@ -1605,7 +1605,7 @@ if [ "$apache" = 'yes' ]; then
 	a2enmod ssl > /dev/null 2>&1
 	a2enmod actions > /dev/null 2>&1
 	a2dismod --quiet status > /dev/null 2>&1
-	a2enmod --quiet lokahost-status > /dev/null 2>&1
+	a2enmod --quiet lokahostcp-status > /dev/null 2>&1
 
 	# Enable mod_ruid/mpm_itk or mpm_event
 	if [ "$phpfpm" = 'yes' ]; then
@@ -1613,14 +1613,14 @@ if [ "$apache" = 'yes' ]; then
 		a2dismod php$fpm_v > /dev/null 2>&1
 		a2dismod mpm_prefork > /dev/null 2>&1
 		a2enmod mpm_event > /dev/null 2>&1
-		cp -f $LOKAHOST_INSTALL_DIR/apache2/lokahost-event.conf /etc/apache2/conf.d/
+		cp -f $LOKAHOSTCP_INSTALL_DIR/apache2/lokahostcp-event.conf /etc/apache2/conf.d/
 	else
 		a2enmod ruid2 > /dev/null 2>&1
 	fi
 
-	echo "# Powered by lokahost" > /etc/apache2/sites-available/default
-	echo "# Powered by lokahost" > /etc/apache2/sites-available/default-ssl
-	echo "# Powered by lokahost" > /etc/apache2/ports.conf
+	echo "# Powered by lokahostcp" > /etc/apache2/sites-available/default
+	echo "# Powered by lokahostcp" > /etc/apache2/sites-available/default-ssl
+	echo "# Powered by lokahostcp" > /etc/apache2/ports.conf
 	echo -e "/home\npublic_html/cgi-bin" > /etc/apache2/suexec/www-data
 	touch /var/log/apache2/access.log /var/log/apache2/error.log
 	mkdir -p /var/log/apache2/domains
@@ -1629,7 +1629,7 @@ if [ "$apache" = 'yes' ]; then
 	chmod 751 /var/log/apache2/domains
 
 	# Prevent remote access to server-status page
-	sed -i '/Allow from all/d' /etc/apache2/mods-available/lokahost-status.conf
+	sed -i '/Allow from all/d' /etc/apache2/mods-available/lokahostcp-status.conf
 
 	update-rc.d apache2 defaults > /dev/null 2>&1
 	systemctl start apache2 >> $LOG
@@ -1647,16 +1647,16 @@ if [ "$phpfpm" = "yes" ]; then
 	if [ "$multiphp" = 'yes' ]; then
 		for v in "${multiphp_v[@]}"; do
 			echo "[ * ] Installing PHP $v..."
-			$LOKAHOST/bin/v-add-web-php "$v" > /dev/null 2>&1
+			$LOKAHOSTCP/bin/v-add-web-php "$v" > /dev/null 2>&1
 		done
 	else
 		echo "[ * ] Installing PHP $fpm_v..."
-		$LOKAHOST/bin/v-add-web-php "$fpm_v" > /dev/null 2>&1
+		$LOKAHOSTCP/bin/v-add-web-php "$fpm_v" > /dev/null 2>&1
 	fi
 
 	echo "[ * ] Configuring PHP-FPM $fpm_v..."
 	# Create www.conf for webmail and php(*)admin
-	cp -f $LOKAHOST_INSTALL_DIR/php-fpm/www.conf /etc/php/$fpm_v/fpm/pool.d/www.conf
+	cp -f $LOKAHOSTCP_INSTALL_DIR/php-fpm/www.conf /etc/php/$fpm_v/fpm/pool.d/www.conf
 	update-rc.d php$fpm_v-fpm defaults > /dev/null 2>&1
 	systemctl start php$fpm_v-fpm >> $LOG
 	check_result $? "php-fpm start failed"
@@ -1681,7 +1681,7 @@ done
 # Cleanup php session files not changed in the last 7 days (60*24*7 minutes)
 echo '#!/bin/sh' > /etc/cron.daily/php-session-cleanup
 echo "find -O3 /home/*/tmp/ -ignore_readdir_race -depth -mindepth 1 -name 'sess_*' -type f -cmin '+10080' -delete > /dev/null 2>&1" >> /etc/cron.daily/php-session-cleanup
-echo "find -O3 $LOKAHOST/data/sessions/ -ignore_readdir_race -depth -mindepth 1 -name 'sess_*' -type f -cmin '+10080' -delete > /dev/null 2>&1" >> /etc/cron.daily/php-session-cleanup
+echo "find -O3 $LOKAHOSTCP/data/sessions/ -ignore_readdir_race -depth -mindepth 1 -name 'sess_*' -type f -cmin '+10080' -delete > /dev/null 2>&1" >> /etc/cron.daily/php-session-cleanup
 chmod 755 /etc/cron.daily/php-session-cleanup
 
 #----------------------------------------------------------#
@@ -1690,7 +1690,7 @@ chmod 755 /etc/cron.daily/php-session-cleanup
 
 if [ "$vsftpd" = 'yes' ]; then
 	echo "[ * ] Configuring Vsftpd server..."
-	cp -f $LOKAHOST_INSTALL_DIR/vsftpd/vsftpd.conf /etc/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/vsftpd/vsftpd.conf /etc/
 	touch /var/log/vsftpd.log
 	chown root:adm /var/log/vsftpd.log
 	chmod 640 /var/log/vsftpd.log
@@ -1709,8 +1709,8 @@ fi
 if [ "$proftpd" = 'yes' ]; then
 	echo "[ * ] Configuring ProFTPD server..."
 	echo "127.0.0.1 $servername" >> /etc/hosts
-	cp -f $LOKAHOST_INSTALL_DIR/proftpd/proftpd.conf /etc/proftpd/
-	cp -f $LOKAHOST_INSTALL_DIR/proftpd/tls.conf /etc/proftpd/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/proftpd/proftpd.conf /etc/proftpd/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/proftpd/tls.conf /etc/proftpd/
 
 	# Disable TLS 1.3 support for ProFTPD versions older than v1.3.7a
 	if [ "$release" = '20.04' ]; then
@@ -1752,7 +1752,7 @@ if [ "$mysql" = 'yes' ] || [ "$mysql8" = 'yes' ]; then
 	# Remove symbolic link
 	rm -f /etc/mysql/my.cnf
 	# Configuring MariaDB
-	cp -f $LOKAHOST_INSTALL_DIR/mysql/$mycnf /etc/mysql/my.cnf
+	cp -f $LOKAHOSTCP_INSTALL_DIR/mysql/$mycnf /etc/mysql/my.cnf
 
 	# Switch MariaDB inclusions to the MySQL
 	if [ "$mysql_type" = 'MySQL' ]; then
@@ -1808,8 +1808,8 @@ fi
 #----------------------------------------------------------#
 
 # Source upgrade.conf with phpmyadmin versions
-# shellcheck source=/usr/local/lokahost/install/upgrade/upgrade.conf
-source $LOKAHOST/install/upgrade/upgrade.conf
+# shellcheck source=/usr/local/lokahostcp/install/upgrade/upgrade.conf
+source $LOKAHOSTCP/install/upgrade/upgrade.conf
 
 if [ "$mysql" = 'yes' ] || [ "$mysql8" = 'yes' ]; then
 	# Display upgrade information
@@ -1836,17 +1836,17 @@ if [ "$mysql" = 'yes' ] || [ "$mysql8" = 'yes' ]; then
 	cp -rf phpMyAdmin-$pma_v-all-languages/* /usr/share/phpmyadmin
 
 	# Create copy of config file
-	cp -f $LOKAHOST_INSTALL_DIR/phpmyadmin/config.inc.php /etc/phpmyadmin/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/phpmyadmin/config.inc.php /etc/phpmyadmin/
 	mkdir -p /var/lib/phpmyadmin/tmp
 	chmod 770 /var/lib/phpmyadmin/tmp
-	chown root:lokahostmail /usr/share/phpmyadmin/tmp
+	chown root:lokahostcpmail /usr/share/phpmyadmin/tmp
 
 	# Set config and log directory
 	sed -i "s|'configFile' => ROOT_PATH . 'config.inc.php',|'configFile' => '/etc/phpmyadmin/config.inc.php',|g" /usr/share/phpmyadmin/libraries/vendor_config.php
 
 	# Create temporary folder and change permission
 	chmod 770 /usr/share/phpmyadmin/tmp
-	chown root:lokahostmail /usr/share/phpmyadmin/tmp
+	chown root:lokahostcpmail /usr/share/phpmyadmin/tmp
 
 	# Generate blow fish
 	blowfish=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
@@ -1857,15 +1857,15 @@ if [ "$mysql" = 'yes' ] || [ "$mysql8" = 'yes' ]; then
 	rm -f phpMyAdmin-$pma_v-all-languages.tar.gz
 
 	write_config_value "DB_PMA_ALIAS" "phpmyadmin"
-	$LOKAHOST/bin/v-change-sys-db-alias 'pma' "phpmyadmin"
+	$LOKAHOSTCP/bin/v-change-sys-db-alias 'pma' "phpmyadmin"
 
 	# Special thanks to Pavel Galkin (https://skurudo.ru)
 	# https://github.com/skurudo/phpmyadmin-fixer
-	# shellcheck source=/usr/local/lokahost/install/deb/phpmyadmin/pma.sh
-	source $LOKAHOST_INSTALL_DIR/phpmyadmin/pma.sh > /dev/null 2>&1
+	# shellcheck source=/usr/local/lokahostcp/install/deb/phpmyadmin/pma.sh
+	source $LOKAHOSTCP_INSTALL_DIR/phpmyadmin/pma.sh > /dev/null 2>&1
 
 	# limit access to /etc/phpmyadmin/
-	chown -R root:lokahostmail /etc/phpmyadmin/
+	chown -R root:lokahostcpmail /etc/phpmyadmin/
 	chmod -R 640 /etc/phpmyadmin/*
 	chmod 750 /etc/phpmyadmin/conf.d/
 fi
@@ -1877,28 +1877,28 @@ fi
 if [ "$postgresql" = 'yes' ]; then
 	echo "[ * ] Configuring PostgreSQL database server..."
 	ppass=$(gen_pass)
-	cp -f $LOKAHOST_INSTALL_DIR/postgresql/pg_hba.conf /etc/postgresql/*/main/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/postgresql/pg_hba.conf /etc/postgresql/*/main/
 	systemctl restart postgresql
 	sudo -iu postgres psql -c "ALTER USER postgres WITH PASSWORD '$ppass'" > /dev/null 2>&1
 
 	mkdir -p /etc/phppgadmin/
 	mkdir -p /usr/share/phppgadmin/
 
-	wget --retry-connrefused --quiet https://github.com/lokahost/phppgadmin/releases/download/v$pga_v/phppgadmin-v$pga_v.tar.gz
+	wget --retry-connrefused --quiet https://github.com/lokahostcp/phppgadmin/releases/download/v$pga_v/phppgadmin-v$pga_v.tar.gz
 	tar xzf phppgadmin-v$pga_v.tar.gz -C /usr/share/phppgadmin/
 
-	cp -f $LOKAHOST_INSTALL_DIR/pga/config.inc.php /etc/phppgadmin/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/pga/config.inc.php /etc/phppgadmin/
 
 	ln -s /etc/phppgadmin/config.inc.php /usr/share/phppgadmin/conf/
 
 	# Configuring phpPgAdmin
 	if [ "$apache" = 'yes' ]; then
-		cp -f $LOKAHOST_INSTALL_DIR/pga/phppgadmin.conf /etc/apache2/conf.d/phppgadmin.inc
+		cp -f $LOKAHOSTCP_INSTALL_DIR/pga/phppgadmin.conf /etc/apache2/conf.d/phppgadmin.inc
 	fi
 
 	rm phppgadmin-v$pga_v.tar.gz
 	write_config_value "DB_PGA_ALIAS" "phppgadmin"
-	$LOKAHOST/bin/v-change-sys-db-alias 'pga' "phppgadmin"
+	$LOKAHOSTCP/bin/v-change-sys-db-alias 'pga' "phppgadmin"
 fi
 
 #----------------------------------------------------------#
@@ -1907,8 +1907,8 @@ fi
 
 if [ "$named" = 'yes' ]; then
 	echo "[ * ] Configuring Bind DNS server..."
-	cp -f $LOKAHOST_INSTALL_DIR/bind/named.conf /etc/bind/
-	cp -f $LOKAHOST_INSTALL_DIR/bind/named.conf.options /etc/bind/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/bind/named.conf /etc/bind/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/bind/named.conf.options /etc/bind/
 	chown root:bind /etc/bind/named.conf
 	chown root:bind /etc/bind/named.conf.options
 	chown bind:bind /var/cache/bind
@@ -1943,14 +1943,14 @@ if [ "$exim" = 'yes' ]; then
 	# if Exim version > 4.9.4 or greater!
 	if ! version_ge "4.94" "$exim_version"; then
 		# Ubuntu 22.04 (Jammy) uses Exim 4.95 instead but config works with Exim4.94
-		cp -f $LOKAHOST_INSTALL_DIR/exim/exim4.conf.4.95.template /etc/exim4/exim4.conf.template
+		cp -f $LOKAHOSTCP_INSTALL_DIR/exim/exim4.conf.4.95.template /etc/exim4/exim4.conf.template
 	else
-		cp -f $LOKAHOST_INSTALL_DIR/exim/exim4.conf.template /etc/exim4/
+		cp -f $LOKAHOSTCP_INSTALL_DIR/exim/exim4.conf.template /etc/exim4/
 	fi
-	cp -f $LOKAHOST_INSTALL_DIR/exim/dnsbl.conf /etc/exim4/
-	cp -f $LOKAHOST_INSTALL_DIR/exim/spam-blocks.conf /etc/exim4/
-	cp -f $LOKAHOST_INSTALL_DIR/exim/limit.conf /etc/exim4/
-	cp -f $LOKAHOST_INSTALL_DIR/exim/system.filter /etc/exim4/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/exim/dnsbl.conf /etc/exim4/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/exim/spam-blocks.conf /etc/exim4/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/exim/limit.conf /etc/exim4/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/exim/system.filter /etc/exim4/
 	touch /etc/exim4/white-blocks.conf
 
 	if [ "$spamd" = 'yes' ]; then
@@ -1988,8 +1988,8 @@ fi
 if [ "$dovecot" = 'yes' ]; then
 	echo "[ * ] Configuring Dovecot POP/IMAP mail server..."
 	gpasswd -a dovecot mail > /dev/null 2>&1
-	cp -rf $LOKAHOST_COMMON_DIR/dovecot /etc/
-	cp -f $LOKAHOST_INSTALL_DIR/logrotate/dovecot /etc/logrotate.d/
+	cp -rf $LOKAHOSTCP_COMMON_DIR/dovecot /etc/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/logrotate/dovecot /etc/logrotate.d/
 	rm -f /etc/dovecot/conf.d/15-mailboxes.conf
 	chown -R root:root /etc/dovecot*
 
@@ -2014,7 +2014,7 @@ fi
 if [ "$clamd" = 'yes' ]; then
 	gpasswd -a clamav mail > /dev/null 2>&1
 	gpasswd -a clamav Debian-exim > /dev/null 2>&1
-	cp -f $LOKAHOST_INSTALL_DIR/clamav/clamd.conf /etc/clamav/
+	cp -f $LOKAHOSTCP_INSTALL_DIR/clamav/clamd.conf /etc/clamav/
 	update-rc.d clamav-daemon defaults
 	echo -ne "[ * ] Installing ClamAV anti-virus definitions... "
 	/usr/bin/freshclam >> $LOG > /dev/null 2>&1
@@ -2052,7 +2052,7 @@ fi
 
 if [ "$fail2ban" = 'yes' ]; then
 	echo "[ * ] Configuring fail2ban access monitor..."
-	cp -rf $LOKAHOST_INSTALL_DIR/fail2ban /etc/
+	cp -rf $LOKAHOSTCP_INSTALL_DIR/fail2ban /etc/
 	if [ "$dovecot" = 'no' ]; then
 		fline=$(cat /etc/fail2ban/jail.local | grep -n dovecot-iptables -A 2)
 		fline=$(echo "$fline" | grep enabled | tail -n1 | cut -f 1 -d -)
@@ -2085,12 +2085,12 @@ fi
 
 # Configuring MariaDB/MySQL host
 if [ "$mysql" = 'yes' ] || [ "$mysql8" = 'yes' ]; then
-	$LOKAHOST/bin/v-add-database-host mysql localhost root $mpass
+	$LOKAHOSTCP/bin/v-add-database-host mysql localhost root $mpass
 fi
 
 # Configuring PostgreSQL host
 if [ "$postgresql" = 'yes' ]; then
-	$LOKAHOST/bin/v-add-database-host pgsql localhost postgres $ppass
+	$LOKAHOSTCP/bin/v-add-database-host pgsql localhost postgres $ppass
 fi
 
 #----------------------------------------------------------#
@@ -2100,7 +2100,7 @@ fi
 # Min requirements Dovecot + Exim + Mysql
 if ([ "$mysql" == 'yes' ] || [ "$mysql8" == 'yes' ]) && [ "$dovecot" == "yes" ]; then
 	echo "[ * ] Installing Roundcube..."
-	$LOKAHOST/bin/v-add-sys-roundcube
+	$LOKAHOSTCP/bin/v-add-sys-roundcube
 	write_config_value "WEBMAIL_ALIAS" "webmail"
 else
 	write_config_value "WEBMAIL_ALIAS" ""
@@ -2131,7 +2131,7 @@ if [ "$sieve" = 'yes' ]; then
 	sed -i "s/mail_plugins = quota imap_quota/mail_plugins = quota imap_quota imap_sieve/g" /etc/dovecot/conf.d/20-imap.conf
 
 	# Replace dovecot-sieve config files
-	cp -f $LOKAHOST_COMMON_DIR/dovecot/sieve/* /etc/dovecot/conf.d
+	cp -f $LOKAHOSTCP_COMMON_DIR/dovecot/sieve/* /etc/dovecot/conf.d
 
 	# Dovecot default file install
 	echo -e "require [\"fileinto\"];\n# rule:[SPAM]\nif header :contains \"X-Spam-Flag\" \"YES\" {\n    fileinto \"INBOX.Spam\";\n}\n" > /etc/dovecot/sieve/default
@@ -2147,9 +2147,9 @@ if [ "$sieve" = 'yes' ]; then
 	if [ -d "/var/lib/roundcube" ]; then
 		# Modify Roundcube config
 		mkdir -p $RC_CONFIG_DIR/plugins/managesieve
-		cp -f $LOKAHOST_COMMON_DIR/roundcube/plugins/config_managesieve.inc.php $RC_CONFIG_DIR/plugins/managesieve/config.inc.php
+		cp -f $LOKAHOSTCP_COMMON_DIR/roundcube/plugins/config_managesieve.inc.php $RC_CONFIG_DIR/plugins/managesieve/config.inc.php
 		ln -s $RC_CONFIG_DIR/plugins/managesieve/config.inc.php $RC_INSTALL_DIR/plugins/managesieve/config.inc.php
-		chown -R root:lokahostmail $RC_CONFIG_DIR/
+		chown -R root:lokahostcpmail $RC_CONFIG_DIR/
 		chmod 751 -R $RC_CONFIG_DIR
 		chmod 644 $RC_CONFIG_DIR/*.php
 		chmod 644 $RC_CONFIG_DIR/plugins/managesieve/config.inc.php
@@ -2174,7 +2174,7 @@ else
 	write_config_value "API" "no"
 	write_config_value "API_SYSTEM" "0"
 	write_config_value "API_ALLOWED_IP" ""
-	$LOKAHOST/bin/v-change-sys-api disable
+	$LOKAHOSTCP/bin/v-change-sys-api disable
 fi
 
 #----------------------------------------------------------#
@@ -2182,7 +2182,7 @@ fi
 #----------------------------------------------------------#
 
 echo "[ * ] Configuring File Manager..."
-$LOKAHOST/bin/v-add-sys-filemanager quiet
+$LOKAHOSTCP/bin/v-add-sys-filemanager quiet
 
 #----------------------------------------------------------#
 #              Configure Web terminal                      #
@@ -2192,8 +2192,8 @@ $LOKAHOST/bin/v-add-sys-filemanager quiet
 if [ "$webterminal" = 'yes' ]; then
 	write_config_value "WEB_TERMINAL" "true"
 	systemctl daemon-reload > /dev/null 2>&1
-	systemctl enable lokahost-web-terminal > /dev/null 2>&1
-	systemctl restart lokahost-web-terminal > /dev/null 2>&1
+	systemctl enable lokahostcp-web-terminal > /dev/null 2>&1
+	systemctl restart lokahostcp-web-terminal > /dev/null 2>&1
 else
 	write_config_value "WEB_TERMINAL" "false"
 fi
@@ -2203,7 +2203,7 @@ fi
 #----------------------------------------------------------#
 
 echo "[ * ] Configuring PHP dependencies..."
-$LOKAHOST/bin/v-add-sys-dependencies quiet
+$LOKAHOSTCP/bin/v-add-sys-dependencies quiet
 
 echo "[ * ] Installing Rclone..."
 curl -s https://rclone.org/install.sh | bash > /dev/null 2>&1
@@ -2214,7 +2214,7 @@ curl -s https://rclone.org/install.sh | bash > /dev/null 2>&1
 
 # Configuring system IPs
 echo "[ * ] Configuring System IP..."
-$LOKAHOST/bin/v-update-sys-ip > /dev/null 2>&1
+$LOKAHOSTCP/bin/v-update-sys-ip > /dev/null 2>&1
 
 # Get primary IP
 default_nic="$(ip -d -j route show | jq -r '.[] | if .dst == "default" then .dev else empty end')"
@@ -2227,11 +2227,11 @@ local_ip="$primary_ipv4"
 
 # Configuring firewall
 if [ "$iptables" = 'yes' ]; then
-	$LOKAHOST/bin/v-update-firewall
+	$LOKAHOSTCP/bin/v-update-firewall
 fi
 
 # Get public IP
-pub_ipv4="$(curl -fsLm5 --retry 2 --ipv4 https://ip.lokahost.com/)"
+pub_ipv4="$(curl -fsLm5 --retry 2 --ipv4 https://ip.lokahost.online/)"
 if [ -n "$pub_ipv4" ] && [ "$pub_ipv4" != "$ip" ]; then
 	if [ -e /etc/rc.local ]; then
 		sed -i '/exit 0/d' /etc/rc.local
@@ -2248,13 +2248,13 @@ if [ -n "$pub_ipv4" ] && [ "$pub_ipv4" != "$ip" ]; then
 	check_pve=$(uname -r | grep pve)
 	if [ ! -z "$check_pve" ]; then
 		echo 'hostname=$(hostname --fqdn)' >> /etc/rc.local
-		echo ""$LOKAHOST/bin/v-change-sys-hostname" "'"$hostname"'"" >> /etc/rc.local
+		echo ""$LOKAHOSTCP/bin/v-change-sys-hostname" "'"$hostname"'"" >> /etc/rc.local
 	fi
-	echo "$LOKAHOST/bin/v-update-sys-ip" >> /etc/rc.local
+	echo "$LOKAHOSTCP/bin/v-update-sys-ip" >> /etc/rc.local
 	echo "exit 0" >> /etc/rc.local
 	chmod +x /etc/rc.local
 	systemctl enable rc-local > /dev/null 2>&1
-	$LOKAHOST/bin/v-change-sys-ip-nat "$ip" "$pub_ipv4" > /dev/null 2>&1
+	$LOKAHOSTCP/bin/v-change-sys-ip-nat "$ip" "$pub_ipv4" > /dev/null 2>&1
 	ip="$pub_ipv4"
 fi
 
@@ -2279,7 +2279,7 @@ if [ "$apache" = 'yes' ] && [ "$nginx" = 'yes' ]; then
 fi
 
 # Adding default domain
-$LOKAHOST/bin/v-add-web-domain "$username" "$servername" "$ip"
+$LOKAHOSTCP/bin/v-add-web-domain "$username" "$servername" "$ip"
 check_result $? "can't create $servername domain"
 
 # Adding cron jobs
@@ -2287,39 +2287,39 @@ export SCHEDULED_RESTART="yes"
 
 min=$(gen_pass '012345' '2')
 hour=$(gen_pass '1234567' '1')
-echo "MAILTO=\"\"" > /var/spool/cron/crontabs/lokahostweb
-echo "CONTENT_TYPE=\"text/plain; charset=utf-8\"" >> /var/spool/cron/crontabs/lokahostweb
-echo "*/2 * * * * sudo /usr/local/lokahost/bin/v-update-sys-queue restart" >> /var/spool/cron/crontabs/lokahostweb
-echo "10 00 * * * sudo /usr/local/lokahost/bin/v-update-sys-queue daily" >> /var/spool/cron/crontabs/lokahostweb
-echo "15 02 * * * sudo /usr/local/lokahost/bin/v-update-sys-queue disk" >> /var/spool/cron/crontabs/lokahostweb
-echo "10 00 * * * sudo /usr/local/lokahost/bin/v-update-sys-queue traffic" >> /var/spool/cron/crontabs/lokahostweb
-echo "30 03 * * * sudo /usr/local/lokahost/bin/v-update-sys-queue webstats" >> /var/spool/cron/crontabs/lokahostweb
-echo "*/5 * * * * sudo /usr/local/lokahost/bin/v-update-sys-queue backup" >> /var/spool/cron/crontabs/lokahostweb
-echo "10 05 * * * sudo /usr/local/lokahost/bin/v-backup-users" >> /var/spool/cron/crontabs/lokahostweb
-echo "20 00 * * * sudo /usr/local/lokahost/bin/v-update-user-stats" >> /var/spool/cron/crontabs/lokahostweb
-echo "*/5 * * * * sudo /usr/local/lokahost/bin/v-update-sys-rrd" >> /var/spool/cron/crontabs/lokahostweb
-echo "$min $hour * * * sudo /usr/local/lokahost/bin/v-update-letsencrypt-ssl" >> /var/spool/cron/crontabs/lokahostweb
-echo "41 4 * * * sudo /usr/local/lokahost/bin/v-update-sys-lokahost-all" >> /var/spool/cron/crontabs/lokahostweb
+echo "MAILTO=\"\"" > /var/spool/cron/crontabs/lokahostcpweb
+echo "CONTENT_TYPE=\"text/plain; charset=utf-8\"" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "*/2 * * * * sudo /usr/local/lokahostcp/bin/v-update-sys-queue restart" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "10 00 * * * sudo /usr/local/lokahostcp/bin/v-update-sys-queue daily" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "15 02 * * * sudo /usr/local/lokahostcp/bin/v-update-sys-queue disk" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "10 00 * * * sudo /usr/local/lokahostcp/bin/v-update-sys-queue traffic" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "30 03 * * * sudo /usr/local/lokahostcp/bin/v-update-sys-queue webstats" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "*/5 * * * * sudo /usr/local/lokahostcp/bin/v-update-sys-queue backup" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "10 05 * * * sudo /usr/local/lokahostcp/bin/v-backup-users" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "20 00 * * * sudo /usr/local/lokahostcp/bin/v-update-user-stats" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "*/5 * * * * sudo /usr/local/lokahostcp/bin/v-update-sys-rrd" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "$min $hour * * * sudo /usr/local/lokahostcp/bin/v-update-letsencrypt-ssl" >> /var/spool/cron/crontabs/lokahostcpweb
+echo "41 4 * * * sudo /usr/local/lokahostcp/bin/v-update-sys-lokahostcp-all" >> /var/spool/cron/crontabs/lokahostcpweb
 
-chmod 600 /var/spool/cron/crontabs/lokahostweb
-chown lokahostweb:lokahostweb /var/spool/cron/crontabs/lokahostweb
+chmod 600 /var/spool/cron/crontabs/lokahostcpweb
+chown lokahostcpweb:lokahostcpweb /var/spool/cron/crontabs/lokahostcpweb
 
 # Enable automatic updates
-$LOKAHOST/bin/v-add-cron-lokahost-autoupdate apt
+$LOKAHOSTCP/bin/v-add-cron-lokahostcp-autoupdate apt
 
 # Building initital rrd images
-$LOKAHOST/bin/v-update-sys-rrd
+$LOKAHOSTCP/bin/v-update-sys-rrd
 
 # Enabling file system quota
 if [ "$quota" = 'yes' ]; then
-	$LOKAHOST/bin/v-add-sys-quota
+	$LOKAHOSTCP/bin/v-add-sys-quota
 fi
 
 # Set backend port
-$LOKAHOST/bin/v-change-sys-port $port > /dev/null 2>&1
+$LOKAHOSTCP/bin/v-change-sys-port $port > /dev/null 2>&1
 
 # Create default configuration files
-$LOKAHOST/bin/v-update-sys-defaults
+$LOKAHOSTCP/bin/v-update-sys-defaults
 
 # Update remaining packages since repositories have changed
 echo -ne "[ * ] Installing remaining software updates..."
@@ -2328,35 +2328,35 @@ apt-get -y upgrade >> $LOG &
 BACK_PID=$!
 echo
 
-# Starting Lokahost service
-update-rc.d lokahost defaults
-systemctl start lokahost
-check_result $? "lokahost start failed"
-chown lokahostweb:lokahostweb $LOKAHOST/data/sessions
+# Starting Lokahostcp service
+update-rc.d lokahostcp defaults
+systemctl start lokahostcp
+check_result $? "lokahostcp start failed"
+chown lokahostcpweb:lokahostcpweb $LOKAHOSTCP/data/sessions
 
 # Create backup folder and set correct permission
 mkdir -p /backup/
 chmod 755 /backup/
 
 # Create cronjob to generate ssl
-echo "@reboot root sleep 10 && rm /etc/cron.d/lokahost-ssl && PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:' && /usr/local/lokahost/bin/v-add-letsencrypt-host" > /etc/cron.d/lokahost-ssl
+echo "@reboot root sleep 10 && rm /etc/cron.d/lokahostcp-ssl && PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:' && /usr/local/lokahostcp/bin/v-add-letsencrypt-host" > /etc/cron.d/lokahostcp-ssl
 
 #----------------------------------------------------------#
-#              Set lokahost.conf default values              #
+#              Set lokahostcp.conf default values              #
 #----------------------------------------------------------#
 
 echo "[ * ] Updating configuration files..."
-BIN="$LOKAHOST/bin"
-source $LOKAHOST/func/syshealth.sh
+BIN="$LOKAHOSTCP/bin"
+source $LOKAHOSTCP/func/syshealth.sh
 syshealth_repair_system_config
 
-# Add /usr/local/lokahost/bin/ to path variable
-echo 'if [ "${PATH#*/usr/local/lokahost/bin*}" = "$PATH" ]; then
-    . /etc/profile.d/lokahost.sh
+# Add /usr/local/lokahostcp/bin/ to path variable
+echo 'if [ "${PATH#*/usr/local/lokahostcp/bin*}" = "$PATH" ]; then
+    . /etc/profile.d/lokahostcp.sh
 fi' >> /root/.bashrc
 
 #----------------------------------------------------------#
-#                   Lokahost Access Info                     #
+#                   Lokahostcp Access Info                     #
 #----------------------------------------------------------#
 
 # Comparing hostname and IP
@@ -2372,7 +2372,7 @@ echo -e "\n"
 # Sending notification to admin email
 echo -e "Congratulations!
 
-You have successfully installed Lokahost Control Panel on your server.
+You have successfully installed Lokahostcp Control Panel on your server.
 
 Ready to get started? Log in using the following credentials:
 
@@ -2383,31 +2383,31 @@ fi
 echo -e -n " 	Username:   $username
 	Password:   $displaypass
 
-Thank you for choosing Lokahost Control Panel to power your full stack web server,
+Thank you for choosing Lokahostcp Control Panel to power your full stack web server,
 we hope that you enjoy using it as much as we do!
 
 Please feel free to contact us at any time if you have any questions,
 or if you encounter any bugs or problems:
 
-Documentation:  https://docs.lokahost.com/
-Forum:          https://forum.lokahost.com/
-GitHub:         https://www.github.com/lokahost/lokahost
+Documentation:  https://docs.lokahost.online/
+Forum:          https://forum.lokahost.online/
+GitHub:         https://www.github.com/lokahostcp/lokahostcp
 
 Note: Automatic updates are enabled by default. If you would like to disable them,
 please log in and navigate to Server > Updates to turn them off.
 
-Help support the Lokahost Control Panel project by donating via PayPal:
-https://www.lokahost.com/donate
+Help support the Lokahostcp Control Panel project by donating via PayPal:
+https://www.lokahost.online/donate
 
 --
 Sincerely yours,
-The Lokahost Control Panel development team
+The Lokahostcp Control Panel development team
 
 Made with love & pride by the open-source community around the world.
 " >> $tmpfile
 
-send_mail="$LOKAHOST/web/inc/mail-wrapper.php"
-cat $tmpfile | $send_mail -s "Lokahost Control Panel" $email
+send_mail="$LOKAHOSTCP/web/inc/mail-wrapper.php"
+cat $tmpfile | $send_mail -s "Lokahostcp Control Panel" $email
 
 # Congrats
 echo
@@ -2415,7 +2415,7 @@ cat $tmpfile
 rm -f $tmpfile
 
 # Add welcome message to notification panel
-$LOKAHOST/bin/v-add-user-notification "$username" 'Welcome to Lokahost Control Panel!' '<p>You are now ready to begin adding <a href="/add/user/">user accounts</a> and <a href="/add/web/">domains</a>. For help and assistance, <a href="https://lokahost.com/docs/" target="_blank">view the documentation</a> or <a href="https://forum.lokahost.com/" target="_blank">visit our forum</a>.</p><p>Please <a href="https://github.com/lokahost/lokahost/issues" target="_blank">report any issues via GitHub</a>.</p><p class="u-text-bold">Have a wonderful day!</p><p><i class="fas fa-heart icon-red"></i> The Lokahost Control Panel development team</p>'
+$LOKAHOSTCP/bin/v-add-user-notification "$username" 'Welcome to Lokahostcp Control Panel!' '<p>You are now ready to begin adding <a href="/add/user/">user accounts</a> and <a href="/add/web/">domains</a>. For help and assistance, <a href="https://lokahost.online/docs/" target="_blank">view the documentation</a> or <a href="https://forum.lokahost.online/" target="_blank">visit our forum</a>.</p><p>Please <a href="https://github.com/lokahostcp/lokahostcp/issues" target="_blank">report any issues via GitHub</a>.</p><p class="u-text-bold">Have a wonderful day!</p><p><i class="fas fa-heart icon-red"></i> The Lokahostcp Control Panel development team</p>'
 
 # Clean-up
 # Sort final configuration file

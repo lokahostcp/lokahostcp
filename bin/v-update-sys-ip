@@ -5,7 +5,7 @@
 # example: v-update-sys-ip
 #          # Intended for internal usage
 #
-# This function scans configured IP in the system and register them with Lokahost
+# This function scans configured IP in the system and register them with Lokahostcp
 # internal database. This call is intended for use on vps servers, where IP is
 # set by hypervisor.
 
@@ -14,23 +14,49 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/ip.sh
-source $LOKAHOST/func/ip.sh
-# shellcheck source=/usr/local/lokahost/func/domain.sh
-source $LOKAHOST/func/domain.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/ip.sh
+source $LOKAHOSTCP/func/ip.sh
+# shellcheck source=/usr/local/lokahostcp/func/domain.sh
+source $LOKAHOSTCP/func/domain.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
 #----------------------------------------------------------#
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
+
+# Detect this server's public IPv4 address.
+#
+# Used below to configure NAT. If it returns nothing, the NAT block is skipped
+# and a server behind NAT keeps an internal IP in its vhost and DNS records.
+#
+# TODO: decide the lookup strategy. https://ip.lokahost.online/ does not exist
+# yet (see docs/INFRASTRUCTURE.md), so as written this returns empty on every
+# call. Options, roughly in order of increasing resilience:
+#
+#   1. Point at a third-party echo service (api.ipify.org, ifconfig.co).
+#      Simplest, but a hard dependency on someone else's uptime, and every
+#      install discloses itself to that operator.
+#   2. Try our own host first, then fall through to one or two third parties.
+#      Resilient, but still discloses on fallback.
+#   3. Read the address off the default route first
+#      (ip -j route get 1.1.1.1) and only call out if that yields a private
+#      address. No disclosure and no dependency when the host is publicly
+#      addressed -- but hosting panels usually run behind NAT or a cloud load
+#      balancer, which is exactly the case this function exists to handle.
+#
+# Echo the address on stdout, or nothing if it cannot be determined. Callers
+# must tolerate an empty result.
+detect_public_ipv4() {
+	curl -fsLm5 --retry 2 --ipv4 https://ip.lokahost.online/
+}
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -52,7 +78,7 @@ for nic in $nics; do
 	fi
 done
 
-v_ips="$(ls $LOKAHOST/data/ips/)"
+v_ips="$(ls $LOKAHOSTCP/data/ips/)"
 ip_num="$(echo "$ips" | wc -w)"
 v_ip_num="$(echo "$v_ips" | wc -w)"
 
@@ -66,7 +92,7 @@ fi
 
 # Updating configs
 if [ -n "$old_ip" ]; then
-	mv $LOKAHOST/data/ips/$old_ip $LOKAHOST/data/ips/$new_ip
+	mv $LOKAHOSTCP/data/ips/$old_ip $LOKAHOSTCP/data/ips/$new_ip
 
 	# Generating timestamp
 	new_timestamp
@@ -100,7 +126,7 @@ if [ -n "$old_ip" ]; then
 		fi
 
 		for user in $("$BIN/v-list-users" list); do
-			sed -i "s/$old_ip/$new_ip/g" $LOKAHOST/data/users/$user/web.conf
+			sed -i "s/$old_ip/$new_ip/g" $LOKAHOSTCP/data/users/$user/web.conf
 			$BIN/v-rebuild-web-domains "$user" no
 		done
 
@@ -127,8 +153,8 @@ if [ -n "$old_ip" ]; then
 	# Updating DNS
 	if [ -n "$DNS_SYSTEM" ]; then
 		for user in $("$BIN/v-list-users" list); do
-			sed -i "s/$old_ip/$new_ip/g" $LOKAHOST/data/users/$user/dns.conf
-			sed -i "s/$old_ip/$new_ip/g" $LOKAHOST/data/users/$user/dns/*.conf
+			sed -i "s/$old_ip/$new_ip/g" $LOKAHOSTCP/data/users/$user/dns.conf
+			sed -i "s/$old_ip/$new_ip/g" $LOKAHOSTCP/data/users/$user/dns/*.conf
 			$BIN/v-rebuild-dns-domains "$user" no
 		done
 		$BIN/v-restart-dns
@@ -145,7 +171,7 @@ if [ -n "$old_ip" ]; then
 
 	# Updating firewall
 	if [ -n "$FIREWALL_SYSTEM" ]; then
-		sed -i "s/$old_ip/$new_ip/g" $LOKAHOST/data/firewall/*.conf
+		sed -i "s/$old_ip/$new_ip/g" $LOKAHOSTCP/data/firewall/*.conf
 		$BIN/v-update-firewall
 	fi
 fi
@@ -153,7 +179,7 @@ fi
 # Adding system IP
 for ip in $ips; do
 	check_ip="$(ip addr list | grep -w "$ip")"
-	if [ ! -e "$LOKAHOST/data/ips/$ip" ] && [ -n "$check_ip" ]; then
+	if [ ! -e "$LOKAHOSTCP/data/ips/$ip" ] && [ -n "$check_ip" ]; then
 		interface="$(ip -d -j addr show | jq --arg IP "$ip" -r '.[] | if .addr_info[].local == $IP then .ifname else empty end')"
 		prefixlen="$(ip -d -j addr show | jq --arg IP "$ip" -r '.[].addr_info[] | if .local == $IP then .prefixlen else empty end')"
 		netmask="$(convert_cidr "$prefixlen")"
@@ -164,10 +190,10 @@ for ip in $ips; do
 done
 
 # Updating NAT
-pub_ipv4="$(curl -fsLm5 --retry 2 --ipv4 https://ip.lokahost.com/)"
-if [ ! -e "$LOKAHOST/data/ips/$pub_ipv4" ]; then
-	if [ -z "$(grep -R "$pub_ipv4" $LOKAHOST/data/ips/)" ]; then
-		ip="$(ls -t $LOKAHOST/data/ips/ | head -n1)"
+pub_ipv4="$(detect_public_ipv4)"
+if [ -n "$pub_ipv4" ] && [ ! -e "$LOKAHOSTCP/data/ips/$pub_ipv4" ]; then
+	if [ -z "$(grep -R "$pub_ipv4" $LOKAHOSTCP/data/ips/)" ]; then
+		ip="$(ls -t $LOKAHOSTCP/data/ips/ | head -n1)"
 		$BIN/v-change-sys-ip-nat "$ip" "$pub_ipv4"
 	fi
 fi
@@ -176,7 +202,7 @@ fi
 $BIN/v-update-sys-ip-counters
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

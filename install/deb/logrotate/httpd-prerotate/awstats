@@ -1,4 +1,4 @@
 #!/bin/sh
 
-# Changes made by LokahostCP due to https://github.com/lokahost/lokahost/issues/3289
-/usr/local/lokahost/bin/v-update-sys-queue webstats
+# Changes made by Lokahostcp due to https://github.com/lokahostcp/lokahostcp/issues/3289
+/usr/local/lokahostcp/bin/v-update-sys-queue webstats

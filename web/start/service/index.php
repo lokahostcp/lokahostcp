@@ -11,10 +11,10 @@ verify_csrf($_GET);
 if ($_SESSION["userContext"] === "admin") {
 	if (!empty($_GET["srv"])) {
 		if ($_GET["srv"] == "iptables") {
-			exec(LOKAHOST_CMD . "v-update-firewall", $output, $return_var);
+			exec(LOKAHOSTCP_CMD . "v-update-firewall", $output, $return_var);
 		} else {
 			$v_service = quoteshellarg($_GET["srv"]);
-			exec(LOKAHOST_CMD . "v-start-service " . $v_service, $output, $return_var);
+			exec(LOKAHOSTCP_CMD . "v-start-service " . $v_service, $output, $return_var);
 		}
 	}
 	if ($return_var != 0) {

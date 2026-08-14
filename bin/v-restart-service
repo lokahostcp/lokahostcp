@@ -15,11 +15,11 @@ service=$1
 restart=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-source_conf "$LOKAHOST/conf/lokahost.conf"
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -35,7 +35,7 @@ is_format_valid 'service' 'restart'
 log="/dev/null"
 if [ "$DEBUG_MODE" = "true" ]; then
 
-	log="/var/log/lokahost/debug.log"
+	log="/var/log/lokahostcp/debug.log"
 fi
 
 # Multi-instance service restart request handling
@@ -94,7 +94,7 @@ for service in $service_list; do
 done
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

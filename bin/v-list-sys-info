@@ -4,7 +4,7 @@
 #
 # example: v-list-sys-info
 #
-# This function checks available updates for lokahost packages.
+# This function checks available updates for lokahostcp packages.
 
 #----------------------------------------------------------#
 #                Variables & Functions                     #
@@ -14,16 +14,16 @@
 format=${1-shell}
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
-# Retrieve Lokahost Control Panel version number
-LOKAHOST_VERSION=$(grep VERSION $LOKAHOST/conf/lokahost.conf | cut -d '=' -f2 | sed "s|'||g")
-LOKAHOST_RELEASE=$(grep RELEASE_BRANCH $LOKAHOST/conf/lokahost.conf | cut -d '=' -f2 | sed "s|'||g")
+# Retrieve Lokahostcp Control Panel version number
+LOKAHOSTCP_VERSION=$(grep VERSION $LOKAHOSTCP/conf/lokahostcp.conf | cut -d '=' -f2 | sed "s|'||g")
+LOKAHOSTCP_RELEASE=$(grep RELEASE_BRANCH $LOKAHOSTCP/conf/lokahostcp.conf | cut -d '=' -f2 | sed "s|'||g")
 
 # JSON list function
 json_list() {
@@ -33,8 +33,8 @@ json_list() {
         "OS": "'$OS'",
         "VERSION": "'$VERSION'",
         "ARCH": "'$ARCH'",
-        "LOKAHOST": "'$LOKAHOST_VERSION'",
-        "RELEASE": "'$LOKAHOST_RELEASE'",
+        "LOKAHOSTCP": "'$LOKAHOSTCP_VERSION'",
+        "RELEASE": "'$LOKAHOSTCP_RELEASE'",
         "UPTIME": "'$UPTIME'",
         "LOADAVERAGE": "'$LOADAVERAGE'"
         }'
@@ -43,20 +43,20 @@ json_list() {
 
 # SHELL list function
 shell_list() {
-	echo "HOSTNAME   OS   VER   ARCH  LOKAHOST  RELEASE  UPTIME   LA"
+	echo "HOSTNAME   OS   VER   ARCH  LOKAHOSTCP  RELEASE  UPTIME   LA"
 	echo "--------   --   ---   ----  ------  -------  ------   --"
-	echo "$HOSTNAME $OS $VERSION $ARCH $LOKAHOST_VERSION $LOKAHOST_RELEASE $UPTIME $LOADAVERAGE"
+	echo "$HOSTNAME $OS $VERSION $ARCH $LOKAHOSTCP_VERSION $LOKAHOSTCP_RELEASE $UPTIME $LOADAVERAGE"
 }
 
 # PLAIN list function
 plain_list() {
-	echo -e "$HOSTNAME\t$OS\t$VERSION\t$ARCH\t$LOKAHOST_VERSION\t$LOKAHOST_RELEASE\t$UPTIME\t$LOADAVERAGE"
+	echo -e "$HOSTNAME\t$OS\t$VERSION\t$ARCH\t$LOKAHOSTCP_VERSION\t$LOKAHOSTCP_RELEASE\t$UPTIME\t$LOADAVERAGE"
 }
 
 # CSV list function
 csv_list() {
-	echo "HOSTNAME,OS,VERSION,ARCH,LOKAHOST,RELEASE,UPTIME,LOADAVERAGE"
-	echo "$HOSTNAME,$OS,$VERSION,$ARCH,$LOKAHOST_VERSION,$LOKAHOST_RELEASE,$UPTIME,$LOADAVERAGE"
+	echo "HOSTNAME,OS,VERSION,ARCH,LOKAHOSTCP,RELEASE,UPTIME,LOADAVERAGE"
+	echo "$HOSTNAME,$OS,$VERSION,$ARCH,$LOKAHOSTCP_VERSION,$LOKAHOSTCP_RELEASE,$UPTIME,$LOADAVERAGE"
 }
 
 #----------------------------------------------------------#
@@ -110,7 +110,7 @@ case $format in
 esac
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

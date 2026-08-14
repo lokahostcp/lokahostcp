@@ -88,7 +88,7 @@ $v_locality = quoteshellarg($_POST["v_locality"]);
 $v_org = quoteshellarg($_POST["v_org"]);
 
 exec(
-	LOKAHOST_CMD .
+	LOKAHOSTCP_CMD .
 		"v-generate-ssl-cert " .
 		$v_domain .
 		" " .

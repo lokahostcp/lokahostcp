@@ -196,7 +196,7 @@ if (!empty($_POST["ok"])) {
 			$fp = fopen($tmpfile, "w");
 			fwrite($fp, $pkg);
 			exec(
-				LOKAHOST_CMD . "v-add-user-package " . $tmpfile . " " . $v_package,
+				LOKAHOSTCP_CMD . "v-add-user-package " . $tmpfile . " " . $v_package,
 				$output,
 				$return_var,
 			);
@@ -223,31 +223,31 @@ if (!empty($_POST["ok"])) {
 }
 
 // List web temmplates
-exec(LOKAHOST_CMD . "v-list-web-templates json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-web-templates json", $output, $return_var);
 $web_templates = json_decode(implode("", $output), true);
 unset($output);
 
 // List web templates for backend
 if (!empty($_SESSION["WEB_BACKEND"])) {
-	exec(LOKAHOST_CMD . "v-list-web-templates-backend json", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-list-web-templates-backend json", $output, $return_var);
 	$backend_templates = json_decode(implode("", $output), true);
 	unset($output);
 }
 
 // List web templates for proxy
 if (!empty($_SESSION["PROXY_SYSTEM"])) {
-	exec(LOKAHOST_CMD . "v-list-web-templates-proxy json", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-list-web-templates-proxy json", $output, $return_var);
 	$proxy_templates = json_decode(implode("", $output), true);
 	unset($output);
 }
 
 // List DNS templates
-exec(LOKAHOST_CMD . "v-list-dns-templates json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-dns-templates json", $output, $return_var);
 $dns_templates = json_decode(implode("", $output), true);
 unset($output);
 
 // List system shells
-exec(LOKAHOST_CMD . "v-list-sys-shells json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-sys-shells json", $output, $return_var);
 $shells = json_decode(implode("", $output), true);
 unset($output);
 

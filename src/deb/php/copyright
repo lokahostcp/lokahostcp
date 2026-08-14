@@ -1,11 +1,11 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: lokahost
-Source: https://www.lokahost.com
+Upstream-Name: lokahostcp
+Source: https://www.lokahost.online
 
 Files: *
-Copyright: 2018-2023, Lokahost Control Panel <info@lokahost.com>
+Copyright: 2018-2023, Lokahostcp Control Panel <info@lokahost.online>
 License: GPL-3.0+
-Remarks: Lokahost is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin
+Remarks: Lokahostcp is a fork from VestaCP, special thanks to vestacp.com and Serghey Rodin
 
 License: GPL-3.0+
  This program is free software: you can redistribute it and/or modify

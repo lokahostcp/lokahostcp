@@ -16,18 +16,18 @@ restart=$2
 update_serial=${3-no}
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/domain.sh
-source $LOKAHOST/func/domain.sh
-# shellcheck source=/usr/local/lokahost/func/rebuild.sh
-source $LOKAHOST/func/rebuild.sh
-# shellcheck source=/usr/local/lokahost/func/syshealth.sh
-source $LOKAHOST/func/syshealth.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/domain.sh
+source $LOKAHOSTCP/func/domain.sh
+# shellcheck source=/usr/local/lokahostcp/func/rebuild.sh
+source $LOKAHOSTCP/func/rebuild.sh
+# shellcheck source=/usr/local/lokahostcp/func/syshealth.sh
+source $LOKAHOSTCP/func/syshealth.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -46,7 +46,7 @@ if [ "$DNS_SYSTEM" = 'remote' ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -87,7 +87,7 @@ for domain in $(search_objects 'dns' 'DOMAIN' "*" 'DOMAIN'); do
 done
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Updating counters

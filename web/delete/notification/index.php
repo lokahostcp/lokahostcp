@@ -8,11 +8,11 @@ verify_csrf($_GET);
 
 if ($_GET["delete"] == 1) {
 	if (empty($_GET["notification_id"])) {
-		exec(LOKAHOST_CMD . "v-delete-user-notification " . $user . " all", $output, $return_var);
+		exec(LOKAHOSTCP_CMD . "v-delete-user-notification " . $user . " all", $output, $return_var);
 	} else {
 		$v_id = quoteshellarg((int) $_GET["notification_id"]);
 		exec(
-			LOKAHOST_CMD . "v-delete-user-notification " . $user . " " . $v_id,
+			LOKAHOSTCP_CMD . "v-delete-user-notification " . $user . " " . $v_id,
 			$output,
 			$return_var,
 		);
@@ -22,14 +22,14 @@ if ($_GET["delete"] == 1) {
 } else {
 	if (empty($_GET["notification_id"])) {
 		exec(
-			LOKAHOST_CMD . "v-acknowledge-user-notification " . $user . " all",
+			LOKAHOSTCP_CMD . "v-acknowledge-user-notification " . $user . " all",
 			$output,
 			$return_var,
 		);
 	} else {
 		$v_id = quoteshellarg((int) $_GET["notification_id"]);
 		exec(
-			LOKAHOST_CMD . "v-acknowledge-user-notification " . $user . " " . $v_id,
+			LOKAHOSTCP_CMD . "v-acknowledge-user-notification " . $user . " " . $v_id,
 			$output,
 			$return_var,
 		);

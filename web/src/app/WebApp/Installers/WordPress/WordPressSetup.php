@@ -1,9 +1,9 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Wordpress;
+namespace Lokahostcp\WebApp\Installers\Wordpress;
 
-use Lokahost\System\Util;
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\System\Util;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 use function Lokahostcp\quoteshellarg\quoteshellarg;
 
 class WordpressSetup extends BaseSetup {

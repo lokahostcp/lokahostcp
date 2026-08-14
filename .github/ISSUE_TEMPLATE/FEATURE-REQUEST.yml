@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Is there a feature or change that you think would make Lokahost Control Panel work better for you? Send us your ideas and our development team will take them into consideration.
+        Is there a feature or change that you think would make Lokahostcp Control Panel work better for you? Send us your ideas and our development team will take them into consideration.
         Before submitting a new idea, look at the **[current feature requests list](https://github.com/lokahostcp/lokahostcp/labels/feature)** to see if it has already been requested.
   - type: textarea
     id: request

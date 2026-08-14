@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Lokahost\WebApp;
+namespace Lokahostcp\WebApp;
 
-use Lokahost\System\LokahostApp;
+use Lokahostcp\System\LokahostcpApp;
 
 class AppWizard {
 	private $domain;
@@ -19,7 +19,7 @@ class AppWizard {
 		"database_password" => ["type" => "password", "placeholder" => "auto"],
 	];
 
-	public function __construct(InstallerInterface $app, string $domain, LokahostApp $context) {
+	public function __construct(InstallerInterface $app, string $domain, LokahostcpApp $context) {
 		$this->domain = $domain;
 		$this->appcontext = $context;
 

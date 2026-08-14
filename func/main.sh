@@ -2,7 +2,7 @@
 
 #===========================================================================#
 #                                                                           #
-# Lokahost Control Panel - Core Function Library                              #
+# Lokahostcp Control Panel - Core Function Library                              #
 #                                                                           #
 #===========================================================================#
 
@@ -21,11 +21,11 @@ source_conf() {
 
 if [ -z "$user" ]; then
 	if [ -z "$ROOT_USER" ]; then
-		if [ -z "$LOKAHOST" ]; then
-			# shellcheck source=/etc/lokahost/lokahost.conf
-			source /etc/lokahost/lokahost.conf
+		if [ -z "$LOKAHOSTCP" ]; then
+			# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+			source /etc/lokahostcp/lokahostcp.conf
 		fi
-		source_conf "$LOKAHOST/conf/lokahost.conf" # load config file
+		source_conf "$LOKAHOSTCP/conf/lokahostcp.conf" # load config file
 	fi
 	user="$ROOT_USER"
 fi
@@ -37,20 +37,20 @@ BACKUP_GZIP=9
 BACKUP_DISK_LIMIT=95
 BACKUP_LA_LIMIT=$(grep -c '^processor' /proc/cpuinfo)
 RRD_STEP=300
-BIN=$LOKAHOST/bin
-LOKAHOST_INSTALL_DIR="$LOKAHOST/install/deb"
-LOKAHOST_COMMON_DIR="$LOKAHOST/install/common"
-LOKAHOST_BACKUP="/root/lcp_backups/$(date +%d%m%Y%H%M)"
-LOKAHOST_PHP="$LOKAHOST/php/bin/php"
-USER_DATA=$LOKAHOST/data/users/$user
-WEBTPL=$LOKAHOST/data/templates/web
-MAILTPL=$LOKAHOST/data/templates/mail
-DNSTPL=$LOKAHOST/data/templates/dns
-RRD=$LOKAHOST/web/rrd
-SENDMAIL="$LOKAHOST/web/inc/mail-wrapper.php"
-LOKAHOST_GIT_REPO="https://raw.githubusercontent.com/lokahost/lokahost"
-LOKAHOST_THEMES="$LOKAHOST/web/css/themes"
-LOKAHOST_THEMES_CUSTOM="$LOKAHOST/web/css/themes/custom"
+BIN=$LOKAHOSTCP/bin
+LOKAHOSTCP_INSTALL_DIR="$LOKAHOSTCP/install/deb"
+LOKAHOSTCP_COMMON_DIR="$LOKAHOSTCP/install/common"
+LOKAHOSTCP_BACKUP="/root/lcp_backups/$(date +%d%m%Y%H%M)"
+LOKAHOSTCP_PHP="$LOKAHOSTCP/php/bin/php"
+USER_DATA=$LOKAHOSTCP/data/users/$user
+WEBTPL=$LOKAHOSTCP/data/templates/web
+MAILTPL=$LOKAHOSTCP/data/templates/mail
+DNSTPL=$LOKAHOSTCP/data/templates/dns
+RRD=$LOKAHOSTCP/web/rrd
+SENDMAIL="$LOKAHOSTCP/web/inc/mail-wrapper.php"
+LOKAHOSTCP_GIT_REPO="https://raw.githubusercontent.com/lokahostcp/lokahostcp"
+LOKAHOSTCP_THEMES="$LOKAHOSTCP/web/css/themes"
+LOKAHOSTCP_THEMES_CUSTOM="$LOKAHOSTCP/web/css/themes/custom"
 SCRIPT="$(basename $0)"
 CHECK_RESULT_CALLBACK=""
 
@@ -121,9 +121,9 @@ log_event() {
 		LOG_TIME="$date $time $(basename $0)"
 	fi
 	if [ "$1" -eq 0 ]; then
-		echo "$LOG_TIME $2" >> $LOKAHOST/log/system.log
+		echo "$LOG_TIME $2" >> $LOKAHOSTCP/log/system.log
 	else
-		echo "$LOG_TIME $2 [Error $1]" >> $LOKAHOST/log/error.log
+		echo "$LOG_TIME $2 [Error $1]" >> $LOKAHOSTCP/log/error.log
 	fi
 }
 
@@ -144,12 +144,12 @@ log_history() {
 
 	# Log system events to system log file
 	if [ "$log_user" = "system" ]; then
-		log=$LOKAHOST/log/activity.log
+		log=$LOKAHOSTCP/log/activity.log
 	else
 		if ! $BIN/v-list-user "$log_user" > /dev/null; then
 			return $E_NOTEXIST
 		fi
-		log=$LOKAHOST/data/users/$log_user/history.log
+		log=$LOKAHOSTCP/data/users/$log_user/history.log
 	fi
 	touch $log
 
@@ -257,11 +257,11 @@ generate_password() {
 # Package existence check
 is_package_valid() {
 	if [ -z $1 ]; then
-		if [ ! -e "$LOKAHOST/data/packages/$package.pkg" ]; then
+		if [ ! -e "$LOKAHOSTCP/data/packages/$package.pkg" ]; then
 			check_result "$E_NOTEXIST" "package $package doesn't exist"
 		fi
 	else
-		if [ ! -e "$LOKAHOST/data/packages/$1.pkg" ]; then
+		if [ ! -e "$LOKAHOSTCP/data/packages/$1.pkg" ]; then
 			check_result "$E_NOTEXIST" "package $1 doesn't exist"
 		fi
 	fi
@@ -269,7 +269,7 @@ is_package_valid() {
 }
 
 is_package_new() {
-	if [ -e "$LOKAHOST/data/packages/$1.pkg" ]; then
+	if [ -e "$LOKAHOSTCP/data/packages/$1.pkg" ]; then
 		echo "Error: package $1 already exists."
 		log_event "$E_EXISTS" "$ARGUMENTS"
 		exit "$E_EXISTS"
@@ -293,8 +293,8 @@ is_backup_enabled() {
 
 # Check user backup settings
 is_backup_scheduled() {
-	if [ -e "$LOKAHOST/data/queue/backup.pipe" ]; then
-		check_q=$(grep " $user " $LOKAHOST/data/queue/backup.pipe | grep $1)
+	if [ -e "$LOKAHOSTCP/data/queue/backup.pipe" ]; then
+		check_q=$(grep " $user " $LOKAHOSTCP/data/queue/backup.pipe | grep $1)
 		if [ -n "$check_q" ]; then
 			check_result "$E_EXISTS" "$1 is already scheduled"
 		fi
@@ -318,18 +318,18 @@ is_object_new() {
 # Check if object is valid
 is_object_valid() {
 	if [ $2 = 'USER' ]; then
-		tstpath="$(readlink -f "$LOKAHOST/data/users/$3")"
-		if [ "$(dirname "$tstpath")" != "$(readlink -f "$LOKAHOST/data/users")" ] || [ ! -d "$LOKAHOST/data/users/$3" ]; then
+		tstpath="$(readlink -f "$LOKAHOSTCP/data/users/$3")"
+		if [ "$(dirname "$tstpath")" != "$(readlink -f "$LOKAHOSTCP/data/users")" ] || [ ! -d "$LOKAHOSTCP/data/users/$3" ]; then
 			check_result "$E_NOTEXIST" "$1 $3 doesn't exist"
 		fi
 	elif [ $2 = 'KEY' ]; then
 		local key="$(basename "$3")"
 
-		if [[ -z "$key" || ${#key} -lt 16 ]] || [[ ! -f "$LOKAHOST/data/access-keys/${key}" && ! -f "$LOKAHOST/data/access-keys/$key" ]]; then
+		if [[ -z "$key" || ${#key} -lt 16 ]] || [[ ! -f "$LOKAHOSTCP/data/access-keys/${key}" && ! -f "$LOKAHOSTCP/data/access-keys/$key" ]]; then
 			check_result "$E_NOTEXIST" "$1 $3 doesn't exist"
 		fi
 	else
-		object=$(grep "$2='$3'" $LOKAHOST/data/users/$user/$1.conf)
+		object=$(grep "$2='$3'" $LOKAHOSTCP/data/users/$user/$1.conf)
 		if [ -z "$object" ]; then
 			arg1=$(basename $1)
 			arg2=$(echo $2 | tr '[:upper:]' '[:lower:]')
@@ -523,10 +523,10 @@ get_user_value() {
 # Update user value in user.conf
 update_user_value() {
 	key="${2//$/}"
-	lnr=$(grep -n "^$key='" $LOKAHOST/data/users/$1/user.conf | cut -f 1 -d ':')
+	lnr=$(grep -n "^$key='" $LOKAHOSTCP/data/users/$1/user.conf | cut -f 1 -d ':')
 	if [ -n "$lnr" ]; then
-		sed -i "$lnr d" $LOKAHOST/data/users/$1/user.conf
-		sed -i "$lnr i\\$key='${3}'" $LOKAHOST/data/users/$1/user.conf
+		sed -i "$lnr d" $LOKAHOSTCP/data/users/$1/user.conf
+		sed -i "$lnr i\\$key='${3}'" $LOKAHOSTCP/data/users/$1/user.conf
 	fi
 }
 
@@ -534,7 +534,7 @@ update_user_value() {
 increase_user_value() {
 	key="${2//$/}"
 	factor="${3-1}"
-	conf="$LOKAHOST/data/users/$1/user.conf"
+	conf="$LOKAHOSTCP/data/users/$1/user.conf"
 	old=$(grep "$key=" $conf | cut -f 2 -d \')
 	if [ -z "$old" ]; then
 		old=0
@@ -547,7 +547,7 @@ increase_user_value() {
 decrease_user_value() {
 	key="${2//$/}"
 	factor="${3-1}"
-	conf="$LOKAHOST/data/users/$1/user.conf"
+	conf="$LOKAHOSTCP/data/users/$1/user.conf"
 	old=$(grep "$key=" $conf | cut -f 2 -d \')
 	if [ -z "$old" ]; then
 		old=0
@@ -1348,7 +1348,7 @@ check_access_key_secret() {
 	local secret_access_key=$2
 	local -n key_user=$3
 
-	if [[ -z "$access_key_id" || ! -f "$LOKAHOST/data/access-keys/${access_key_id}" ]]; then
+	if [[ -z "$access_key_id" || ! -f "$LOKAHOSTCP/data/access-keys/${access_key_id}" ]]; then
 		check_result "$E_PASSWORD" "Access key $access_key_id doesn't exist"
 	fi
 
@@ -1358,7 +1358,7 @@ check_access_key_secret() {
 		check_result "$E_PASSWORD" "Invalid secret key for key $access_key_id"
 	else
 		SECRET_ACCESS_KEY=""
-		source_conf "$LOKAHOST/data/access-keys/${access_key_id}"
+		source_conf "$LOKAHOSTCP/data/access-keys/${access_key_id}"
 
 		if [[ -z "$SECRET_ACCESS_KEY" || "$SECRET_ACCESS_KEY" != "$secret_access_key" ]]; then
 			check_result "$E_PASSWORD" "Invalid secret key for key $access_key_id"
@@ -1373,7 +1373,7 @@ check_access_key_user() {
 	local access_key_id="$(basename "$1")"
 	local user=$2
 
-	if [[ -z "$access_key_id" || ! -f "$LOKAHOST/data/access-keys/${access_key_id}" ]]; then
+	if [[ -z "$access_key_id" || ! -f "$LOKAHOSTCP/data/access-keys/${access_key_id}" ]]; then
 		check_result "$E_FORBIDEN" "Access key $access_key_id doesn't exist"
 	fi
 
@@ -1381,7 +1381,7 @@ check_access_key_user() {
 		check_result "$E_FORBIDEN" "User not provided"
 	else
 		USER=""
-		source_conf "$LOKAHOST/data/access-keys/${access_key_id}"
+		source_conf "$LOKAHOSTCP/data/access-keys/${access_key_id}"
 
 		if [[ -z "$USER" || "$USER" != "$user" ]]; then
 			check_result "$E_FORBIDEN" "key $access_key_id does not belong to the user $user"
@@ -1397,9 +1397,9 @@ check_access_key_cmd() {
 
 	if [[ "$DEBUG_MODE" = "true" ]]; then
 		new_timestamp
-		echo "[$date:$time] $1 $2" >> /var/log/lokahost/api.log
+		echo "[$date:$time] $1 $2" >> /var/log/lokahostcp/api.log
 	fi
-	if [[ -z "$access_key_id" || ! -f "$LOKAHOST/data/access-keys/${access_key_id}" ]]; then
+	if [[ -z "$access_key_id" || ! -f "$LOKAHOSTCP/data/access-keys/${access_key_id}" ]]; then
 		check_result "$E_FORBIDEN" "Access key $access_key_id doesn't exist"
 	fi
 
@@ -1407,7 +1407,7 @@ check_access_key_cmd() {
 		check_result "$E_FORBIDEN" "Command not provided"
 	elif [[ "$cmd" = 'v-make-tmp-file' ]]; then
 		USER="" PERMISSIONS=""
-		source_conf "${LOKAHOST}/data/access-keys/${access_key_id}"
+		source_conf "${LOKAHOSTCP}/data/access-keys/${access_key_id}"
 		local allowed_commands
 		if [[ -n "$PERMISSIONS" ]]; then
 			allowed_commands="$(get_apis_commands "$PERMISSIONS")"
@@ -1422,7 +1422,7 @@ check_access_key_cmd() {
 		check_result "$E_FORBIDEN" "Command $cmd not found"
 	else
 		USER="" PERMISSIONS=""
-		source_conf "${LOKAHOST}/data/access-keys/${access_key_id}"
+		source_conf "${LOKAHOSTCP}/data/access-keys/${access_key_id}"
 
 		local allowed_commands
 		if [[ -n "$PERMISSIONS" ]]; then
@@ -1555,8 +1555,8 @@ download_file() {
 	fi
 }
 
-check_lokahost_demo_mode() {
-	demo_mode=$(grep DEMO_MODE /usr/local/lokahost/conf/lokahost.conf | cut -d '=' -f2 | sed "s|'||g")
+check_lokahostcp_demo_mode() {
+	demo_mode=$(grep DEMO_MODE /usr/local/lokahostcp/conf/lokahostcp.conf | cut -d '=' -f2 | sed "s|'||g")
 	if [ -n "$demo_mode" ] && [ "$demo_mode" = "yes" ]; then
 		echo "ERROR: Unable to perform operation due to security restrictions that are in place."
 		exit 1
@@ -1595,7 +1595,7 @@ multiphp_default_version() {
 	echo "$sys_phpversion"
 }
 
-is_lokahost_package() {
+is_lokahostcp_package() {
 	check=false
 	for pkg in $1; do
 		if [ "$pkg" == "$2" ]; then
@@ -1603,14 +1603,14 @@ is_lokahost_package() {
 		fi
 	done
 	if [ "$check" != "true" ]; then
-		check_result $E_INVALID "$2 package is not controlled by lokahost"
+		check_result $E_INVALID "$2 package is not controlled by lokahostcp"
 	fi
 }
 
 # Run arbitrary cli commands with dropped privileges
 # Note: setpriv --init-groups is not available on debian9 (util-linux 2.29.2)
 # Input:
-#     - $user : Vaild lokahost user
+#     - $user : Vaild lokahostcp user
 user_exec() {
 	is_object_valid 'user' 'USER' "$user"
 
@@ -1647,11 +1647,11 @@ is_username_format_valid() {
 }
 
 change_sys_value() {
-	check_ckey=$(grep "^$1='" "$LOKAHOST/conf/lokahost.conf")
+	check_ckey=$(grep "^$1='" "$LOKAHOSTCP/conf/lokahostcp.conf")
 	if [ -z "$check_ckey" ]; then
-		echo "$1='$2'" >> "$LOKAHOST/conf/lokahost.conf"
+		echo "$1='$2'" >> "$LOKAHOSTCP/conf/lokahostcp.conf"
 	else
-		sed -i "s|^$1=.*|$1='$2'|g" "$LOKAHOST/conf/lokahost.conf"
+		sed -i "s|^$1=.*|$1='$2'|g" "$LOKAHOSTCP/conf/lokahostcp.conf"
 	fi
 }
 
@@ -1669,11 +1669,11 @@ is_key_permissions_format_valid() {
 			permission="$(basename "$permission" | sed -E "s/^\s*|\s*$//g")"
 
 			#            if [[ -z "$(echo "$permission" | grep -E "^v-")" ]]; then
-			if [[ ! -e "$LOKAHOST/data/api/$permission" ]]; then
+			if [[ ! -e "$LOKAHOSTCP/data/api/$permission" ]]; then
 				check_result "$E_NOTEXIST" "API $permission doesn't exist"
 			fi
 
-			source_conf "$LOKAHOST/data/api/$permission"
+			source_conf "$LOKAHOSTCP/data/api/$permission"
 			if [ "$ROLE" = "admin" ] && [ "$user" != "$ROOT_USER" ]; then
 				check_result "$E_INVALID" "Only the admin can run this API"
 			fi
@@ -1717,8 +1717,8 @@ get_apis_commands() {
 			#            if [[ -n "$(echo "$permission" | grep -E "^v-")" ]]; then
 			#                commands_to_add="$permission"
 			#            el
-			if [[ -e "$LOKAHOST/data/api/$permission" ]]; then
-				source_conf "$LOKAHOST/data/api/$permission"
+			if [[ -e "$LOKAHOSTCP/data/api/$permission" ]]; then
+				source_conf "$LOKAHOSTCP/data/api/$permission"
 				commands_to_add="$COMMANDS"
 			fi
 
@@ -1732,7 +1732,7 @@ get_apis_commands() {
 	cleanup_key_permissions "$allowed_commands"
 }
 
-# Get the position of an argument by name in a lokahost command using the command's documentation comment.
+# Get the position of an argument by name in a lokahostcp command using the command's documentation comment.
 #
 # Return:
 # * 0:   It doesn't have the argument;

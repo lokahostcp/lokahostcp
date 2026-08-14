@@ -1,8 +1,8 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Symfony;
+namespace Lokahostcp\WebApp\Installers\Symfony;
 
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class SymfonySetup extends BaseSetup {
 	protected $appInfo = [

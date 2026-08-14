@@ -1,7 +1,7 @@
 {
 	"name": "lokahostcp",
 	"private": true,
-	"version": "1.9.0~alpha",
+	"version": "1.0.0",
 	"description": "An open-source Linux web server control panel.",
 	"repository": "https://github.com/lokahostcp/lokahostcp",
 	"license": "GPL-3.0-or-later",

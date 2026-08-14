@@ -1,8 +1,8 @@
 <?php
-namespace Lokahost\WebApp\Installers\Flarum;
+namespace Lokahostcp\WebApp\Installers\Flarum;
 
-use Lokahost\System\Util;
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\System\Util;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class FlarumSetup extends BaseSetup {
 	protected $appInfo = [
@@ -37,7 +37,7 @@ class FlarumSetup extends BaseSetup {
 		],
 	];
 
-	// Our updateFile routine done the 'Lokahost way'
+	// Our updateFile routine done the 'Lokahostcp way'
 	public function updateFile($file, $search, $replace) {
 		$result = null;
 		$this->appcontext->runUser("v-open-fs-file", [$file], $result);

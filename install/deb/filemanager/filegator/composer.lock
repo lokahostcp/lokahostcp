@@ -77,16 +77,16 @@
 			"time": "2022-11-18T03:40:51+00:00"
 		},
 		{
-			"name": "lokahost/phpquoteshellarg",
+			"name": "lokahostcp/phpquoteshellarg",
 			"version": "v1.0.1-p3",
 			"source": {
 				"type": "git",
-				"url": "https://github.com/lokahost/phpquoteshellarg.git",
+				"url": "https://github.com/lokahostcp/phpquoteshellarg.git",
 				"reference": "89cbab9b81b4482127a7bd521ccb6394dd8cda37"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/lokahost/phpquoteshellarg/zipball/89cbab9b81b4482127a7bd521ccb6394dd8cda37",
+				"url": "https://api.github.com/repos/lokahostcp/phpquoteshellarg/zipball/89cbab9b81b4482127a7bd521ccb6394dd8cda37",
 				"reference": "89cbab9b81b4482127a7bd521ccb6394dd8cda37",
 				"shasum": ""
 			},
@@ -104,13 +104,13 @@
 				"Unlicense"
 			],
 			"description": "Improved escape shell arguments for support of special charactars",
-			"homepage": "https://github.com/lokahost",
+			"homepage": "https://github.com/lokahostcp",
 			"keywords": [
 				"escapeshellarg",
 				"quoteshellarg"
 			],
 			"support": {
-				"source": "https://github.com/lokahost/phpquoteshellarg/tree/v1.0.1-p3"
+				"source": "https://github.com/lokahostcp/phpquoteshellarg/tree/v1.0.1-p3"
 			},
 			"time": "2022-07-17T14:48:05+00:00"
 		},

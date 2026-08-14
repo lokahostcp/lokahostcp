@@ -23,7 +23,7 @@ $action = $_POST["action"];
 if ($_SESSION["userContext"] === "admin") {
 	switch ($action) {
 		case "reread IP":
-			exec(LOKAHOST_CMD . "v-update-sys-ip", $output, $return_var);
+			exec(LOKAHOSTCP_CMD . "v-update-sys-ip", $output, $return_var);
 			header("Location: /list/ip/");
 			exit();
 			break;
@@ -41,7 +41,7 @@ if ($_SESSION["userContext"] === "admin") {
 
 foreach ($ip as $value) {
 	$value = quoteshellarg($value);
-	exec(LOKAHOST_CMD . $cmd . " " . $value, $output, $return_var);
+	exec(LOKAHOSTCP_CMD . $cmd . " " . $value, $output, $return_var);
 }
 
 header("Location: /list/ip/");

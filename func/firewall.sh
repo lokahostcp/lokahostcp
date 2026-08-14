@@ -2,7 +2,7 @@
 
 #===========================================================================#
 #                                                                           #
-# Lokahost Control Panel - Firewall Function Library                          #
+# Lokahostcp Control Panel - Firewall Function Library                          #
 #                                                                           #
 #===========================================================================#
 

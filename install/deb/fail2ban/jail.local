@@ -1,61 +1,61 @@
 [ssh-iptables]
 enabled  = true
 filter   = sshd
-action   = lokahost[name=SSH]
+action   = lokahostcp[name=SSH]
 logpath  = /var/log/auth.log
 maxretry = 5
 
 [vsftpd-iptables]
 enabled  = false
 filter   = vsftpd
-action   = lokahost[name=FTP]
+action   = lokahostcp[name=FTP]
 logpath  = /var/log/vsftpd.log
 maxretry = 5
 
 [exim-iptables]
 enabled  = true
 filter   = exim
-action   = lokahost[name=MAIL]
+action   = lokahostcp[name=MAIL]
 logpath  = /var/log/exim4/mainlog
 
 [dovecot-iptables]
 enabled  = true
 filter   = dovecot
-action   = lokahost[name=MAIL]
+action   = lokahostcp[name=MAIL]
 logpath  = /var/log/dovecot.log
 
 [mysqld-iptables]
 enabled  = false
 filter   = mysqld-auth
-action   = lokahost[name=DB]
+action   = lokahostcp[name=DB]
 logpath  = /var/log/mysql/error.log
 maxretry = 5
 
-[lokahost-iptables]
+[lokahostcp-iptables]
 enabled  = true
-filter   = lokahost
-action   = lokahost[name=LOKAHOST]
-logpath  = /var/log/lokahost/auth.log
+filter   = lokahostcp
+action   = lokahostcp[name=LOKAHOSTCP]
+logpath  = /var/log/lokahostcp/auth.log
 maxretry = 5
 
 [roundcube-auth]
 enabled  = false
 filter   = roundcube-auth
-action   = lokahost[name=WEB]
+action   = lokahostcp[name=WEB]
 logpath  = /var/log/roundcube/errors.log
 maxretry = 5
 
 [phpmyadmin-auth]
 enabled  = true
 filter   = phpmyadmin-syslog
-action   = lokahost[name=WEB]
+action   = lokahostcp[name=WEB]
 logpath  = /var/log/auth.log
 maxretry = 5
 
 [recidive]
 enabled  = true
 filter   = recidive
-action   = lokahost[name=RECIDIVE]
+action   = lokahostcp[name=RECIDIVE]
 logpath  = /var/log/fail2ban.log
 maxretry = 5
 findtime = 86400

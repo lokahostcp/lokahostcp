@@ -9,7 +9,7 @@ verify_csrf($_GET);
 
 $database = quoteshellarg($_GET["database"]);
 
-exec(LOKAHOST_CMD . "v-dump-database " . $user . " " . $database . " file", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-dump-database " . $user . " " . $database . " file", $output, $return_var);
 
 if ($return_var == 0) {
 	header("Content-type: application/sql");

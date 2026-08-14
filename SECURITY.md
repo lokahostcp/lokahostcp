@@ -1,10 +1,10 @@
-# Lokahost CP Security policy
+# Lokahostcp CP Security policy
 
-Welcome and thanks for taking interest in Lokahost CP!
+Welcome and thanks for taking interest in Lokahostcp CP!
 
-We are mostly interested in reports by actual Lokahost CP users but all high quality contributions are welcome.
+We are mostly interested in reports by actual Lokahostcp CP users but all high quality contributions are welcome.
 
-If you believe that you have have discovered a vulnerability in Lokahost Control Panel, please let our development team know by sending an email to <info@lokahost.com>
+If you believe that you have have discovered a vulnerability in Lokahostcp Control Panel, please let our development team know by sending an email to <info@lokahost.online>
 
 We ask you to include a detailed description of the vulnerability, a list of services involved (e.g. exim, dovecot) and the versions which you've tested, full steps to reproduce the vulnerability, and include your findings and expected results.
 

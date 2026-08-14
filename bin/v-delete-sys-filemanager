@@ -1,5 +1,5 @@
 #!/bin/bash
-# info: remove file manager functionality from Lokahost Control Panel
+# info: remove file manager functionality from Lokahostcp Control Panel
 # options: [MODE]
 #
 # example: v-delete-sys-filemanager
@@ -14,14 +14,14 @@ MODE=$1
 FORCE=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
-FM_INSTALL_DIR="$LOKAHOST/web/fm"
+FM_INSTALL_DIR="$LOKAHOSTCP/web/fm"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -33,18 +33,18 @@ if [ "x$(id -u)" != 'x0' ]; then
 	exit 10
 fi
 
-# Ensure that $LOKAHOST (/usr/local/lokahost/) and other variables are valid.
-if [ -z "$LOKAHOST" ]; then
-	LOKAHOST="/usr/local/lokahost"
+# Ensure that $LOKAHOSTCP (/usr/local/lokahostcp/) and other variables are valid.
+if [ -z "$LOKAHOSTCP" ]; then
+	LOKAHOSTCP="/usr/local/lokahostcp"
 fi
 
-if [ -z "$HOMEDIR" ] || [ -z "$LOKAHOST_INSTALL_DIR" ]; then
-	echo "Error: Lokahost environment vars not present"
+if [ -z "$HOMEDIR" ] || [ -z "$LOKAHOSTCP_INSTALL_DIR" ]; then
+	echo "Error: Lokahostcp environment vars not present"
 	exit 2
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 # Check if File Manager components are installed
 if [ "$FORCE" != "yes" ] && [ ! -e "$FM_INSTALL_DIR" ]; then

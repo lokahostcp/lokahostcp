@@ -12,14 +12,14 @@
 host=$1
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/remote.sh
-source $LOKAHOST/func/remote.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/remote.sh
+source $LOKAHOSTCP/func/remote.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -31,7 +31,7 @@ is_procces_running
 remote_dns_health_check
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -40,9 +40,9 @@ check_lokahost_demo_mode
 IFS=$'\n'
 
 if [ -z $host ]; then
-	hosts=$(cat "$LOKAHOST/conf/dns-cluster.conf")
+	hosts=$(cat "$LOKAHOSTCP/conf/dns-cluster.conf")
 else
-	hosts=$(grep "HOST='$host'" "$LOKAHOST/conf/dns-cluster.conf")
+	hosts=$(grep "HOST='$host'" "$LOKAHOSTCP/conf/dns-cluster.conf")
 fi
 
 # Starting cluster loop
@@ -65,11 +65,11 @@ for cluster in $hosts; do
 done
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Updating pipe
-pipe="$LOKAHOST/data/queue/dns-cluster.pipe"
+pipe="$LOKAHOSTCP/data/queue/dns-cluster.pipe"
 str=$(grep -n "$SCRIPT $1 $2$" $pipe | cut -f1 -d: | head -n1)
 if [ -n "$str" ]; then
 	sed -i "$str d" $pipe

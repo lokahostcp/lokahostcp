@@ -5,10 +5,10 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
-source $LOKAHOST/conf/lokahost.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/conf/lokahostcp.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 
 #
 # Migrate legacy multiphp to full php-fpm backend
@@ -20,8 +20,8 @@ source $LOKAHOST/conf/lokahost.conf
 # nginx+multiphp,
 # nginx+apache+multiphp,
 # apache+multiphp:
-#   Change Lokahost WEB_BACKEND from null to php-fpm
-#   Create backend templates ex: PHP-7_3, PHP-5_6 (in $LOKAHOST/data/templates/web/php-fpm/)
+#   Change Lokahostcp WEB_BACKEND from null to php-fpm
+#   Create backend templates ex: PHP-7_3, PHP-5_6 (in $LOKAHOSTCP/data/templates/web/php-fpm/)
 #   v-update-web-templates
 #   Loop through all web domains
 #   If official multiphp tpl is used ex: PHP-72, then change backend tpl and set app web template to default
@@ -44,22 +44,22 @@ echo "Found $num_php_versions php versions"
 if [ "$num_php_versions" -gt 1 ] && [ -z "$WEB_BACKEND" ]; then
 	# Legacy multiphp
 
-	sed -i "/^WEB_BACKEND=/d" $LOKAHOST/conf/lokahost.conf
-	echo "WEB_BACKEND='php-fpm'" >> $LOKAHOST/conf/lokahost.conf
+	sed -i "/^WEB_BACKEND=/d" $LOKAHOSTCP/conf/lokahostcp.conf
+	echo "WEB_BACKEND='php-fpm'" >> $LOKAHOSTCP/conf/lokahostcp.conf
 
 	for php_ver in $(v-list-sys-php); do
 		[ ! -d "/etc/php/$php_ver/fpm/pool.d/" ] && continue
-		cp -f "$LOKAHOST_INSTALL_DIR/php-fpm/multiphp.tpl" ${WEBTPL}/php-fpm/PHP-${php_ver/\./_}.tpl
+		cp -f "$LOKAHOSTCP_INSTALL_DIR/php-fpm/multiphp.tpl" ${WEBTPL}/php-fpm/PHP-${php_ver/\./_}.tpl
 	done
 
 	if [ ! -z "$WEB_SYSTEM" ]; then
-		cp -rf "${LOKAHOST_INSTALL_DIR}/templates/web/$WEB_SYSTEM" "${WEBTPL}/"
+		cp -rf "${LOKAHOSTCP_INSTALL_DIR}/templates/web/$WEB_SYSTEM" "${WEBTPL}/"
 	fi
 
 	# Migrate domains
 	for user in $($BIN/v-list-sys-users plain); do
 		# Define user data and get suspended status
-		USER_DATA=$LOKAHOST/data/users/$user
+		USER_DATA=$LOKAHOSTCP/data/users/$user
 		SUSPENDED=$(get_user_value '$SUSPENDED')
 
 		# Check if user is suspended

@@ -1,10 +1,10 @@
 #!/bin/bash
-# info: update host certificate for lokahost
+# info: update host certificate for lokahostcp
 # options: USER HOSTNAME
 #
 # example: v-update-host-certificate admin example.com
 #
-# This function updates the SSL certificate used for Lokahost Control Panel.
+# This function updates the SSL certificate used for Lokahostcp Control Panel.
 
 #----------------------------------------------------------#
 #                Variables & Functions                     #
@@ -21,14 +21,14 @@ user=$1
 hostname=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/ip.sh
-source $LOKAHOST/func/ip.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/ip.sh
+source $LOKAHOSTCP/func/ip.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -50,15 +50,15 @@ if [ ! -f "/home/$user/conf/web/$hostname/ssl/$hostname.pem" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 # Copy hostnames certificates from user dir
-cp /home/$user/conf/web/$hostname/ssl/$hostname.pem $LOKAHOST/ssl/certificate.crt
-cp /home/$user/conf/web/$hostname/ssl/$hostname.key $LOKAHOST/ssl/certificate.key
+cp /home/$user/conf/web/$hostname/ssl/$hostname.pem $LOKAHOSTCP/ssl/certificate.crt
+cp /home/$user/conf/web/$hostname/ssl/$hostname.key $LOKAHOSTCP/ssl/certificate.key
 
 # Enable fallback support for mail domains that do not support SSL
 if [[ "$MAIL_SYSTEM" =~ exim ]]; then
@@ -70,22 +70,22 @@ if [[ "$MAIL_SYSTEM" =~ exim ]]; then
 	fi
 
 	# Assign exim permissions to certificate
-	chown $exim_user:mail $LOKAHOST/ssl/certificate.crt
-	chown $exim_user:mail $LOKAHOST/ssl/certificate.key
+	chown $exim_user:mail $LOKAHOSTCP/ssl/certificate.crt
+	chown $exim_user:mail $LOKAHOSTCP/ssl/certificate.key
 fi
 
 # Add UPDATE_HOSTNAME_SSL if not exist
 if [ -z "$UPDATE_HOSTNAME_SSL" ]; then
-	echo "UPDATE_HOSTNAME_SSL='yes'" >> "$LOKAHOST/conf/lokahost.conf"
+	echo "UPDATE_HOSTNAME_SSL='yes'" >> "$LOKAHOSTCP/conf/lokahostcp.conf"
 fi
 
 # Restart services
 $BIN/v-restart-mail
 $BIN/v-restart-ftp
-$BIN/v-restart-service "lokahost"
+$BIN/v-restart-service "lokahostcp"
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

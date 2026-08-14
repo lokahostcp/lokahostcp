@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-if [ "${PATH#*/usr/local/lokahost/bin*}" = "$PATH" ]; then
-    . /etc/profile.d/lokahost.sh
+if [ "${PATH#*/usr/local/lokahostcp/bin*}" = "$PATH" ]; then
+    . /etc/profile.d/lokahostcp.sh
 fi
 
 load 'test_helper/bats-support/load'
@@ -16,27 +16,27 @@ function random() {
 function setup() {
     # echo "# Setup_file" > &3
     if [ $BATS_TEST_NUMBER = 1 ]; then
-        echo 'user=test-5285' > /tmp/lokahost-test-env.sh
-        echo 'user2=test-5286' >> /tmp/lokahost-test-env.sh
-        echo 'userbk=testbk-5285' >> /tmp/lokahost-test-env.sh
-        echo 'userpass1=test-5285' >> /tmp/lokahost-test-env.sh
-        echo 'userpass2=t3st-p4ssw0rd' >> /tmp/lokahost-test-env.sh
-        echo 'LOKAHOST=/usr/local/lokahost' >> /tmp/lokahost-test-env.sh
-        echo 'domain=test-5285.lokahost.com' >> /tmp/lokahost-test-env.sh
-        echo 'domainuk=test-5285.lokahost.com.uk' >> /tmp/lokahost-test-env.sh
-        echo 'rootdomain=testlokahostcp.com' >> /tmp/lokahost-test-env.sh
-        echo 'subdomain=cdn.testlokahostcp.com' >> /tmp/lokahost-test-env.sh
-        echo 'database=test-5285_database' >> /tmp/lokahost-test-env.sh
-        echo 'dbuser=test-5285_dbuser' >> /tmp/lokahost-test-env.sh
-        echo 'pguser=test5290' >> /tmp/lokahost-test-env.sh
-        echo 'pgdatabase=test5290_database' >> /tmp/lokahost-test-env.sh
-        echo 'pgdbuser=test5290_dbuser' >> /tmp/lokahost-test-env.sh
+        echo 'user=test-5285' > /tmp/lokahostcp-test-env.sh
+        echo 'user2=test-5286' >> /tmp/lokahostcp-test-env.sh
+        echo 'userbk=testbk-5285' >> /tmp/lokahostcp-test-env.sh
+        echo 'userpass1=test-5285' >> /tmp/lokahostcp-test-env.sh
+        echo 'userpass2=t3st-p4ssw0rd' >> /tmp/lokahostcp-test-env.sh
+        echo 'LOKAHOSTCP=/usr/local/lokahostcp' >> /tmp/lokahostcp-test-env.sh
+        echo 'domain=test-5285.lokahost.online' >> /tmp/lokahostcp-test-env.sh
+        echo 'domainuk=test-5285.lokahost.online.uk' >> /tmp/lokahostcp-test-env.sh
+        echo 'rootdomain=testlokahostcp.com' >> /tmp/lokahostcp-test-env.sh
+        echo 'subdomain=cdn.testlokahostcp.com' >> /tmp/lokahostcp-test-env.sh
+        echo 'database=test-5285_database' >> /tmp/lokahostcp-test-env.sh
+        echo 'dbuser=test-5285_dbuser' >> /tmp/lokahostcp-test-env.sh
+        echo 'pguser=test5290' >> /tmp/lokahostcp-test-env.sh
+        echo 'pgdatabase=test5290_database' >> /tmp/lokahostcp-test-env.sh
+        echo 'pgdbuser=test5290_dbuser' >> /tmp/lokahostcp-test-env.sh
     fi
 
-    source /tmp/lokahost-test-env.sh
-    source $LOKAHOST/func/main.sh
-    source $LOKAHOST/conf/lokahost.conf
-    source $LOKAHOST/func/ip.sh
+    source /tmp/lokahostcp-test-env.sh
+    source $LOKAHOSTCP/func/main.sh
+    source $LOKAHOSTCP/conf/lokahostcp.conf
+    source $LOKAHOSTCP/func/ip.sh
 }
 
 function validate_web_domain() {
@@ -49,12 +49,12 @@ function validate_web_domain() {
 	refute [ -z "$domain" ]
 	refute [ -z "$webproof" ]
 
-	source $LOKAHOST/func/ip.sh
+	source $LOKAHOSTCP/func/ip.sh
 
 	run v-list-web-domain $user $domain
 	assert_success
 
-	USER_DATA=$LOKAHOST/data/users/$user
+	USER_DATA=$LOKAHOSTCP/data/users/$user
 	local domain_ip=$(get_object_value 'web' 'DOMAIN' "$domain" '$IP')
 	SSL=$(get_object_value 'web' 'DOMAIN' "$domain" '$SSL')
 	domain_ip=$(get_real_ip "$domain_ip")
@@ -96,12 +96,12 @@ function validate_web_domain() {
     refute [ -z "$domain" ]
     refute [ -z "$webproof" ]
 
-    source $LOKAHOST/func/ip.sh
+    source $LOKAHOSTCP/func/ip.sh
 
     run v-list-web-domain $user $domain
     assert_success
 
-    USER_DATA=$LOKAHOST/data/users/$user
+    USER_DATA=$LOKAHOSTCP/data/users/$user
     local domain_ip=$(get_object_value 'web' 'DOMAIN' "$domain" '$IP')
     SSL=$(get_object_value 'web' 'DOMAIN' "$domain" '$SSL')
     domain_ip=$(get_real_ip "$domain_ip")
@@ -142,12 +142,12 @@ function validate_headers_domain() {
   refute [ -z "$domain" ]
   refute [ -z "$webproof" ]
 
-  source $LOKAHOST/func/ip.sh
+  source $LOKAHOSTCP/func/ip.sh
 
   run v-list-web-domain $user $domain
   assert_success
 
-  USER_DATA=$LOKAHOST/data/users/$user
+  USER_DATA=$LOKAHOSTCP/data/users/$user
   local domain_ip=$(get_object_value 'web' 'DOMAIN' "$domain" '$IP')
   SSL=$(get_object_value 'web' 'DOMAIN' "$domain" '$SSL')
   domain_ip=$(get_real_ip "$domain_ip")
@@ -193,9 +193,9 @@ function validate_webmail_domain() {
     refute [ -z "$domain" ]
     refute [ -z "$webproof" ]
 
-    source $LOKAHOST/func/ip.sh
+    source $LOKAHOSTCP/func/ip.sh
 
-    USER_DATA=$LOKAHOST/data/users/$user
+    USER_DATA=$LOKAHOSTCP/data/users/$user
     local domain_ip=$(get_object_value 'web' 'DOMAIN' "$domain" '$IP')
     SSL=$(get_object_value 'mail' 'DOMAIN' "$domain" '$SSL')
     domain_ip=$(get_real_ip "$domain_ip")
@@ -247,7 +247,7 @@ function validate_database(){
     local dbuser=$3
     local password=$4
 
-    host_str=$(grep "HOST='localhost'" $LOKAHOST/conf/$type.conf)
+    host_str=$(grep "HOST='localhost'" $LOKAHOSTCP/conf/$type.conf)
     parse_object_kv_list "$host_str"
     if [ -z $PORT ]; then PORT=3306; fi
 
@@ -291,7 +291,7 @@ function check_ip_banned(){
   local ip=$1
   local chain=$2
 
-  run grep "IP='$ip' CHAIN='$chain'" $LOKAHOST/data/firewall/banlist.conf
+  run grep "IP='$ip' CHAIN='$chain'" $LOKAHOSTCP/data/firewall/banlist.conf
   assert_success
   assert_output --partial "$ip"
 }
@@ -299,7 +299,7 @@ function check_ip_banned(){
 function check_ip_not_banned(){
   local ip=$1
   local chain=$2
-  run grep "IP='$ip' CHAIN='$chain'" $LOKAHOST/data/firewall/banlist.conf
+  run grep "IP='$ip' CHAIN='$chain'" $LOKAHOSTCP/data/firewall/banlist.conf
   assert_failure E_ARGS
   refute_output
 }
@@ -362,7 +362,7 @@ function check_ip_not_banned(){
 #----------------------------------------------------------#
 
 @test "User: Add new user" {
-    run v-add-user $user $user $user@lokahost.com default "Super Test"
+    run v-add-user $user $user $user@lokahost.online default "Super Test"
     assert_success
     refute_output
 }
@@ -415,7 +415,7 @@ function check_ip_not_banned(){
 }
 
 @test "User: Change user email" {
-    run v-change-user-contact "$user" tester@lokahost.com
+    run v-change-user-contact "$user" tester@lokahost.online
     assert_success
     refute_output
 }
@@ -663,9 +663,9 @@ function check_ip_not_banned(){
     local a2_remoteip="/etc/$WEB_SYSTEM/mods-enabled/remoteip.conf"
 
     # Save initial state
-    echo "interface=${interface}" >> /tmp/lokahost-test-env.sh
-    [ -f "$a2_rpaf" ]     && file_hash1=$(cat $a2_rpaf     |md5sum |cut -d" " -f1) && echo "a2_rpaf_hash='${file_hash1}'"     >> /tmp/lokahost-test-env.sh
-    [ -f "$a2_remoteip" ] && file_hash2=$(cat $a2_remoteip |md5sum |cut -d" " -f1) && echo "a2_remoteip_hash='${file_hash2}'" >> /tmp/lokahost-test-env.sh
+    echo "interface=${interface}" >> /tmp/lokahostcp-test-env.sh
+    [ -f "$a2_rpaf" ]     && file_hash1=$(cat $a2_rpaf     |md5sum |cut -d" " -f1) && echo "a2_rpaf_hash='${file_hash1}'"     >> /tmp/lokahostcp-test-env.sh
+    [ -f "$a2_remoteip" ] && file_hash2=$(cat $a2_remoteip |md5sum |cut -d" " -f1) && echo "a2_remoteip_hash='${file_hash2}'" >> /tmp/lokahostcp-test-env.sh
 
 
     local ip="198.18.0.12"
@@ -674,9 +674,9 @@ function check_ip_not_banned(){
     refute_output
 
     assert_file_exist /etc/$WEB_SYSTEM/conf.d/$ip.conf
-    assert_file_exist $LOKAHOST/data/ips/$ip
-    assert_file_contains $LOKAHOST/data/ips/$ip "OWNER='$user'"
-    assert_file_contains $LOKAHOST/data/ips/$ip "INTERFACE='$interface'"
+    assert_file_exist $LOKAHOSTCP/data/ips/$ip
+    assert_file_contains $LOKAHOSTCP/data/ips/$ip "OWNER='$user'"
+    assert_file_contains $LOKAHOSTCP/data/ips/$ip "INTERFACE='$interface'"
 
     if [ -n "$PROXY_SYSTEM" ]; then
         assert_file_exist /etc/$PROXY_SYSTEM/conf.d/$ip.conf
@@ -694,10 +694,10 @@ function check_ip_not_banned(){
 
    # Test will fail if systemd (For example Proxmox) is used for setting ip addresses. How ever there is no "decent" way to check if Netplan is used except via the method used in v-add-sys-ip and there for breaking the reason to test this. How ever if the test used in v-add-sys-ip fails it still should check if it exists!
 
-   assert_file_exist /etc/netplan/60-lokahost.yaml
+   assert_file_exist /etc/netplan/60-lokahostcp.yaml
 
    # also check if file contains the newly added ip
-   assert_file_contains /etc/netplan/60-lokahost.yaml "$ip"
+   assert_file_contains /etc/netplan/60-lokahostcp.yaml "$ip"
 }
 
 @test "Ip: [Debian] Netplan file updated" {
@@ -722,9 +722,9 @@ function check_ip_not_banned(){
     refute_output
 
     assert_file_exist /etc/$WEB_SYSTEM/conf.d/$ip.conf
-    assert_file_exist $LOKAHOST/data/ips/$ip
-    assert_file_contains $LOKAHOST/data/ips/$ip "OWNER='$user'"
-    assert_file_contains $LOKAHOST/data/ips/$ip "INTERFACE='$interface'"
+    assert_file_exist $LOKAHOSTCP/data/ips/$ip
+    assert_file_contains $LOKAHOSTCP/data/ips/$ip "OWNER='$user'"
+    assert_file_contains $LOKAHOSTCP/data/ips/$ip "INTERFACE='$interface'"
 
     if [ -n "$PROXY_SYSTEM" ]; then
         assert_file_exist /etc/$PROXY_SYSTEM/conf.d/$ip.conf
@@ -743,7 +743,7 @@ function check_ip_not_banned(){
     refute_output
 
     assert_file_not_exist /etc/$WEB_SYSTEM/conf.d/$ip.conf
-    assert_file_not_exist $LOKAHOST/data/ips/$ip
+    assert_file_not_exist $LOKAHOSTCP/data/ips/$ip
 }
 
 @test "Ip: [Ubuntu] Netplan file changed" {
@@ -753,8 +753,8 @@ function check_ip_not_banned(){
 	 fi
 
 	 ip="198.18.0.121"
-	 assert_file_exist /etc/netplan/60-lokahost.yaml
-	 assert_file_contains /etc/netplan/60-lokahost.yaml "$ip"
+	 assert_file_exist /etc/netplan/60-lokahostcp.yaml
+	 assert_file_contains /etc/netplan/60-lokahostcp.yaml "$ip"
 }
 
 @test "Ip: Delete ip 198.18.0.121" {
@@ -764,7 +764,7 @@ function check_ip_not_banned(){
 	refute_output
 
 	assert_file_not_exist /etc/$WEB_SYSTEM/conf.d/$ip.conf
-	assert_file_not_exist $LOKAHOST/data/ips/$ip
+	assert_file_not_exist $LOKAHOSTCP/data/ips/$ip
 
 	if [ -n "$PROXY_SYSTEM" ]; then
 			assert_file_not_exist /etc/$PROXY_SYSTEM/conf.d/$ip.conf
@@ -790,9 +790,9 @@ function check_ip_not_banned(){
     refute_output
 
     assert_file_exist /etc/$WEB_SYSTEM/conf.d/$ip.conf
-    assert_file_exist $LOKAHOST/data/ips/$ip
-    assert_file_contains $LOKAHOST/data/ips/$ip "OWNER='$user'"
-    assert_file_contains $LOKAHOST/data/ips/$ip "INTERFACE='$interface'"
+    assert_file_exist $LOKAHOSTCP/data/ips/$ip
+    assert_file_contains $LOKAHOSTCP/data/ips/$ip "OWNER='$user'"
+    assert_file_contains $LOKAHOSTCP/data/ips/$ip "INTERFACE='$interface'"
 
     if [ -n "$PROXY_SYSTEM" ]; then
         assert_file_exist /etc/$PROXY_SYSTEM/conf.d/$ip.conf
@@ -813,8 +813,8 @@ function check_ip_not_banned(){
     assert_success
     refute_output
 
-    echo -e "<?php\necho 'Lokahost Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
-    validate_web_domain $user $domain 'Lokahost Test:12' 'php-test.php'
+    echo -e "<?php\necho 'Lokahostcp Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
+    validate_web_domain $user $domain 'Lokahostcp Test:12' 'php-test.php'
     rm $HOMEDIR/$user/web/$domain/public_html/php-test.php
 }
 
@@ -864,7 +864,7 @@ function check_ip_not_banned(){
     assert_success
     refute_output
 
-	echo -e "<?php\necho 'Lokahost Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
+	echo -e "<?php\necho 'Lokahostcp Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
     validate_web_domain $user $domain 'This site is currently suspended'
 	validate_web_domain $user $domain 'This site is currently suspended' 'php-test.php'
 	rm $HOMEDIR/$user/web/$domain/public_html/php-test.php
@@ -875,8 +875,8 @@ function check_ip_not_banned(){
     assert_success
     refute_output
 
-    echo -e "<?php\necho 'Lokahost Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
-    validate_web_domain $user $domain 'Lokahost Test:12' 'php-test.php'
+    echo -e "<?php\necho 'Lokahostcp Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
+    validate_web_domain $user $domain 'Lokahostcp Test:12' 'php-test.php'
     rm $HOMEDIR/$user/web/$domain/public_html/php-test.php
 }
 
@@ -903,7 +903,7 @@ function check_ip_not_banned(){
     assert_success
     refute_output
 
-    echo -e "<?php\necho 'Lokahost Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
+    echo -e "<?php\necho 'Lokahostcp Test:'.(4*3);" > $HOMEDIR/$user/web/$domain/public_html/php-test.php
     run validate_headers_domain $user $domain "Miss"
     run validate_headers_domain $user $domain "Hit"
     rm $HOMEDIR/$user/web/$domain/public_html/php-test.php
@@ -920,7 +920,7 @@ function check_ip_not_banned(){
 
 
 @test "WEB: Generate Self signed certificate" {
-    ssl=$(v-generate-ssl-cert "$domain" "info@$domain" US CA "Orange County" LokahostCP IT "mail.$domain" | tail -n1 | awk '{print $2}')
+    ssl=$(v-generate-ssl-cert "$domain" "info@$domain" US CA "Orange County" Lokahostcp IT "mail.$domain" | tail -n1 | awk '{print $2}')
     echo $ssl;
     mv $ssl/$domain.crt /tmp/$domain.crt
     mv $ssl/$domain.key /tmp/$domain.key
@@ -948,8 +948,8 @@ function check_ip_not_banned(){
    assert_success
    refute_output
 
-   echo -e "<?php\necho 'Lokahost Test:'.(4*3);" > $HOMEDIR/$user/web/idn-tést.eu/public_html/php-test.php
-   validate_web_domain $user idn-tést.eu 'Lokahost Test:12' 'php-test.php'
+   echo -e "<?php\necho 'Lokahostcp Test:'.(4*3);" > $HOMEDIR/$user/web/idn-tést.eu/public_html/php-test.php
+   validate_web_domain $user idn-tést.eu 'Lokahostcp Test:12' 'php-test.php'
    rm $HOMEDIR/$user/web/idn-tést.eu/public_html/php-test.php
 }
 
@@ -961,7 +961,7 @@ function check_ip_not_banned(){
 
 
 @test "WEB: Generate Self signed certificate ASCII idn-tést.eu" {
-    run v-generate-ssl-cert "xn--idn-tst-fya.eu" "info@xn--idn-tst-fya.eu" US CA "Orange County" LokahostCP IT "mail.xn--idn-tst-fya.eu"
+    run v-generate-ssl-cert "xn--idn-tst-fya.eu" "info@xn--idn-tst-fya.eu" US CA "Orange County" Lokahostcp IT "mail.xn--idn-tst-fya.eu"
     assert_success
 }
 
@@ -979,7 +979,7 @@ function check_ip_not_banned(){
 }
 
 @test "WEB: Generate Self signed certificate ASCII bløst.рф" {
-    run v-generate-ssl-cert "xn--blst-hra.xn--p1ai" "info@xn--blst-hra.xn--p1ai" US CA "Orange County" LokahostCP IT "mail.xn--blst-hra.xn--p1ai"
+    run v-generate-ssl-cert "xn--blst-hra.xn--p1ai" "info@xn--blst-hra.xn--p1ai" US CA "Orange County" Lokahostcp IT "mail.xn--blst-hra.xn--p1ai"
     assert_success
 }
 
@@ -1026,8 +1026,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
 }
 
@@ -1050,8 +1050,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
 }
 
@@ -1074,8 +1074,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
 }
 
@@ -1098,8 +1098,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
 }
 
@@ -1122,8 +1122,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
 }
 
@@ -1146,8 +1146,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
 }
 
@@ -1170,8 +1170,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm $HOMEDIR/$user/web/$multi_domain/public_html/php-test.php
 }
 
@@ -1194,8 +1194,8 @@ function check_ip_not_banned(){
     num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
     assert_equal "$num_fpm_config_files" '1'
 
-    echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-    validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+    echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+    validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
     rm $HOMEDIR/$user/web/$multi_domain/public_html/php-test.php
 }
 
@@ -1218,8 +1218,8 @@ function check_ip_not_banned(){
 	num_fpm_config_files="$(find -L /etc/php/ -name "${multi_domain}.conf" | wc -l)"
 	assert_equal "$num_fpm_config_files" '1'
 
-	echo -e "<?php\necho 'lokahost-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
-	validate_web_domain $user $multi_domain "lokahost-multiphptest:$test_phpver" 'php-test.php'
+	echo -e "<?php\necho 'lokahostcp-multiphptest:'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;" > "$HOMEDIR/$user/web/$multi_domain/public_html/php-test.php"
+	validate_web_domain $user $multi_domain "lokahostcp-multiphptest:$test_phpver" 'php-test.php'
 	rm $HOMEDIR/$user/web/$multi_domain/public_html/php-test.php
 }
 
@@ -1393,17 +1393,17 @@ function check_ip_not_banned(){
 }
 
 @test "DNS: Add domain record MX" {
-    run v-add-dns-record $user $domain '@' MX mx.lokahost.com  '' 50
+    run v-add-dns-record $user $domain '@' MX mx.lokahost.online  '' 50
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
-    run v-change-dns-record $user $domain 50 '@' MX mx.lokahost.com
+    run v-change-dns-record $user $domain 50 '@' MX mx.lokahost.online
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
     run v-delete-dns-record $user $domain 50
     assert_success
@@ -1412,17 +1412,17 @@ function check_ip_not_banned(){
 
 @test "DNS: Add domain record NS" {
     run v-delete-dns-record $user $domain 50
-    run v-add-dns-record $user $domain '@' NS mx.lokahost.com  '' 50
+    run v-add-dns-record $user $domain '@' NS mx.lokahost.online  '' 50
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
-    run v-change-dns-record $user $domain 50 '@' NS mx.lokahost.com
+    run v-change-dns-record $user $domain 50 '@' NS mx.lokahost.online
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
     run v-delete-dns-record $user $domain 50
     assert_success
@@ -1431,17 +1431,17 @@ function check_ip_not_banned(){
 
 @test "DNS: Add domain record SRV" {
     run v-delete-dns-record $user $domain 50
-    run v-add-dns-record $user $domain '_test_domain' SRV mx.lokahost.com  '' 50
+    run v-add-dns-record $user $domain '_test_domain' SRV mx.lokahost.online  '' 50
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
-    run v-change-dns-record $user $domain 50 '_test.domain' SRV mx.lokahost.com
+    run v-change-dns-record $user $domain 50 '_test.domain' SRV mx.lokahost.online
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
     run v-delete-dns-record $user $domain 50
     assert_success
@@ -1450,17 +1450,17 @@ function check_ip_not_banned(){
 
 @test "DNS: Add domain record CNAME" {
     run v-delete-dns-record $user $domain 50
-    run v-add-dns-record $user $domain 'mail' CNAME mx.lokahost.com  '' 50
+    run v-add-dns-record $user $domain 'mail' CNAME mx.lokahost.online  '' 50
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
-    run v-change-dns-record $user $domain 50 'mail' CNAME mx.lokahost.com
+    run v-change-dns-record $user $domain 50 'mail' CNAME mx.lokahost.online
     assert_success
     refute_output
 
-    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.com."
+    assert_file_contains "$HOMEDIR/$user/conf/dns/${domain}.db" "mx.lokahost.online."
 
     run v-delete-dns-record $user $domain 50
     assert_success
@@ -1648,23 +1648,23 @@ function check_ip_not_banned(){
 }
 
 @test "MAIL: Add account alias 3" {
-	run v-add-mail-account-alias $user $domain test lokahost
+	run v-add-mail-account-alias $user $domain test lokahostcp
 	assert_success
-	assert_file_contains /etc/exim4/domains/$domain/aliases "lokahost@$domain"
+	assert_file_contains /etc/exim4/domains/$domain/aliases "lokahostcp@$domain"
 	refute_output
 }
 
 @test "MAIL: Add account 3" {
-	run v-add-mail-account $user $domain lokahost "$userpass2"
+	run v-add-mail-account $user $domain lokahostcp "$userpass2"
 	assert_success
-	assert_file_contains /etc/exim4/domains/$domain/limits "lokahost@$domain"
+	assert_file_contains /etc/exim4/domains/$domain/limits "lokahostcp@$domain"
 	refute_output
 }
 
 @test "MAIL: Add account 4" {
-	run v-add-mail-account $user $domain lokahostrocks3 "$userpass2"
+	run v-add-mail-account $user $domain lokahostcprocks3 "$userpass2"
 	assert_success
-	assert_file_contains /etc/exim4/domains/$domain/limits "lokahostrocks3@$domain"
+	assert_file_contains /etc/exim4/domains/$domain/limits "lokahostcprocks3@$domain"
 	refute_output
 }
 
@@ -1683,7 +1683,7 @@ function check_ip_not_banned(){
 }
 
 @test "MAIL: Add account alias Invalid length" {
-	run v-add-mail-account-alias $user $domain test 'lokahost-realy-rocks-but-i-want-to-have-feature-xyz-and-i-want-it-now'
+	run v-add-mail-account-alias $user $domain test 'lokahostcp-realy-rocks-but-i-want-to-have-feature-xyz-and-i-want-it-now'
 	assert_failure $E_INVALID
 }
 @test "MAIL: Add account alias Invalid" {
@@ -1691,7 +1691,7 @@ function check_ip_not_banned(){
 	assert_failure $E_INVALID
 }
 @test "MAIL: Add account alias Invalid 2" {
-	run v-add-mail-account-alias $user $domain test 'lokahost@test'
+	run v-add-mail-account-alias $user $domain test 'lokahostcp@test'
 	assert_failure $E_INVALID
 }
 
@@ -1739,11 +1739,11 @@ function check_ip_not_banned(){
     assert_success
     refute_output
 
-    run grep "RECORD='_domainkey'" "${LOKAHOST}/data/users/${user}/dns/${domain}.conf"
+    run grep "RECORD='_domainkey'" "${LOKAHOSTCP}/data/users/${user}/dns/${domain}.conf"
     assert_failure
     refute_output
 
-    run grep "RECORD='mail._domainkey'" "${LOKAHOST}/data/users/${user}/dns/${domain}.conf"
+    run grep "RECORD='mail._domainkey'" "${LOKAHOSTCP}/data/users/${user}/dns/${domain}.conf"
     assert_failure
     refute_output
 }
@@ -1753,11 +1753,11 @@ function check_ip_not_banned(){
     assert_success
     refute_output
 
-    run grep "RECORD='_domainkey'" "${LOKAHOST}/data/users/${user}/dns/${domain}.conf"
+    run grep "RECORD='_domainkey'" "${LOKAHOSTCP}/data/users/${user}/dns/${domain}.conf"
     assert_success
     assert_output --partial "RECORD='_domainkey' TYPE='TXT'"
 
-    run grep "RECORD='mail._domainkey'" "${LOKAHOST}/data/users/${user}/dns/${domain}.conf"
+    run grep "RECORD='mail._domainkey'" "${LOKAHOSTCP}/data/users/${user}/dns/${domain}.conf"
     assert_success
     assert_output  --partial "RECORD='mail._domainkey' TYPE='TXT'"
 }
@@ -1771,7 +1771,7 @@ function check_ip_not_banned(){
     assert_success
     refute_output
 
-    run grep "RECORD='k2._domainkey'" "${LOKAHOST}/data/users/${user}/dns/${domain}.conf"
+    run grep "RECORD='k2._domainkey'" "${LOKAHOSTCP}/data/users/${user}/dns/${domain}.conf"
     assert_success
     assert_output --partial "RECORD='k2._domainkey' TYPE='TXT'"
 }
@@ -1784,7 +1784,7 @@ function check_ip_not_banned(){
 @test "Allow Users: User can't add user.user2.com " {
     # Case: admin company.tld
     # users should not be allowed to add user.company.tld
-    run v-add-user $user2 $user2 $user@lokahost.com default "Super Test"
+    run v-add-user $user2 $user2 $user@lokahost.online default "Super Test"
     assert_success
     refute_output
 
@@ -1953,7 +1953,7 @@ function check_ip_not_banned(){
   if [ -z "$(echo $DB_SYSTEM | grep -w "pgsql")" ]; then
     skip "PostGreSQL is not installed"
   fi
-  run v-add-user $pguser $pguser $user@lokahost.com default "Super Test"
+  run v-add-user $pguser $pguser $user@lokahost.online default "Super Test"
   run v-add-database "$pguser" "database" "dbuser" "1234ABCD" "pgsql"
   assert_success
   refute_output
@@ -2070,43 +2070,43 @@ function check_ip_not_banned(){
 #----------------------------------------------------------#
 
 @test "Firewall: Add ip to banlist" {
-  run v-add-firewall-ban '1.2.3.4' 'LOKAHOST'
+  run v-add-firewall-ban '1.2.3.4' 'LOKAHOSTCP'
   assert_success
   refute_output
 
-  check_ip_banned '1.2.3.4' 'LOKAHOST'
+  check_ip_banned '1.2.3.4' 'LOKAHOSTCP'
 }
 
 @test "Firewall: Delete ip to banlist" {
-  run v-delete-firewall-ban '1.2.3.4' 'LOKAHOST'
+  run v-delete-firewall-ban '1.2.3.4' 'LOKAHOSTCP'
   assert_success
   refute_output
-  check_ip_not_banned '1.2.3.4' 'LOKAHOST'
+  check_ip_not_banned '1.2.3.4' 'LOKAHOSTCP'
 }
 
 @test "Firewall: Add ip to banlist for ALL" {
-  run v-add-firewall-ban '1.2.3.4' 'LOKAHOST'
+  run v-add-firewall-ban '1.2.3.4' 'LOKAHOSTCP'
   assert_success
   refute_output
   run v-add-firewall-ban '1.2.3.4' 'MAIL'
   assert_success
   refute_output
-  check_ip_banned '1.2.3.4' 'LOKAHOST'
+  check_ip_banned '1.2.3.4' 'LOKAHOSTCP'
 }
 
 @test "Firewall: Delete ip to banlist CHAIN = ALL" {
   run v-delete-firewall-ban '1.2.3.4' 'ALL'
   assert_success
   refute_output
-  check_ip_not_banned '1.2.3.4' 'LOKAHOST'
+  check_ip_not_banned '1.2.3.4' 'LOKAHOSTCP'
 }
 
 @test "Test Whitelist Fail2ban" {
 
-echo   "1.2.3.4" >> $LOKAHOST/data/firewall/excludes.conf
-  run v-add-firewall-ban '1.2.3.4' 'LOKAHOST'
-  rm $LOKAHOST/data/firewall/excludes.conf
-  check_ip_not_banned '1.2.3.4' 'LOKAHOST'
+echo   "1.2.3.4" >> $LOKAHOSTCP/data/firewall/excludes.conf
+  run v-add-firewall-ban '1.2.3.4' 'LOKAHOSTCP'
+  rm $LOKAHOSTCP/data/firewall/excludes.conf
+  check_ip_not_banned '1.2.3.4' 'LOKAHOSTCP'
 }
 
 @test "Test create ipset" {
@@ -2145,63 +2145,63 @@ echo   "1.2.3.4" >> $LOKAHOST/data/firewall/excludes.conf
 #----------------------------------------------------------#
 
 @test "Package: Create new Package" {
-    cp $LOKAHOST/data/packages/default.pkg /tmp/package
-    run v-add-user-package /tmp/package lokahosttest
+    cp $LOKAHOSTCP/data/packages/default.pkg /tmp/package
+    run v-add-user-package /tmp/package lokahostcptest
     assert_success
     refute_output
 }
 
 @test "Package: Assign user to new Package" {
-    run v-change-user-package  $user lokahosttest
+    run v-change-user-package  $user lokahostcptest
     assert_success
     refute_output
 }
 
 @test "Package: Create new package (Duplicate)" {
     sed -i "s/BANDWIDTH='unlimited'/BANDWIDTH='100'/g" /tmp/package
-    run v-add-user-package /tmp/package lokahosttest
+    run v-add-user-package /tmp/package lokahostcptest
     assert_failure $E_EXISTS
 }
 
 @test "Package: Update new Package" {
     sed -i "s/BANDWIDTH='unlimited'/BANDWIDTH='100'/g" /tmp/package
-    run v-add-user-package /tmp/package lokahosttest yes
+    run v-add-user-package /tmp/package lokahostcptest yes
     assert_success
     refute_output
 }
 
 @test "Package: Update package of user" {
-    run v-change-user-package  $user lokahosttest
+    run v-change-user-package  $user lokahostcptest
     assert_success
     refute_output
-    run grep "BANDWIDTH='100'" $LOKAHOST/data/users/$user/user.conf
+    run grep "BANDWIDTH='100'" $LOKAHOSTCP/data/users/$user/user.conf
     assert_success
     assert_output --partial "100"
 }
 
 @test "Package: Copy package Not Exists" {
-  run v-copy-user-package lokahostdoesnotexists lokahosttest2
+  run v-copy-user-package lokahostcpdoesnotexists lokahostcptest2
   assert_failure $E_NOTEXIST
 }
 
 @test "Package: Copy package" {
-  run v-copy-user-package lokahosttest lokahosttest2
+  run v-copy-user-package lokahostcptest lokahostcptest2
   assert_success
   refute_output
 }
 
 @test "Package: Copy package Exists" {
-  run v-copy-user-package lokahosttest lokahosttest2
+  run v-copy-user-package lokahostcptest lokahostcptest2
   assert_failure $E_EXISTS
 }
 
 @test "Package: Delete package" {
-    run v-delete-user-package lokahosttest
-    run v-delete-user-package lokahosttest2
+    run v-delete-user-package lokahostcptest
+    run v-delete-user-package lokahostcptest2
     rm /tmp/package
     assert_success
     refute_output
-    run grep "BANDWIDTH='unlimited'" $LOKAHOST/data/users/$user/user.conf
+    run grep "BANDWIDTH='unlimited'" $LOKAHOSTCP/data/users/$user/user.conf
     assert_success
     assert_output --partial "unlimited"
 }

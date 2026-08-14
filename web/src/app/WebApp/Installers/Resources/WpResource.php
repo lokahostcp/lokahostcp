@@ -1,14 +1,14 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Resources;
+namespace Lokahostcp\WebApp\Installers\Resources;
 
-use Lokahost\System\LokahostApp;
+use Lokahostcp\System\LokahostcpApp;
 
 class WpResource {
 	private $appcontext;
 	private $options;
 
-	public function __construct(LokahostApp $appcontext, $data, $destination, $options, $appinfo) {
+	public function __construct(LokahostcpApp $appcontext, $data, $destination, $options, $appinfo) {
 		$this->appcontext = $appcontext;
 		$this->appcontext->runWp(
 			[

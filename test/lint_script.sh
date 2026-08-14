@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Includes
-# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
-source $LOKAHOST/conf/lokahost.conf
+# shellcheck source=/usr/local/lokahostcp/conf/lokahostcp.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 
 # Variables and arguments
-LOKAHOST="/usr/local/lokahost"
+LOKAHOSTCP="/usr/local/lokahostcp"
 script=$1
 log=$2
 scroll=$3

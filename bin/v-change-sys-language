@@ -15,12 +15,12 @@ language=$1
 update_users=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 is_language_valid() {
 	# English is always allowed
@@ -30,7 +30,7 @@ is_language_valid() {
 			log_event "$E_INVALID" "$ARGUMENTS"
 			exit $E_INVALID
 		fi
-		if [ ! -d "$LOKAHOST/web/locale/$1" ]; then
+		if [ ! -d "$LOKAHOSTCP/web/locale/$1" ]; then
 			echo "Error: language $1 doesn't exist"
 			log_event "$E_NOTEXIST" "$ARGUMENTS"
 			exit $E_NOTEXIST
@@ -47,17 +47,17 @@ is_format_valid 'language'
 is_language_valid "$language"
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 # Change language
-if [ -z "$(grep LANGUAGE $LOKAHOST/conf/lokahost.conf)" ]; then
-	echo "LANGUAGE='$language'" >> $LOKAHOST/conf/lokahost.conf
+if [ -z "$(grep LANGUAGE $LOKAHOSTCP/conf/lokahostcp.conf)" ]; then
+	echo "LANGUAGE='$language'" >> $LOKAHOSTCP/conf/lokahostcp.conf
 else
-	sed -i "s/LANGUAGE=.*/LANGUAGE='$language'/g" $LOKAHOST/conf/lokahost.conf
+	sed -i "s/LANGUAGE=.*/LANGUAGE='$language'/g" $LOKAHOSTCP/conf/lokahostcp.conf
 fi
 
 # Update language for all existing users if specified
@@ -68,7 +68,7 @@ if [ "$update_users" = "yes" ]; then
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

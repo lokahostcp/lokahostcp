@@ -1,0 +1,55 @@
+#!/bin/bash
+# info: update lokahostcp package/configs
+# options: PACKAGE
+#
+# example: v-update-sys-lokahostcp lokahostcp-php
+#
+# This function runs as apt update trigger. It pulls shell script from lokahostcp
+# server and runs it. (lokahostcp, lokahostcp-nginx and lokahostcp-php are valid options)
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+package=$1
+
+# Includes
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# load config file
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
+
+#----------------------------------------------------------#
+#                    Verifications                         #
+#----------------------------------------------------------#
+
+# Checking arg number
+check_args '1' "$#" 'PACKAGE'
+is_lokahostcp_package "lokahostcp lokahostcp-nginx lokahostcp-php" "$package"
+
+# Perform verification if read-only mode is enabled
+check_lokahostcp_demo_mode
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Update repo
+apt-get update -o Dir::Etc::sourcelist="sources.list.d/lokahostcp.list" \
+	-o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0" -qq
+
+# Update lokahostcp package
+apt-get install $package -qq > /dev/null 2>&1
+check_result $? "$package update failed" "$E_UPDATE"
+
+#----------------------------------------------------------#
+#                       Lokahostcp                             #
+#----------------------------------------------------------#
+
+# Logging
+log_event "$OK" "$ARGUMENTS"
+
+exit

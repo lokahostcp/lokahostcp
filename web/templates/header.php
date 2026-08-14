@@ -3,9 +3,9 @@
 
 <head>
 <?php
-require $_SERVER["LOKAHOST"] . "/web/templates/includes/title.php";
-require $_SERVER["LOKAHOST"] . "/web/templates/includes/css.php";
-require $_SERVER["LOKAHOST"] . "/web/templates/includes/js.php";
+require $_SERVER["LOKAHOSTCP"] . "/web/templates/includes/title.php";
+require $_SERVER["LOKAHOSTCP"] . "/web/templates/includes/css.php";
+require $_SERVER["LOKAHOSTCP"] . "/web/templates/includes/js.php";
 ?>
 </head>
 

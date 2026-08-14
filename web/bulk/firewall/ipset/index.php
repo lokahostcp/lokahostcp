@@ -37,7 +37,7 @@ switch ($action) {
 
 foreach ($setname as $value) {
 	$v_name = quoteshellarg($value);
-	exec(LOKAHOST_CMD . $cmd . " " . $v_name, $output, $return_var);
+	exec(LOKAHOSTCP_CMD . $cmd . " " . $v_name, $output, $return_var);
 }
 
 header("Location: /list/firewall/ipset/");

@@ -2,9 +2,9 @@
 
 # ======================================================== #
 #
-# Lokahost Control Panel Installation Routine
+# Lokahostcp Control Panel Installation Routine
 # Automatic OS detection wrapper
-# https://www.lokahost.com/
+# https://www.lokahost.online/
 #
 # Currently Supported Operating Systems:
 #
@@ -79,7 +79,7 @@ fi
 no_support_message() {
 	echo "****************************************************"
 	echo "Your operating system (OS) is not supported by"
-	echo "Lokahost Control Panel. Officially supported releases:"
+	echo "Lokahostcp Control Panel. Officially supported releases:"
 	echo "****************************************************"
 	echo "  Debian 10, 11, 12"
 	echo "  Ubuntu 20.04, 22.04 LTS"
@@ -97,7 +97,7 @@ check_wget_curl() {
 	# Check wget
 	if [ -e '/usr/bin/wget' ]; then
 		if [ -e '/etc/redhat-release' ]; then
-			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-rhel.sh -O lcp-install-rhel.sh
+			wget -q https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install-rhel.sh -O lcp-install-rhel.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-rhel.sh $*
 				exit
@@ -106,7 +106,7 @@ check_wget_curl() {
 				exit 1
 			fi
 		else
-			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-$type.sh -O lcp-install-$type.sh
+			wget -q https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install-$type.sh -O lcp-install-$type.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-$type.sh $*
 				exit
@@ -120,7 +120,7 @@ check_wget_curl() {
 	# Check curl
 	if [ -e '/usr/bin/curl' ]; then
 		if [ -e '/etc/redhat-release' ]; then
-			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-rhel.sh
+			curl -s -O https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install-rhel.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-rhel.sh $*
 				exit
@@ -129,7 +129,7 @@ check_wget_curl() {
 				exit 1
 			fi
 		else
-			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-$type.sh
+			curl -s -O https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install-$type.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-$type.sh $*
 				exit

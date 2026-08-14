@@ -116,7 +116,7 @@
 					</div>
 				</div>
 				<div class="sidebar-right-grid-sidebar">
-					<?php require $_SERVER["LOKAHOST"] . "/web/templates/includes/email-settings-panel.php"; ?>
+					<?php require $_SERVER["LOKAHOSTCP"] . "/web/templates/includes/email-settings-panel.php"; ?>
 				</div>
 			</div>
 		</div>
