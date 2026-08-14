@@ -68,9 +68,37 @@ this endpoint is a single point of failure as currently written.
 
 ### 4. `github.com/lokahostcp/lokahostcp` — source repository
 
-The git-based update path (`bin/v-update-sys-lokahostcp-git`) clones from
-here, and failure notifications throughout `bin/` link users to
-`/issues`. The repository must exist and be public.
+The repository exists and is public. Its `release` branch is what the
+documented install command downloads:
+
+```bash
+wget https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install.sh
+```
+
+**That branch is stale, and the install it produces fails.** As of the last
+check it was pushed 2024-01-30 and still carries pre-rebrand content:
+
+- It refers to `lokahost.com`, not `lokahost.online`.
+- Worse, `lcp-install.sh` fetches its second stage from
+  `raw.githubusercontent.com/lokahost/lokahost/...` — a **different
+  organisation**, which returns 404. So the first stage downloads, then
+  immediately fails to fetch the platform installer.
+
+This is the organisation split that was unified in this tree (546 references
+moved from `lokahost/lokahost` to `lokahostcp/lokahostcp`). The fix is
+published, not local: push this branch to the GitHub `release` branch, which
+is currently protected.
+
+Verify afterwards that both stages resolve:
+
+```bash
+curl -sI https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install.sh | head -1
+curl -sI https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install-debian.sh | head -1
+```
+
+The git-based update path (`bin/v-update-sys-lokahostcp-git`) clones from the
+same repository, and failure notifications throughout `bin/` link users to
+`/issues`.
 
 ## Non-blocking — referenced but degrade gracefully
 

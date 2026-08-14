@@ -1,19 +1,14 @@
 <h1 align="center"><a href="https://www.lokahost.online/">Lokahostcp Control Panel</a></h1>
 
-![lokahostcp Web Interface screenshot](https://storage.lokahost.online/lokahostcpscreen.png)
-
 <h2 align="center">Lightweight and powerful control panel for the modern web</h2>
 
-<p align="center"><strong>Latest stable release:</strong> Version 1.8.10 | <a href="https://github.com/lokahostcp/lokahostcp/blob/release/CHANGELOG.md">View Changelog</a></p>
+<p align="center"><strong>Latest release:</strong> Version 1.0.0 | <a href="https://github.com/lokahostcp/lokahostcp/blob/release/CHANGELOG.md">View Changelog</a></p>
 
 <p align="center">
-	<a href="https://www.lokahost.online/">Lokahostcp</a> |
+	<a href="https://lokahost.online/">Lokahostcp</a> |
 	<a href="https://docs.lokahost.online/">Documentation</a> |
 	<a href="https://forum.lokahost.online/">Forum</a>
 	<br/><br/>
-	<a href="https://drone.lokahost.online/lokahostcp/lokahostcp">
-		<img src="https://drone.lokahost.online/api/badges/lokahostcp/lokahostcp/status.svg?ref=refs/heads/main" alt="Drone Status"/>
-	</a>
 	<a href="https://github.com/lokahostcp/lokahostcp/actions/workflows/lint.yml">
 		<img src="https://github.com/lokahostcp/lokahostcp/actions/workflows/lint.yml/badge.svg" alt="Lint Status"/>
 	</a>
@@ -22,13 +17,6 @@
 ## **Welcome!**
 
 Lokahostcp Control Panel is designed to provide administrators an easy to use web and command line interface, enabling them to quickly deploy and manage web domains, mail accounts, DNS zones, and databases from one central dashboard without the hassle of manually deploying and configuring individual components or services.
-
-## Donate
-<br />
-Bitcoin (BTC): 3D3h9bn8sGFTpH8prZZ5NYtY8CUBywPzjr<br>
-Ethereum (ERC20): 0x7a8d7f7da88e94bcf90ecba94ded6ab318e14ef5<br>
-Binance Smart Chain (BEP20): 0xc998315a5e739007ddb0b2c9762fb7c1bff4004d<br>
-Solana (SOL): DDQbkwghHxDTngPuiBCCF9eC6HpsEutm3Ryywnscrfp5<br>
 
 ## Features and Services
 

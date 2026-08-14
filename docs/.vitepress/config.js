@@ -22,11 +22,10 @@ export default defineConfig({
 
 		nav: nav(),
 
-		socialLinks: [
-			{ icon: 'github', link: 'https://github.com/lokahostcp/lokahostcp' },
-			{ icon: 'twitter', link: 'https://twitter.com/LokahostcpPanel' },
-			{ icon: 'facebook', link: 'https://www.facebook.com/lokahostcp' },
-		],
+		// The Twitter and Facebook handles here were produced by renaming the
+		// upstream project's accounts, so they never pointed at this project.
+		// Re-add them once accounts actually exist.
+		socialLinks: [{ icon: 'github', link: 'https://github.com/lokahostcp/lokahostcp' }],
 
 		sidebar: { '/docs/': sidebarDocs() },
 
