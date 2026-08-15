@@ -865,7 +865,6 @@ echo "[ * ] Node.js 20.x"
 # fail on every install with:
 #   The repository '.../node_20.x bookworm Release' does not have a Release file
 echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > $apt/nodesource.list
-echo "deb-src [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >> $apt/nodesource.list
 curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee /usr/share/keyrings/nodesource.gpg > /dev/null 2>&1
 
 # Installing PostgreSQL repo
@@ -2387,8 +2386,18 @@ echo
 chown lokahostcpweb:lokahostcpweb $LOKAHOSTCP/data/sessions
 
 # Starting Lokahostcp service
+#
+# `restart`, not `start`: by this point earlier steps have already brought the
+# panel up, and re-running the LSB init script makes nginx try to bind 8083 a
+# second time:
+#   nginx: [emerg] bind() to 0.0.0.0:8083 failed (98: Address already in use)
+# That exit status reaches check_result, which aborts the installer - silently
+# skipping everything below, including creating /backup and the Let's Encrypt
+# cron job. The panel looked fine while backups and host SSL were missing.
+# restart is idempotent: it starts a stopped service and cleanly cycles a
+# running one.
 update-rc.d lokahostcp defaults
-systemctl start lokahostcp
+systemctl restart lokahostcp
 check_result $? "lokahostcp start failed"
 
 # Create backup folder and set correct permission
