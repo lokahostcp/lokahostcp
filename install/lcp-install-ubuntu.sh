@@ -675,10 +675,31 @@ if [ "$interactive" = 'yes' ]; then
 	fi
 fi
 
+# In non-interactive mode there is nobody to answer a prompt: `read` hits EOF,
+# returns immediately with an empty value, and the surrounding `while validate_*`
+# loop spins forever printing its error. Observed filling 112 MB of log in about
+# three minutes before being killed.
+#
+# Fail fast with the flag the operator actually needs to pass instead.
+require_value() {
+	# $1 = flag name, $2 = value
+	if [ -z "$2" ] && [ "$interactive" = 'no' ]; then
+		echo
+		echo "Error: $1 is required when --interactive no is used."
+		echo "       Nothing can answer the prompt in an unattended install."
+		exit 1
+	fi
+}
+
 #Validate Username / Password / Email / Hostname even when interactive = no
+require_value "--username" "$username"
 if [ -z "$username" ]; then
 	while validate_username; do
-		read -p 'Please enter administrator username: ' username
+		read -p 'Please enter administrator username: ' username || {
+			echo
+			echo 'Error: no input available (stdin closed).'
+			exit 1
+		}
 	done
 else
 	if validate_username; then
@@ -687,9 +708,14 @@ else
 fi
 
 #Ask for the password
+require_value "--password" "$vpass"
 if [ -z "$vpass" ]; then
 	while validate_password; do
-		read -p 'Please enter administrator password: ' vpass
+		read -p 'Please enter administrator password: ' vpass || {
+			echo
+			echo 'Error: no input available (stdin closed).'
+			exit 1
+		}
 	done
 else
 	if validate_password; then
@@ -699,10 +725,15 @@ else
 fi
 
 # Asking for contact email
+require_value "--email" "$email"
 if [ -z "$email" ]; then
 	while validate_email; do
 		echo -e "\nPlease use a valid emailadress (ex. info@domain.tld)."
-		read -p 'Please enter admin email address: ' email
+		read -p 'Please enter admin email address: ' email || {
+			echo
+			echo 'Error: no input available (stdin closed).'
+			exit 1
+		}
 	done
 else
 	if validate_email; then

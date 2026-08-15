@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 ob_start();
 $TAB = "USER";
@@ -205,7 +205,11 @@ if (!empty($_POST["save"])) {
 
 	// Disable twofa
 	if (empty($_POST["v_twofa"]) && !empty($v_twofa) && empty($_SESSION["error_msg"])) {
-		exec(LOKAHOSTCP_CMD . "v-delete-user-2fa " . quoteshellarg($v_username), $output, $return_var);
+		exec(
+			LOKAHOSTCP_CMD . "v-delete-user-2fa " . quoteshellarg($v_username),
+			$output,
+			$return_var,
+		);
 		check_return_code($return_var, $output);
 		unset($output);
 		$v_twofa = "";
@@ -357,7 +361,11 @@ if (!empty($_POST["save"])) {
 			if (!empty($_POST["v_role"])) {
 				$v_role = quoteshellarg($_POST["v_role"]);
 				exec(
-					LOKAHOSTCP_CMD . "v-change-user-role " . quoteshellarg($v_username) . " " . $v_role,
+					LOKAHOSTCP_CMD .
+						"v-change-user-role " .
+						quoteshellarg($v_username) .
+						" " .
+						$v_role,
 					$output,
 					$return_var,
 				);
@@ -410,7 +418,11 @@ if (!empty($_POST["save"])) {
 	if ($v_language != $_POST["v_language"] && empty($_SESSION["error_msg"])) {
 		$v_language = quoteshellarg($_POST["v_language"]);
 		exec(
-			LOKAHOSTCP_CMD . "v-change-user-language " . quoteshellarg($v_username) . " " . $v_language,
+			LOKAHOSTCP_CMD .
+				"v-change-user-language " .
+				quoteshellarg($v_username) .
+				" " .
+				$v_language,
 			$output,
 			$return_var,
 		);
@@ -433,7 +445,11 @@ if (!empty($_POST["save"])) {
 		} else {
 			$v_email = quoteshellarg($_POST["v_email"]);
 			exec(
-				LOKAHOSTCP_CMD . "v-change-user-contact " . quoteshellarg($v_username) . " " . $v_email,
+				LOKAHOSTCP_CMD .
+					"v-change-user-contact " .
+					quoteshellarg($v_username) .
+					" " .
+					$v_email,
 				$output,
 				$return_var,
 			);

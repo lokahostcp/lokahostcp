@@ -14,7 +14,7 @@ use Filegator\Services\Auth\AuthInterface;
 use Filegator\Services\Auth\User;
 use Filegator\Services\Auth\UsersCollection;
 use Filegator\Services\Service;
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 /**
  * @codeCoverageIgnore

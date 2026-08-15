@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 $TAB = "SEARCH";
 
@@ -33,7 +33,11 @@ if ($_SESSION["userContext"] === "admin" && $_SESSION["look"] == "") {
 		exec(LOKAHOSTCP_CMD . "v-search-object " . $q . " json", $output, $return_var);
 	}
 } else {
-	exec(LOKAHOSTCP_CMD . "v-search-user-object " . $user . " " . $q . " json", $output, $return_var);
+	exec(
+		LOKAHOSTCP_CMD . "v-search-user-object " . $user . " " . $q . " json",
+		$output,
+		$return_var,
+	);
 }
 
 $data = json_decode(implode("", $output), true);

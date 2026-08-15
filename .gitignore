@@ -49,3 +49,6 @@ npm-debug.log
 
 # optional eslint cache
 .eslintcache
+
+# Installed at deploy time by v-add-sys-filemanager, not tracked.
+install/deb/filemanager/filegator/vendor/

@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 ob_start();
 unset($_SESSION["error_msg"]);
@@ -46,7 +46,12 @@ $valiases = explode(",", $data[$v_domain]["ALIAS"]);
 $v_ssl = $data[$v_domain]["SSL"];
 if (!empty($v_ssl)) {
 	exec(
-		LOKAHOSTCP_CMD . "v-list-web-domain-ssl " . $user . " " . quoteshellarg($v_domain) . " json",
+		LOKAHOSTCP_CMD .
+			"v-list-web-domain-ssl " .
+			$user .
+			" " .
+			quoteshellarg($v_domain) .
+			" json",
 		$output,
 		$return_var,
 	);
@@ -222,7 +227,12 @@ if (!empty($_POST["save"])) {
 	// Change dns domain IP
 	if ($v_ip != $_POST["v_ip"] && empty($_SESSION["error_msg"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-list-dns-domain " . $user . " " . quoteshellarg($v_domain) . " json",
+			LOKAHOSTCP_CMD .
+				"v-list-dns-domain " .
+				$user .
+				" " .
+				quoteshellarg($v_domain) .
+				" json",
 			$output,
 			$return_var,
 		);
@@ -250,7 +260,12 @@ if (!empty($_POST["save"])) {
 	if ($v_ip != $_POST["v_ip"] && empty($_SESSION["error_msg"])) {
 		foreach ($valiases as $v_alias) {
 			exec(
-				LOKAHOSTCP_CMD . "v-list-dns-domain " . $user . " " . quoteshellarg($v_alias) . " json",
+				LOKAHOSTCP_CMD .
+					"v-list-dns-domain " .
+					$user .
+					" " .
+					quoteshellarg($v_alias) .
+					" json",
 				$output,
 				$return_var,
 			);
@@ -277,7 +292,12 @@ if (!empty($_POST["save"])) {
 	// Change mail domain IP
 	if ($v_ip != $_POST["v_ip"] && empty($_SESSION["error_msg"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-list-mail-domain " . $user . " " . quoteshellarg($v_domain) . " json",
+			LOKAHOSTCP_CMD .
+				"v-list-mail-domain " .
+				$user .
+				" " .
+				quoteshellarg($v_domain) .
+				" json",
 			$output,
 			$return_var,
 		);
@@ -372,7 +392,11 @@ if (!empty($_POST["save"])) {
 				unset($output);
 			} else {
 				exec(
-					LOKAHOSTCP_CMD . "v-delete-fastcgi-cache " . $user . " " . quoteshellarg($v_domain),
+					LOKAHOSTCP_CMD .
+						"v-delete-fastcgi-cache " .
+						$user .
+						" " .
+						quoteshellarg($v_domain),
 					$output,
 					$return_var,
 				);
@@ -508,7 +532,11 @@ if (!empty($_POST["save"])) {
 
 				if (empty($_SESSION["error_msg"])) {
 					exec(
-						LOKAHOSTCP_CMD . "v-list-dns-domain " . $user . " " . quoteshellarg($v_domain),
+						LOKAHOSTCP_CMD .
+							"v-list-dns-domain " .
+							$user .
+							" " .
+							quoteshellarg($v_domain),
 						$output,
 						$return_var,
 					);
@@ -555,7 +583,11 @@ if (!empty($_POST["save"])) {
 				unset($output);
 				if (empty($_SESSION["error_msg"])) {
 					exec(
-						LOKAHOSTCP_CMD . "v-list-dns-domain " . $user . " " . quoteshellarg($v_domain),
+						LOKAHOSTCP_CMD .
+							"v-list-dns-domain " .
+							$user .
+							" " .
+							quoteshellarg($v_domain),
 						$output,
 						$return_var,
 					);
@@ -982,7 +1014,11 @@ if (!empty($_POST["save"])) {
 		empty($_SESSION["error_msg"])
 	) {
 		exec(
-			LOKAHOSTCP_CMD . "v-delete-web-domain-ssl-force " . $user . " " . quoteshellarg($v_domain),
+			LOKAHOSTCP_CMD .
+				"v-delete-web-domain-ssl-force " .
+				$user .
+				" " .
+				quoteshellarg($v_domain),
 			$output,
 			$return_var,
 		);
@@ -996,7 +1032,11 @@ if (!empty($_POST["save"])) {
 	// Delete SSL HSTS
 	if ($v_ssl_hsts == "yes" && empty($_POST["v_ssl_hsts"]) && empty($_SESSION["error_msg"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-delete-web-domain-ssl-hsts " . $user . " " . quoteshellarg($v_domain),
+			LOKAHOSTCP_CMD .
+				"v-delete-web-domain-ssl-hsts " .
+				$user .
+				" " .
+				quoteshellarg($v_domain),
 			$output,
 			$return_var,
 		);
@@ -1058,7 +1098,11 @@ if (!empty($_POST["save"])) {
 	// Delete web stats authorization
 	if (!empty($v_stats_user) && empty($_POST["v_stats_auth"]) && empty($_SESSION["error_msg"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-delete-web-domain-stats-user " . $user . " " . quoteshellarg($v_domain),
+			LOKAHOSTCP_CMD .
+				"v-delete-web-domain-stats-user " .
+				$user .
+				" " .
+				quoteshellarg($v_domain),
 			$output,
 			$return_var,
 		);
@@ -1530,7 +1574,11 @@ if (!empty($_POST["save"])) {
 
 	if (!empty($v_redirect) && empty($_POST["v-redirect-checkbox"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-delete-web-domain-redirect " . $user . " " . quoteshellarg($v_domain),
+			LOKAHOSTCP_CMD .
+				"v-delete-web-domain-redirect " .
+				$user .
+				" " .
+				quoteshellarg($v_domain),
 			$output,
 			$return_var,
 		);

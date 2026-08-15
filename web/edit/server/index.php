@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 $TAB = "SERVER";
 
@@ -400,7 +400,9 @@ if (!empty($_POST["save"])) {
 	if (empty($_SESSION["error_msg"])) {
 		if ($_POST["v_theme"] != $_SESSION["THEME"]) {
 			exec(
-				LOKAHOSTCP_CMD . "v-change-sys-config-value THEME " . quoteshellarg($_POST["v_theme"]),
+				LOKAHOSTCP_CMD .
+					"v-change-sys-config-value THEME " .
+					quoteshellarg($_POST["v_theme"]),
 				$output,
 				$return_var,
 			);
@@ -692,7 +694,9 @@ if (!empty($_POST["save"])) {
 	if (empty($_SESSION["error_msg"])) {
 		if ($_POST["v_mysql_url"] != $_SESSION["DB_PMA_ALIAS"]) {
 			exec(
-				LOKAHOSTCP_CMD . "v-change-sys-db-alias pma " . quoteshellarg($_POST["v_mysql_url"]),
+				LOKAHOSTCP_CMD .
+					"v-change-sys-db-alias pma " .
+					quoteshellarg($_POST["v_mysql_url"]),
 				$output,
 				$return_var,
 			);
@@ -709,7 +713,9 @@ if (!empty($_POST["save"])) {
 		}
 		if ($_POST["v_pgsql_url"] != $_SESSION["DB_PGA_ALIAS"]) {
 			exec(
-				LOKAHOSTCP_CMD . "v-change-sys-db-alias pga " . quoteshellarg($_POST["v_pgsql_url"]),
+				LOKAHOSTCP_CMD .
+					"v-change-sys-db-alias pga " .
+					quoteshellarg($_POST["v_pgsql_url"]),
 				$output,
 				$return_var,
 			);

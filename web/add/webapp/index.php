@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 ob_start();
 $TAB = "WEB";
@@ -61,7 +61,11 @@ if (!empty($_GET["app"])) {
 				);
 			}
 			if ($info["enabled"] == true) {
-				$installer = new \Lokahostcp\WebApp\AppWizard($app_installer, $v_domain, $lokahostcp);
+				$installer = new \Lokahostcp\WebApp\AppWizard(
+					$app_installer,
+					$v_domain,
+					$lokahostcp,
+				);
 				$GLOBALS["WebappInstaller"] = $installer;
 			}
 		} catch (Exception $e) {

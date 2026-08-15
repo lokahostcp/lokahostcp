@@ -4,7 +4,7 @@ namespace Lokahostcp\WebApp\Installers\Wordpress;
 
 use Lokahostcp\System\Util;
 use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 class WordpressSetup extends BaseSetup {
 	protected $appInfo = [

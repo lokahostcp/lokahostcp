@@ -313,11 +313,20 @@ fi
 # empty and turned `make -j $NUM_CPUS` into an unbounded `make -j` — a fork
 # storm rather than a parallel build. nproc is portable; the grep is kept as a
 # fallback for the physical-core count on x86.
-NUM_CPUS=$(nproc 2> /dev/null)
-if [ -z "$NUM_CPUS" ]; then
-	NUM_CPUS=$(grep "^cpu cores" /proc/cpuinfo | uniq | awk '{print $4}')
+#
+# Overridable because parallel make is not always safe: building under qemu
+# emulation (e.g. amd64 on an arm64 host) fails with
+#   make[3]: *** write jobserver: Bad file descriptor.  Stop.
+# which aborts zlib and leaves nginx uncompiled. Since `set -e` is disabled
+# here, the build continues and dpkg-deb emits a package containing only the
+# init script. Use NUM_CPUS=1 for emulated builds.
+if [ -z "${NUM_CPUS:-}" ]; then
+	NUM_CPUS=$(nproc 2> /dev/null)
+	if [ -z "$NUM_CPUS" ]; then
+		NUM_CPUS=$(grep "^cpu cores" /proc/cpuinfo | uniq | awk '{print $4}')
+	fi
+	[ -z "$NUM_CPUS" ] && NUM_CPUS=1
 fi
-[ -z "$NUM_CPUS" ] && NUM_CPUS=1
 
 if [ "$LOKAHOSTCP_DEBUG" ]; then
 	if [ "$OSTYPE" = 'rhel' ]; then

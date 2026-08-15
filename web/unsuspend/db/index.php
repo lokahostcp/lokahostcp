@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 // Init
 ob_start();
@@ -10,7 +10,11 @@ verify_csrf($_GET);
 
 if (!empty($_GET["database"])) {
 	$v_database = quoteshellarg($_GET["database"]);
-	exec(LOKAHOSTCP_CMD . "v-unsuspend-database " . $user . " " . $v_database, $output, $return_var);
+	exec(
+		LOKAHOSTCP_CMD . "v-unsuspend-database " . $user . " " . $v_database,
+		$output,
+		$return_var,
+	);
 	check_return_code($return_var, $output);
 	unset($output);
 }

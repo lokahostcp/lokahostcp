@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace Lokahostcp\System;
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 class LokahostcpApp {
 	/** @var string[] */
