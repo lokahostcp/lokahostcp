@@ -91,16 +91,42 @@ could never have validated packages signed by this project.
 | Public half  | `https://apt.lokahost.online/pubkey.gpg`                                        |
 | Private half | `~/lokahostcp-signing/` on the maintainer's workstation — **not** on any server |
 
-Two things need your attention:
+**The private key is passphrase-protected.** Verified behaviourally: signing
+with an empty passphrase is refused, signing with the stored passphrase
+succeeds. The passphrase is 32 characters of `openssl rand` entropy and is
+**not written down anywhere in this repository**; it lives in the macOS
+Keychain on the maintainer's workstation:
 
-1. **The private key has no passphrase.** That was necessary to script the
-   signing. Anyone with read access to that file can sign packages your users
-   install as root. Add one with
-   `gpg --change-passphrase 98D8AFF10FDC39E8`, accepting that publishing then
-   becomes interactive. Back the key up offline; losing it means every existing
-   install stops trusting updates.
-2. **The RPM repository is published and uses the same key.** See
-   `rpm.lokahost.online` below.
+```bash
+security find-generic-password -a lokahostcp-signing \
+	-s "Lokahostcp GPG signing key 98D8AFF10FDC39E8" -w
+```
+
+Signing is therefore still scriptable without an interactive prompt — the
+passphrase is read from the Keychain and passed on a file descriptor, never on
+a command line where it would land in shell history or `ps`:
+
+```bash
+PASS="$(security find-generic-password -a lokahostcp-signing \
+	-s "Lokahostcp GPG signing key 98D8AFF10FDC39E8" -w)"
+printf '%s' "$PASS" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 \
+	--local-user 98D8AFF10FDC39E8 --armor --detach-sign --output Release.gpg Release
+```
+
+Two consequences worth knowing:
+
+1. **The backup at `~/lokahostcp-signing/lokahostcp-signing-key.PRIVATE.asc` is
+   now encrypted with that passphrase**, and the earlier unprotected export was
+   shredded — an unprotected copy on disk would have made the passphrase
+   pointless. Confirmed by importing the backup into a clean keyring: it
+   refuses an empty passphrase and signs with the real one.
+2. **Losing the Keychain entry loses the key.** Copy the passphrase into a
+   password manager, and keep the backup and
+   `FB8AD618...0FDC39E8.rev` (the revocation certificate) somewhere offline.
+   Without them, every existing install stops trusting updates and the only
+   remedy is a new key that every user must fetch by hand.
+
+The **RPM repository** uses the same key — see `rpm.lokahost.online` below.
 
 Never publish the private key. Only the public half belongs on the web server.
 
