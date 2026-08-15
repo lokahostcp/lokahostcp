@@ -3,11 +3,11 @@ Package: lokahostcp-php
 Priority: optional
 Version: 8.2.11-1
 Section: admin
-Maintainer: HestaCP <info@lokahost.online>
+Maintainer: Lokahostcp <info@lokahost.online>
 Homepage: https://www.lokahost.online
 Architecture: amd64
 Depends: lokahostcp, libzip4, unzip, libonig5 | libonig4 | libonig2
-Conflct: libzip5
+Conflicts: libzip5
 Description: lokahostcp php-fpm
  lokahostcp is an open source hosting control panel.
  lokahostcp has a clean and focused interface without the clutter.
