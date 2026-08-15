@@ -4,7 +4,7 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 try {
 	require_once "vendor/autoload.php";
@@ -74,7 +74,11 @@ if (
 ) {
 	$v_user = quoteshellarg($_SESSION["user"]);
 	$v_session_id = quoteshellarg($_SESSION["token"]);
-	exec(LOKAHOSTCP_CMD . "v-log-user-logout " . $v_user . " " . $v_session_id, $output, $return_var);
+	exec(
+		LOKAHOSTCP_CMD . "v-log-user-logout " . $v_user . " " . $v_session_id,
+		$output,
+		$return_var,
+	);
 	destroy_sessions();
 	header("Location: /login/");
 	exit();
@@ -105,7 +109,11 @@ if (isset($_SESSION["user"])) {
 		$username = $_SESSION["look"];
 	}
 
-	exec(LOKAHOSTCP_CMD . "v-list-user " . quoteshellarg($username) . " json", $output, $return_var);
+	exec(
+		LOKAHOSTCP_CMD . "v-list-user " . quoteshellarg($username) . " json",
+		$output,
+		$return_var,
+	);
 	$data = json_decode(implode("", $output), true);
 	unset($output, $return_var);
 	$_SESSION["login_shell"] = $data[$username]["SHELL"];

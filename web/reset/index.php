@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 define("NO_AUTH_REQUIRED", true);
 $TAB = "RESET PASSWORD";
@@ -170,7 +170,11 @@ if (!empty($_POST["user"]) && !empty($_POST["code"]) && !empty($_POST["password"
 			$rkey = $data[$user]["RKEY"];
 			if (password_verify($_POST["code"], $rkey)) {
 				unset($output);
-				exec(LOKAHOSTCP_CMD . "v-get-user-value " . $v_user . " RKEYEXP", $output, $return_var);
+				exec(
+					LOKAHOSTCP_CMD . "v-get-user-value " . $v_user . " RKEYEXP",
+					$output,
+					$return_var,
+				);
 				if ($output[0] > time() - 900) {
 					$v_password = tempnam("/tmp", "vst");
 					$fp = fopen($v_password, "w");

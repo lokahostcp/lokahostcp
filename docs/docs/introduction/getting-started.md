@@ -117,6 +117,7 @@ To choose what software gets installed, you can provide flags to the installatio
 ```bash
 bash lcp-install.sh \
 	--interactive no \
+	--username admin \
 	--hostname host.domain.tld \
 	--email email@domain.tld \
 	--password p4ssw0rd \
@@ -126,6 +127,10 @@ bash lcp-install.sh \
 	--clamav no \
 	--spamassassin no
 ```
+
+`--username` is required with `--interactive no`. There is no prompt to answer
+in an unattended install, so the installer stops with an error if it is
+missing rather than waiting for input that will never arrive.
 
 This command will install Lokahostcp in French with the following software:
 

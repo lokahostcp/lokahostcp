@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 // Init
 ob_start();
@@ -11,7 +11,11 @@ verify_csrf($_GET);
 // Mail domain
 if (!empty($_GET["domain"]) && empty($_GET["account"])) {
 	$v_domain = quoteshellarg($_GET["domain"]);
-	exec(LOKAHOSTCP_CMD . "v-unsuspend-mail-domain " . $user . " " . $v_domain, $output, $return_var);
+	exec(
+		LOKAHOSTCP_CMD . "v-unsuspend-mail-domain " . $user . " " . $v_domain,
+		$output,
+		$return_var,
+	);
 	if ($return_var != 0) {
 		$error = implode("<br>", $output);
 		if (empty($error)) {

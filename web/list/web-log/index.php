@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 include $_SERVER["DOCUMENT_ROOT"] . "/inc/main.php";
 
@@ -16,7 +16,11 @@ if ($_GET["type"] == "error") {
 // Header
 include $_SERVER["DOCUMENT_ROOT"] . "/templates/pages/list_weblog.php";
 
-exec(LOKAHOSTCP_CMD . "v-list-web-domain-" . $type . "log $user " . $v_domain, $output, $return_var);
+exec(
+	LOKAHOSTCP_CMD . "v-list-web-domain-" . $type . "log $user " . $v_domain,
+	$output,
+	$return_var,
+);
 
 if ($return_var == 0) {
 	foreach ($output as $file) {

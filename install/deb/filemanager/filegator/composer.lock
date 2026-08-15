@@ -11,12 +11,12 @@
 			"version": "v4.2.7",
 			"source": {
 				"type": "git",
-				"url": "https://github.com/dg/dibi.git",
+				"url": "https://github.com/dibi/dibi.git",
 				"reference": "7fa05f381b23fdc59af98caeb03b1ae8ed1e03ed"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/dg/dibi/zipball/7fa05f381b23fdc59af98caeb03b1ae8ed1e03ed",
+				"url": "https://api.github.com/repos/dibi/dibi/zipball/7fa05f381b23fdc59af98caeb03b1ae8ed1e03ed",
 				"reference": "7fa05f381b23fdc59af98caeb03b1ae8ed1e03ed",
 				"shasum": ""
 			},
@@ -77,16 +77,16 @@
 			"time": "2022-11-18T03:40:51+00:00"
 		},
 		{
-			"name": "lokahostcp/phpquoteshellarg",
+			"name": "hestiacp/phpquoteshellarg",
 			"version": "v1.0.1-p3",
 			"source": {
 				"type": "git",
-				"url": "https://github.com/lokahostcp/phpquoteshellarg.git",
+				"url": "https://github.com/hestiacp/phpquoteshellarg.git",
 				"reference": "89cbab9b81b4482127a7bd521ccb6394dd8cda37"
 			},
 			"dist": {
 				"type": "zip",
-				"url": "https://api.github.com/repos/lokahostcp/phpquoteshellarg/zipball/89cbab9b81b4482127a7bd521ccb6394dd8cda37",
+				"url": "https://api.github.com/repos/hestiacp/phpquoteshellarg/zipball/89cbab9b81b4482127a7bd521ccb6394dd8cda37",
 				"reference": "89cbab9b81b4482127a7bd521ccb6394dd8cda37",
 				"shasum": ""
 			},
@@ -110,7 +110,7 @@
 				"quoteshellarg"
 			],
 			"support": {
-				"source": "https://github.com/lokahostcp/phpquoteshellarg/tree/v1.0.1-p3"
+				"source": "https://github.com/hestiacp/phpquoteshellarg/tree/v1.0.1-p3"
 			},
 			"time": "2022-07-17T14:48:05+00:00"
 		},
@@ -4757,15 +4757,15 @@
 	],
 	"aliases": [],
 	"minimum-stability": "stable",
-	"stability-flags": [],
+	"stability-flags": {},
 	"prefer-stable": false,
 	"prefer-lowest": false,
 	"platform": {
 		"php": "^7.2"
 	},
-	"platform-dev": [],
+	"platform-dev": {},
 	"platform-overrides": {
 		"php": "7.2.5"
 	},
-	"plugin-api-version": "2.3.0"
+	"plugin-api-version": "2.9.0"
 }

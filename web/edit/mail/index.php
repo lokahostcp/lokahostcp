@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 ob_start();
 $TAB = "MAIL";
@@ -263,7 +263,11 @@ if (!empty($_POST["save"]) && !empty($_GET["domain"]) && empty($_GET["account"])
 	// Add DKIM
 	if ($v_dkim == "no" && !empty($_POST["v_dkim"]) && empty($_SESSION["error_msg"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-add-mail-domain-dkim " . $v_username . " " . quoteshellarg($v_domain),
+			LOKAHOSTCP_CMD .
+				"v-add-mail-domain-dkim " .
+				$v_username .
+				" " .
+				quoteshellarg($v_domain),
 			$output,
 			$return_var,
 		);
@@ -402,7 +406,12 @@ if (!empty($_POST["save"]) && !empty($_GET["domain"]) && empty($_GET["account"])
 		if (empty($_POST["v_webmail"])) {
 			if (empty($_SESSION["error_msg"])) {
 				exec(
-					LOKAHOSTCP_CMD . "v-delete-mail-domain-webmail " . $user . " " . $v_domain . " yes",
+					LOKAHOSTCP_CMD .
+						"v-delete-mail-domain-webmail " .
+						$user .
+						" " .
+						$v_domain .
+						" yes",
 					$output,
 					$return_var,
 				);
@@ -537,7 +546,11 @@ if (!empty($_POST["save"]) && !empty($_GET["domain"]) && empty($_GET["account"])
 	// Delete SSL certificate
 	if ($v_ssl == "yes" && empty($_POST["v_ssl"]) && empty($_SESSION["error_msg"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-delete-mail-domain-ssl " . $v_username . " " . quoteshellarg($v_domain),
+			LOKAHOSTCP_CMD .
+				"v-delete-mail-domain-ssl " .
+				$v_username .
+				" " .
+				quoteshellarg($v_domain),
 			$output,
 			$return_var,
 		);

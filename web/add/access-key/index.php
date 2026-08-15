@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 ob_start();
 $TAB = "Access Key";
 
@@ -66,7 +66,14 @@ if (!empty($_POST["ok"])) {
 	// Add access key
 	if (empty($_SESSION["error_msg"])) {
 		exec(
-			LOKAHOSTCP_CMD . "v-add-access-key " . $user . " " . $v_apis . " " . $v_comment . " json",
+			LOKAHOSTCP_CMD .
+				"v-add-access-key " .
+				$user .
+				" " .
+				$v_apis .
+				" " .
+				$v_comment .
+				" json",
 			$output,
 			$return_var,
 		);

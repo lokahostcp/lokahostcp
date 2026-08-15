@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 ob_start();
 $TAB = "MAIL";
@@ -132,7 +132,12 @@ if (!empty($_POST["ok"])) {
 		if (empty($_POST["v_webmail"])) {
 			if (empty($_SESSION["error_msg"])) {
 				exec(
-					LOKAHOSTCP_CMD . "v-delete-mail-domain-webmail " . $user . " " . $v_domain . " yes",
+					LOKAHOSTCP_CMD .
+						"v-delete-mail-domain-webmail " .
+						$user .
+						" " .
+						$v_domain .
+						" yes",
 					$output,
 					$return_var,
 				);

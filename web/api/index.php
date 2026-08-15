@@ -1,5 +1,5 @@
 <?php
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 try {
 	require_once "../inc/vendor/autoload.php";
@@ -91,7 +91,11 @@ function api_legacy(array $request_data) {
 		$v_ip = quoteshellarg(get_real_user_ip());
 		$user = quoteshellarg($root_user);
 		unset($output);
-		exec(LOKAHOSTCP_CMD . "v-get-user-salt " . $user . " " . $v_ip . " json", $output, $return_var);
+		exec(
+			LOKAHOSTCP_CMD . "v-get-user-salt " . $user . " " . $v_ip . " json",
+			$output,
+			$return_var,
+		);
 		$pam = json_decode(implode("", $output), true);
 		$salt = $pam[$root_user]["SALT"];
 		$method = $pam[$root_user]["METHOD"];

@@ -7,7 +7,7 @@ use Filegator\Services\Archiver\ArchiverInterface;
 use Filegator\Services\Service;
 use Filegator\Services\Storage\Filesystem as Storage;
 use Filegator\Services\Tmpfs\TmpfsInterface;
-use function Lokahostcp\quoteshellarg\quoteshellarg;
+use function Hestiacp\quoteshellarg\quoteshellarg;
 
 class LokahostcpZipArchiver extends ZipArchiver implements Service, ArchiverInterface {
 	protected $container;
