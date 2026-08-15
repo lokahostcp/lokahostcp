@@ -90,7 +90,18 @@ Two things need your attention:
    install stops trusting updates.
 2. **The RPM repository still needs the same key** exported to
    `https://rpm.lokahost.online/RPM-GPG-KEY-LOKAHOSTCP`, per
-   `install/rpm/lokahostcp/lokahostcp.repo:4`.
+   `install/rpm/lokahostcp/lokahostcp.repo:4`. `rpm.lokahost.online` resolves
+   to the server but **has no vhost provisioned**, so there is nowhere to put
+   it yet. Create the web domain in the panel, then:
+
+   ```bash
+   gpg --export --armor 98D8AFF10FDC39E8 > RPM-GPG-KEY-LOKAHOSTCP
+   scp RPM-GPG-KEY-LOKAHOSTCP \
+   	hiroshiaki@207.211.153.17:~/web/rpm.lokahost.online/public_html/
+   ```
+
+   This matters less than it looks: there is no RHEL installer in the tree (see
+   below), so nothing currently consumes that repository.
 
 Never publish the private key. Only the public half belongs on the web server.
 
@@ -137,12 +148,22 @@ Referenced by `bin/v-update-sys-ip:167`, `install/lcp-install-debian.sh:2260`,
 pub_ipv4="$(curl -fsLm5 --retry 2 --ipv4 https://ip.lokahost.online/)"
 ```
 
-Must return the caller's public IPv4 address as plain text. If it does not
-resolve, `pub_ipv4` is empty and the server's IP is misdetected, which
-cascades into broken vhost and DNS configuration.
+**Status: no longer blocking.** `detect_public_ipv4()` in
+`bin/v-update-sys-ip` now reads the source address the kernel would use to
+reach the internet, and only queries an echo service when that address is
+private (RFC1918, CGNAT or link-local). When it does need to ask, it tries this
+host first and then `api.ipify.org` and `ifconfig.me`, so the install works
+whether or not this endpoint exists.
 
-See the open decision in `bin/v-update-sys-ip` about the fallback strategy —
-this endpoint is a single point of failure as currently written.
+Standing it up is still worthwhile: it removes the third-party fallback for
+NAT'd servers, which is the only path that discloses an install to an outside
+operator. The service must return the caller's public IPv4 as plain text.
+
+The installers at `install/lcp-install-debian.sh:2260` and
+`install/lcp-install-ubuntu.sh:2234` still call the endpoint directly with a
+bare `curl` and have no fallback, so a NAT'd machine installing before this
+host exists will still misdetect its IP at install time — only later
+`v-update-sys-ip` runs will correct it.
 
 ### 4. `github.com/lokahostcp/lokahostcp` — source repository
 
