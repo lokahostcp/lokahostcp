@@ -10,8 +10,8 @@ export default defineConfig({
 	cleanUrls: false,
 
 	head: [
-		['link', { rel: 'icon', sizes: 'any', href: '/favicon.ico' }],
-		['link', { rel: 'icon', type: 'image/svg+xml', sizes: '16x16', href: '/logo.svg' }],
+		['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+		['link', { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/favicon-48.png' }],
 		['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
 		['link', { rel: 'manifest', href: '/site.webmanifest' }],
 		['meta', { name: 'theme-color', content: '#b7236a' }],
@@ -38,13 +38,18 @@ export default defineConfig({
 
 		footer: {
 			message: 'Released under the GPLv3 License.',
-			copyright: 'Copyright © 2019-present Lokahostcp Control Panel',
+			// 2024 is when this project was forked. The previous 2019 dated the
+			// upstream project, not this one.
+			copyright: 'Copyright © 2024-present Lokahostcp Control Panel',
 		},
 
-		algolia: {
-			appId: 'V04P0P5D2R',
-			apiKey: '7a90a3ac7f9313f174c50b0f301f7ec6',
-			indexName: 'lokahostcp_cp',
+		// Local search until this project has its own DocSearch index.
+		//
+		// The previous config carried the upstream project's Algolia appId and
+		// apiKey, which the rename left untouched. Queries would have gone to
+		// their index, on their account, and returned their documentation.
+		search: {
+			provider: 'local',
 		},
 	},
 });
@@ -55,10 +60,11 @@ function nav() {
 		{ text: 'Features', link: '/features' },
 		{ text: 'Install', link: '/install' },
 		{ text: 'Documentation', link: '/docs/introduction/getting-started', activeMatch: '/docs/' },
-		{ text: 'Team', link: '/team' },
-		{ text: 'Demo', link: 'https://demo.lokahost.online:8083/' },
-		{ text: 'Forum', link: 'https://forum.lokahost.online/' },
-		{ text: 'Donate', link: '/donate' },
+		// Removed, each verified dead or inherited rather than assumed:
+		//   Team/Donate  - listed the upstream project's developers and its
+		//                  donation accounts.
+		//   Forum        - forum.lokahost.online does not resolve.
+		// Re-add each once this project has its own.
 		{
 			text: `v${version}`,
 			items: [

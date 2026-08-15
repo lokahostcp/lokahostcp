@@ -1,7 +1,7 @@
 # Lokahostcp Nginx Cache
 
 By [Jakob Bouchard](https://github.com/jakobbouchard/)  
-[View the project](https://wordpress.org/plugins/lokahostcp-nginx-cache/) – [Source code](https://github.com/jakobbouchard/lokahostcp-nginx-cache)
+[View the project](https://wordpress.org/plugins/hestiacp-nginx-cache/)
 
 ::: info
 Requires **Lokahostcp >= 1.6.0**, as it uses the latest API.

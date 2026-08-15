@@ -10,14 +10,14 @@ hero:
   tagline: Fast, reliable, open-source. The control panel you’ve always wanted is just a command away.
   image:
     src: /logo.svg
-    alt: Lokahostcp Logo
+    alt: Lokahostcp
+    width: 240
+    height: 240
   actions:
     - theme: brand
       text: Get started
       link: /docs/introduction/getting-started
-    - theme: alt
-      text: Try the demo
-      link: https://demo.lokahost.online:8083/
+    # "Try the demo" removed: demo.lokahost.online does not resolve.
     - theme: alt
       text: View on GitHub
       link: https://github.com/lokahostcp/lokahostcp
@@ -29,18 +29,18 @@ features:
     link: /docs/introduction/getting-started
     linkText: Documentation
   - icon: ❤️
-    title: Made with love & pride
-    details: Lokahostcp is open-source software that is built by passionate people from around the world. This means that the code is reviewed by multiple people and that anybody can contribute to it!
-    link: /team
-    linkText: See the team
+    title: Open source, GPLv3
+    details: Lokahostcp is open-source software derived from HestiaCP. The code is public, reviewable and open to contribution.
+    link: https://github.com/lokahostcp/lokahostcp
+    linkText: Browse the source
   - icon: 🛠️
     title: Extendable & powerful
     details: Lokahostcp is extendable while being easy to learn. You can build your own themes, web templates, quick install applications and can interact with it using third party software via its API.
     link: /docs/contributing/development
     linkText: Help develop Lokahostcp
   - icon: 🤝
-    title: Supported by the community
-    details: Lokahostcp has a great support community - join the forum! To keep the project running, we rely on donations, which can be made via PayPal or cryptocurrency.
-    link: /donate
-    linkText: Donate
+    title: Report an issue
+    details: Found a bug or want to request a feature? Issues and pull requests are handled on GitHub.
+    link: https://github.com/lokahostcp/lokahostcp/issues
+    linkText: Open an issue
 ---

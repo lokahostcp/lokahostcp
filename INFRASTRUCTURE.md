@@ -18,11 +18,11 @@ Referenced by `install/lcp-install-debian.sh:18`, `install/lcp-install-ubuntu.sh
 Must serve a signed apt repository containing four packages, at the version in
 `LOKAHOSTCP_INSTALL_VER` (currently `1.0.0`):
 
-| Package | Built from |
-|---|---|
-| `lokahostcp` | `src/deb/lokahostcp/` |
-| `lokahostcp-nginx` | `src/deb/nginx/` |
-| `lokahostcp-php` | `src/deb/php/` |
+| Package                   | Built from              |
+| ------------------------- | ----------------------- |
+| `lokahostcp`              | `src/deb/lokahostcp/`   |
+| `lokahostcp-nginx`        | `src/deb/nginx/`        |
+| `lokahostcp-php`          | `src/deb/php/`          |
 | `lokahostcp-web-terminal` | `src/deb/web-terminal/` |
 
 The installer requests `lokahostcp=${LOKAHOSTCP_INSTALL_VER}` — an exact
@@ -102,17 +102,17 @@ same repository, and failure notifications throughout `bin/` link users to
 
 ## Non-blocking — referenced but degrade gracefully
 
-| Host | Serves | Referenced by |
-|---|---|---|
-| `rpm.lokahost.online` | yum repository + `RPM-GPG-KEY-LOKAHOSTCP` | `install/rpm/lokahostcp/lokahostcp.repo` |
-| `beta-apt.lokahost.online` | beta channel repo, its own `pubkey.gpg`, and copies of the install scripts | `docs/docs/contributing/testing.md` |
-| `storage.lokahost.online` | README screenshot; backup tarballs used by the restore tests | `README.md`, `test/restore.bats` |
-| `docs.lokahost.online` | documentation site (built from `docs/`) | `README.md`, `func/upgrade.sh`, installers |
-| `forum.lokahost.online` | support forum, linked from upgrade notifications | `README.md`, `CONTRIBUTING.md`, `func/upgrade.sh` |
-| `demo.lokahost.online` | public demo instance | `docs/index.md` |
-| `translate.lokahost.online` | Crowdin translation portal | `CONTRIBUTING.md` |
-| `drone.lokahost.online` | CI build status badge | `README.md` |
-| `www.lokahost.online` | project website | `src/rpm/lokahostcp/lokahostcp.spec`, docs |
+| Host                        | Serves                                                                     | Referenced by                                     |
+| --------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
+| `rpm.lokahost.online`       | yum repository + `RPM-GPG-KEY-LOKAHOSTCP`                                  | `install/rpm/lokahostcp/lokahostcp.repo`          |
+| `beta-apt.lokahost.online`  | beta channel repo, its own `pubkey.gpg`, and copies of the install scripts | `docs/docs/contributing/testing.md`               |
+| `storage.lokahost.online`   | README screenshot; backup tarballs used by the restore tests               | `README.md`, `test/restore.bats`                  |
+| `docs.lokahost.online`      | documentation site (built from `docs/`)                                    | `README.md`, `func/upgrade.sh`, installers        |
+| `forum.lokahost.online`     | support forum, linked from upgrade notifications                           | `README.md`, `CONTRIBUTING.md`, `func/upgrade.sh` |
+| `demo.lokahost.online`      | public demo instance                                                       | `docs/index.md`                                   |
+| `translate.lokahost.online` | Crowdin translation portal                                                 | `CONTRIBUTING.md`                                 |
+| `drone.lokahost.online`     | CI build status badge                                                      | `README.md`                                       |
+| `www.lokahost.online`       | project website                                                            | `src/rpm/lokahostcp/lokahostcp.spec`, docs        |
 
 `test.lokahost.online`, `mx.lokahost.online`, `db.lokahost.online` and
 `smartrelay.lokahost.online` appear only as fixture values in the test suite
