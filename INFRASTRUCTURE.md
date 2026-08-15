@@ -15,25 +15,23 @@ serve, and which files reference it. All hostnames are under
 Referenced by `install/lcp-install-debian.sh:18`, `install/lcp-install-ubuntu.sh:18`
 (as `RHOST`), and reachability-checked at line 456 before the install proceeds.
 
-**Status: complete for `arm64`. `amd64` carries the panel only.**
+**Status: complete on both architectures.**
 
 A signed repository serves at `https://apt.lokahost.online/` for codenames
-`buster`, `bullseye`, `bookworm`, `focal` and `jammy`. Verified with a real apt
-client in a clean container: `apt-get update` accepts the signature without
-warnings, and `apt-get install --download-only lokahostcp=1.0.0
-lokahostcp-nginx lokahostcp-php lokahostcp-web-terminal` fetches all four
-(88.4 MB) with dependencies resolved.
+`buster`, `bullseye`, `bookworm`, `focal` and `jammy`, on `amd64` and `arm64`.
 
 | Package                   | Version    | arm64 | amd64                     |
 | ------------------------- | ---------- | ----- | ------------------------- |
 | `lokahostcp`              | `1.0.0`    | yes   | yes (`Architecture: all`) |
-| `lokahostcp-nginx`        | `1.25.2-1` | yes   | pending                   |
-| `lokahostcp-php`          | `8.2.11-1` | yes   | pending                   |
-| `lokahostcp-web-terminal` | `1.0.0`    | yes   | pending                   |
+| `lokahostcp-nginx`        | `1.25.2-1` | yes   | yes                       |
+| `lokahostcp-php`          | `8.2.11-1` | yes   | yes                       |
+| `lokahostcp-web-terminal` | `1.0.0`    | yes   | yes                       |
 
-`lokahostcp` is `Architecture: all`, so one build serves both. The control file
-previously said `amd64`, which would have made the panel uninstallable on arm64
-regardless of what the repository carried.
+Verified on both architectures with a real apt client in a clean container:
+`apt-get update` accepts the signature without warnings and all four packages
+resolve and download. Verified further by installing end to end and logging in:
+`POST /login/` returns 302 with a session cookie and the panel renders
+authenticated.
 
 #### Building the packages
 

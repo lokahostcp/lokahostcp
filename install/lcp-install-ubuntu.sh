@@ -860,8 +860,12 @@ curl -s "https://$RHOST/pubkey.gpg" | gpg --dearmor | tee /usr/share/keyrings/lo
 
 # Installing Node.js 20.x repo
 echo "[ * ] Node.js 20.x"
-echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x $codename main" > $apt/nodesource.list
-echo "deb-src [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x $codename main" >> $apt/nodesource.list
+# NodeSource serves every distribution from a single "nodistro" suite; the
+# per-codename suites were retired and now 404, which made `apt-get update`
+# fail on every install with:
+#   The repository '.../node_20.x bookworm Release' does not have a Release file
+echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > $apt/nodesource.list
+echo "deb-src [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" >> $apt/nodesource.list
 curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee /usr/share/keyrings/nodesource.gpg > /dev/null 2>&1
 
 # Installing PostgreSQL repo
@@ -2371,11 +2375,21 @@ apt-get -y upgrade >> $LOG &
 BACK_PID=$!
 echo
 
+# Session directory must be writable by the panel's PHP-FPM pool user before
+# anything tries to log in. This used to run *after* the service start below,
+# which is guarded by check_result and therefore exits the installer on any
+# failure - a busy port, a slow boot, an already-running instance. The install
+# then aborted leaving data/sessions owned by root, and the panel would serve
+# its login page but never authenticate anyone:
+#   session_start(): open(...) failed: Permission denied (13)
+# Ownership is a filesystem property and does not depend on the service, so it
+# is set first.
+chown lokahostcpweb:lokahostcpweb $LOKAHOSTCP/data/sessions
+
 # Starting Lokahostcp service
 update-rc.d lokahostcp defaults
 systemctl start lokahostcp
 check_result $? "lokahostcp start failed"
-chown lokahostcpweb:lokahostcpweb $LOKAHOSTCP/data/sessions
 
 # Create backup folder and set correct permission
 mkdir -p /backup/
