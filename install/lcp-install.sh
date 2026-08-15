@@ -10,7 +10,11 @@
 #
 # Debian 10, 11, 12
 # Ubuntu 20.04, 22.04
-# AlmaLinux, EuroLinux, Red Hat EnterPrise Linux, Rocky Linux 8, 9
+#
+# RHEL-family (AlmaLinux, EuroLinux, RHEL, Rocky 8/9) is detected below but
+# NOT supported: no lcp-install-rhel.sh is published, so those machines cannot
+# complete an install. The RPM spec files under src/rpm/ and the yum repo
+# definition in install/rpm/ are likewise untested.
 #
 # ======================================================== #
 
@@ -116,7 +120,10 @@ check_wget_curl() {
 				bash lcp-install-rhel.sh $*
 				exit
 			else
-				echo "Error: lcp-install-rhel.sh download failed."
+				echo "Error: RHEL-family support is not available in this release."
+				echo "       Supported: Debian 10/11/12, Ubuntu 20.04/22.04 LTS."
+				echo "       No RHEL installer is published yet, so this download"
+				echo "       cannot succeed - it is not a network problem."
 				exit 1
 			fi
 		else
@@ -139,7 +146,10 @@ check_wget_curl() {
 				bash lcp-install-rhel.sh $*
 				exit
 			else
-				echo "Error: lcp-install-rhel.sh download failed."
+				echo "Error: RHEL-family support is not available in this release."
+				echo "       Supported: Debian 10/11/12, Ubuntu 20.04/22.04 LTS."
+				echo "       No RHEL installer is published yet, so this download"
+				echo "       cannot succeed - it is not a network problem."
 				exit 1
 			fi
 		else
