@@ -37,25 +37,65 @@ check_lokahostcp_demo_mode
 # Used below to configure NAT. If it returns nothing, the NAT block is skipped
 # and a server behind NAT keeps an internal IP in its vhost and DNS records.
 #
-# TODO: decide the lookup strategy. https://ip.lokahost.online/ does not exist
-# yet (see docs/INFRASTRUCTURE.md), so as written this returns empty on every
-# call. Options, roughly in order of increasing resilience:
+# Strategy, in order:
 #
-#   1. Point at a third-party echo service (api.ipify.org, ifconfig.co).
-#      Simplest, but a hard dependency on someone else's uptime, and every
-#      install discloses itself to that operator.
-#   2. Try our own host first, then fall through to one or two third parties.
-#      Resilient, but still discloses on fallback.
-#   3. Read the address off the default route first
-#      (ip -j route get 1.1.1.1) and only call out if that yields a private
-#      address. No disclosure and no dependency when the host is publicly
-#      addressed -- but hosting panels usually run behind NAT or a cloud load
-#      balancer, which is exactly the case this function exists to handle.
+#   1. The address the kernel would use to reach the internet. If that is
+#      already globally routable the server is not behind NAT, and no external
+#      service needs to be asked at all - no dependency, and the install is not
+#      disclosed to anyone.
+#   2. Only if that address is private (RFC1918, CGNAT, link-local) is an echo
+#      service queried. Our own host is tried first; two third parties follow,
+#      because a single endpoint is a single point of failure and a silent
+#      empty result here misconfigures vhosts and DNS.
+#
+# Ordering matters: reversing 1 and 2 would disclose every install to a third
+# party even when the answer was available locally.
 #
 # Echo the address on stdout, or nothing if it cannot be determined. Callers
 # must tolerate an empty result.
+
+is_private_ipv4() {
+	case "$1" in
+		10.* | 127.* | 169.254.* | 192.168.*) return 0 ;;
+		172.1[6-9].* | 172.2[0-9].* | 172.3[01].*) return 0 ;;
+			# 100.64.0.0/10, carrier-grade NAT
+		100.6[4-9].* | 100.[7-9][0-9].* | 100.1[01][0-9].* | 100.12[0-7].*) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
+is_valid_ipv4() {
+	[[ "$1" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] || return 1
+	local o
+	for o in ${1//./ }; do
+		[ "$o" -le 255 ] || return 1
+	done
+	return 0
+}
+
 detect_public_ipv4() {
-	curl -fsLm5 --retry 2 --ipv4 https://ip.lokahost.online/
+	local ip endpoint
+
+	# 1. Ask the routing table before asking the internet.
+	ip="$(ip -4 -j route get 1.1.1.1 2> /dev/null | jq -r '.[0].prefsrc // empty' 2> /dev/null)"
+	if [ -n "$ip" ] && is_valid_ipv4 "$ip" && ! is_private_ipv4 "$ip"; then
+		echo "$ip"
+		return 0
+	fi
+
+	# 2. Behind NAT. Ours first, then fall back rather than fail silently.
+	for endpoint in \
+		https://ip.lokahost.online/ \
+		https://api.ipify.org/ \
+		https://ifconfig.me/ip; do
+		ip="$(curl -fsLm5 --retry 1 --ipv4 "$endpoint" 2> /dev/null | tr -d '[:space:]')"
+		if [ -n "$ip" ] && is_valid_ipv4 "$ip" && ! is_private_ipv4 "$ip"; then
+			echo "$ip"
+			return 0
+		fi
+	done
+
+	return 1
 }
 
 #----------------------------------------------------------#
