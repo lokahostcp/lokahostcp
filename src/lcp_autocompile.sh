@@ -309,7 +309,15 @@ if [ "$dontinstalldeps" != 'true' ]; then
 fi
 
 # Get system cpu cores
-NUM_CPUS=$(grep "^cpu cores" /proc/cpuinfo | uniq | awk '{print $4}')
+# aarch64 kernels do not emit "cpu cores" in /proc/cpuinfo, which left this
+# empty and turned `make -j $NUM_CPUS` into an unbounded `make -j` — a fork
+# storm rather than a parallel build. nproc is portable; the grep is kept as a
+# fallback for the physical-core count on x86.
+NUM_CPUS=$(nproc 2> /dev/null)
+if [ -z "$NUM_CPUS" ]; then
+	NUM_CPUS=$(grep "^cpu cores" /proc/cpuinfo | uniq | awk '{print $4}')
+fi
+[ -z "$NUM_CPUS" ] && NUM_CPUS=1
 
 if [ "$LOKAHOSTCP_DEBUG" ]; then
 	if [ "$OSTYPE" = 'rhel' ]; then
@@ -452,9 +460,9 @@ if [ "$NGINX_B" = true ]; then
 		fi
 		get_branch_file 'src/deb/nginx/copyright' "$BUILD_DIR_LOKAHOSTCPNGINX/DEBIAN/copyright"
 		get_branch_file 'src/deb/nginx/postinst' "$BUILD_DIR_LOKAHOSTCPNGINX/DEBIAN/postinst"
-		get_branch_file 'src/deb/nginx/postrm' "$BUILD_DIR_LOKAHOSTCPNGINX/DEBIAN/portrm"
+		get_branch_file 'src/deb/nginx/postrm' "$BUILD_DIR_LOKAHOSTCPNGINX/DEBIAN/postrm"
 		chmod +x "$BUILD_DIR_LOKAHOSTCPNGINX/DEBIAN/postinst"
-		chmod +x "$BUILD_DIR_LOKAHOSTCPNGINX/DEBIAN/portrm"
+		chmod +x "$BUILD_DIR_LOKAHOSTCPNGINX/DEBIAN/postrm"
 
 		# Init file
 		mkdir -p $BUILD_DIR_LOKAHOSTCPNGINX/etc/init.d
