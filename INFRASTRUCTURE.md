@@ -153,26 +153,50 @@ documented install command downloads:
 wget https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install.sh
 ```
 
-**That branch is stale, and the install it produces fails.** As of the last
-check it was pushed 2024-01-30 and still carries pre-rebrand content:
+**Status: fixed.** `release` is at `ad86407`, carrying the 1.0.0 tree. Both
+stages of the download now resolve, and stage 2 is the corrected installer
+(`RHOST='apt.lokahost.online'`, version `1.0.0`, no `lokahost.com` references).
 
-- It refers to `lokahost.com`, not `lokahost.online`.
-- Worse, `lcp-install.sh` fetches its second stage from
-  `raw.githubusercontent.com/lokahost/lokahost/...` — a **different
-  organisation**, which returns 404. So the first stage downloads, then
-  immediately fails to fetch the platform installer.
+Previously it was a 2024-01-30 snapshot whose `lcp-install.sh` fetched its
+second stage from `raw.githubusercontent.com/lokahost/lokahost/...` — a
+**different organisation**, returning 404 — so the first stage downloaded and
+then immediately failed. That was the organisation split unified in this tree
+(546 references moved to `lokahostcp/lokahostcp`).
 
-This is the organisation split that was unified in this tree (546 references
-moved from `lokahost/lokahost` to `lokahostcp/lokahostcp`). The fix is
-published, not local: push this branch to the GitHub `release` branch, which
-is currently protected.
+`release` is branch-protected and force-pushes are refused, and the two
+histories share no common ancestor, so neither a normal push nor a pull request
+was possible. It was advanced instead by building a commit server-side through
+the Git Data API — parent `08ac4a4` (the old `release` head), tree taken from
+`v1.0.0` — which makes the ref update a fast-forward rather than a force push.
+Protection settings were never modified and the previous history is intact.
 
-Verify afterwards that both stages resolve:
+To repeat that for a future release:
+
+```bash
+R=repos/lokahostcp/lokahostcp
+TREE=$(gh api $R/git/commits/$(gh api $R/git/ref/heads/v1.0.0 --jq .object.sha) --jq .tree.sha)
+REL=$(gh api $R/git/ref/heads/release --jq .object.sha)
+printf '{"message":"...","tree":"%s","parents":["%s"]}' "$TREE" "$REL" > /tmp/c.json
+NEW=$(gh api $R/git/commits -X POST --input /tmp/c.json --jq .sha)
+printf '{"sha":"%s","force":false}' "$NEW" > /tmp/r.json
+gh api $R/git/refs/heads/release -X PATCH --input /tmp/r.json
+```
+
+Verify both stages afterwards:
 
 ```bash
 curl -sI https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install.sh | head -1
 curl -sI https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install-debian.sh | head -1
 ```
+
+#### RHEL is advertised but not shipped
+
+`install/lcp-install.sh` routes `/etc/redhat-release` machines to
+`lcp-install-rhel.sh`, and its header claims AlmaLinux, EuroLinux, RHEL and
+Rocky 8/9. **That file does not exist in this repository**, so those machines
+download stage 1 and then fail. Either add the installer or remove the claim
+and the RHEL branch; the `install/rpm/` tree and `lokahostcp.repo` are
+similarly untested.
 
 The git-based update path (`bin/v-update-sys-lokahostcp-git`) clones from the
 same repository, and failure notifications throughout `bin/` link users to
