@@ -5,8 +5,8 @@
 putenv("LANGUAGE=" . detect_user_language());
 setlocale(LC_ALL, "C.UTF-8");
 
-$domain = "lokahost";
-$localedir = "/usr/local/lokahost/web/locale";
+$domain = "lokahostcp";
+$localedir = "/usr/local/lokahostcp/web/locale";
 bindtextdomain($domain, $localedir);
 textdomain($domain);
 
@@ -54,15 +54,15 @@ function htmlify_trans($string, $closingTag) {
 function get_email_template($file, $language) {
 	if (
 		file_exists(
-			$_SERVER["LOKAHOST"] . "/data/templates/email/" . $language . "/" . $file . ".html",
+			$_SERVER["LOKAHOSTCP"] . "/data/templates/email/" . $language . "/" . $file . ".html",
 		)
 	) {
 		return file_get_contents(
-			$_SERVER["LOKAHOST"] . "/data/templates/email/" . $language . "/" . $file . ".html",
+			$_SERVER["LOKAHOSTCP"] . "/data/templates/email/" . $language . "/" . $file . ".html",
 		);
 	}
-	if (file_exists($_SERVER["LOKAHOST"] . "/data/templates/email/" . $file . ".html")) {
-		return file_get_contents($_SERVER["LOKAHOST"] . "/data/templates/email/" . $file . ".html");
+	if (file_exists($_SERVER["LOKAHOSTCP"] . "/data/templates/email/" . $file . ".html")) {
+		return file_get_contents($_SERVER["LOKAHOSTCP"] . "/data/templates/email/" . $file . ".html");
 	}
 	return false;
 }

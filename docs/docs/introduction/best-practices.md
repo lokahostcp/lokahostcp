@@ -1,6 +1,6 @@
 # Best Practices
 
-Managing a server is not easy. Here are some best practices you should try to adhere to while managing your Lokahost server.
+Managing a server is not easy. Here are some best practices you should try to adhere to while managing your Lokahostcp server.
 
 ## Use a regular user
 

@@ -14,14 +14,14 @@
 user=$1
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/ip.sh
-source $LOKAHOST/func/ip.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/ip.sh
+source $LOKAHOSTCP/func/ip.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -35,14 +35,14 @@ if [ "$user" = "$ROOT_USER" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 # Parsing user ips
-ip_list=$(grep -H "OWNER='$user'" $LOKAHOST/data/ips/* | cut -f 1 -d:)
+ip_list=$(grep -H "OWNER='$user'" $LOKAHOSTCP/data/ips/* | cut -f 1 -d:)
 
 for ip in $ip_list; do
 	ip=$(basename "$ip")
@@ -60,7 +60,7 @@ for ip in $ip_list; do
 done
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

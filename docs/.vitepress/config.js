@@ -3,15 +3,15 @@ import { version } from '../../package.json';
 
 export default defineConfig({
 	lang: 'en-US',
-	title: 'Lokahost Control Panel',
+	title: 'Lokahostcp Control Panel',
 	description: 'Open-source web server control panel.',
 
 	lastUpdated: true,
 	cleanUrls: false,
 
 	head: [
-		['link', { rel: 'icon', sizes: 'any', href: '/favicon.ico' }],
-		['link', { rel: 'icon', type: 'image/svg+xml', sizes: '16x16', href: '/logo.svg' }],
+		['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+		['link', { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/favicon-48.png' }],
 		['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
 		['link', { rel: 'manifest', href: '/site.webmanifest' }],
 		['meta', { name: 'theme-color', content: '#b7236a' }],
@@ -22,30 +22,34 @@ export default defineConfig({
 
 		nav: nav(),
 
-		socialLinks: [
-			{ icon: 'github', link: 'https://github.com/lokahost/lokahost' },
-			{ icon: 'twitter', link: 'https://twitter.com/LokahostPanel' },
-			{ icon: 'facebook', link: 'https://www.facebook.com/lokahost' },
-		],
+		// The Twitter and Facebook handles here were produced by renaming the
+		// upstream project's accounts, so they never pointed at this project.
+		// Re-add them once accounts actually exist.
+		socialLinks: [{ icon: 'github', link: 'https://github.com/lokahostcp/lokahostcp' }],
 
 		sidebar: { '/docs/': sidebarDocs() },
 
 		outline: [2, 3],
 
 		editLink: {
-			pattern: 'https://github.com/lokahost/lokahost/edit/main/docs/:path',
+			pattern: 'https://github.com/lokahostcp/lokahostcp/edit/main/docs/:path',
 			text: 'Edit this page on GitHub',
 		},
 
 		footer: {
 			message: 'Released under the GPLv3 License.',
-			copyright: 'Copyright © 2019-present Lokahost Control Panel',
+			// 2024 is when this project was forked. The previous 2019 dated the
+			// upstream project, not this one.
+			copyright: 'Copyright © 2024-present Lokahostcp Control Panel',
 		},
 
-		algolia: {
-			appId: 'V04P0P5D2R',
-			apiKey: '7a90a3ac7f9313f174c50b0f301f7ec6',
-			indexName: 'lokahost_cp',
+		// Local search until this project has its own DocSearch index.
+		//
+		// The previous config carried the upstream project's Algolia appId and
+		// apiKey, which the rename left untouched. Queries would have gone to
+		// their index, on their account, and returned their documentation.
+		search: {
+			provider: 'local',
 		},
 	},
 });
@@ -56,24 +60,25 @@ function nav() {
 		{ text: 'Features', link: '/features' },
 		{ text: 'Install', link: '/install' },
 		{ text: 'Documentation', link: '/docs/introduction/getting-started', activeMatch: '/docs/' },
-		{ text: 'Team', link: '/team' },
-		{ text: 'Demo', link: 'https://demo.lokahost.com:8083/' },
-		{ text: 'Forum', link: 'https://forum.lokahost.com/' },
-		{ text: 'Donate', link: '/donate' },
+		// Removed, each verified dead or inherited rather than assumed:
+		//   Team/Donate  - listed the upstream project's developers and its
+		//                  donation accounts.
+		//   Forum        - forum.lokahost.online does not resolve.
+		// Re-add each once this project has its own.
 		{
 			text: `v${version}`,
 			items: [
 				{
 					text: 'Changelog',
-					link: 'https://github.com/lokahost/lokahost/blob/main/CHANGELOG.md',
+					link: 'https://github.com/lokahostcp/lokahostcp/blob/main/CHANGELOG.md',
 				},
 				{
 					text: 'Contributing',
-					link: 'https://github.com/lokahost/lokahost/blob/main/CONTRIBUTING.md',
+					link: 'https://github.com/lokahostcp/lokahostcp/blob/main/CONTRIBUTING.md',
 				},
 				{
 					text: 'Security policy',
-					link: 'https://github.com/lokahost/lokahost/blob/main/SECURITY.md',
+					link: 'https://github.com/lokahostcp/lokahostcp/blob/main/SECURITY.md',
 				},
 			],
 		},
@@ -143,10 +148,10 @@ function sidebarDocs() {
 			text: 'Community',
 			collapsed: false,
 			items: [
-				{ text: 'Lokahost Nginx Cache', link: '/docs/community/lokahost-nginx-cache' },
+				{ text: 'Lokahostcp Nginx Cache', link: '/docs/community/lokahostcp-nginx-cache' },
 				{
-					text: 'Ioncube installer for Lokahost',
-					link: '/docs/community/ioncube-lokahost-installer',
+					text: 'Ioncube installer for Lokahostcp',
+					link: '/docs/community/ioncube-lokahostcp-installer',
 				},
 				{ text: 'Install script generator', link: '/docs/community/install-script-generator' },
 			],

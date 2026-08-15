@@ -1,7 +1,7 @@
 #=========================================================================#
 # Default Web Domain Template                                             #
 # DO NOT MODIFY THIS FILE! CHANGES WILL BE LOST WHEN REBUILDING DOMAINS   #
-# https://lokahost.com/docs/server-administration/web-templates.html      #
+# https://lokahost.online/docs/server-administration/web-templates.html      #
 #=========================================================================#
 
 <VirtualHost %ip%:%web_port%>

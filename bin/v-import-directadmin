@@ -12,12 +12,12 @@
 # Version 0.1
 # This script restore backups from DA to Lokahostcp
 
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 if [ ! -e /usr/bin/rsync ] || [ ! -e /usr/bin/file ]; then
 	echo "#######################################"
@@ -33,7 +33,7 @@ if [ ! -e /usr/bin/rsync ] || [ ! -e /usr/bin/file ]; then
 fi
 # Put this to 0 if you want use bash -x to debug it
 debug=1
-lokahost_package=default
+lokahostcp_package=default
 tmp_dir='tmp_dir_da_backup'
 time=$(echo "$time_n_date" | cut -f 1 -d \ )
 date=$(echo "$time_n_date" | cut -f 2 -d \ )
@@ -110,14 +110,14 @@ if [ -z $directadmin_usermail ]; then
 fi
 
 check_sysuser=$(cut -f 1 -d : /etc/passwd | grep "^$directadmin_user$")
-if [ -n "$check_sysuser" ] || [ -e "$LOKAHOST/data/users/$directadmin_user" ]; then
+if [ -n "$check_sysuser" ] || [ -e "$LOKAHOSTCP/data/users/$directadmin_user" ]; then
 	delete_tmp
 	check_result "$E_EXISTS" "user $directadmin_user exists"
 fi
 
 echo "Generate random password for $directadmin_user and create Lokahostcp Account ..."
 new_password=$(generate_password)
-$BIN/v-add-user $directadmin_user $new_password $directadmin_usermail $lokahost_package
+$BIN/v-add-user $directadmin_user $new_password $directadmin_usermail $lokahostcp_package
 if [ "$?" -ne 0 ]; then
 	tput setaf 1
 	echo "Error: Unable to create user"
@@ -170,12 +170,12 @@ function run_da_db() {
 						echo "udb: $db_user"
 						echo "Password: ${md5}"
 
-						echo "DB='$db' DBUSER='$db_user' MD5='$md5' HOST='localhost' TYPE='mysql' CHARSET='UTF8' U_DISK='0' SUSPENDED='no' TIME='$time' DATE='$data'" >> /usr/local/lokahost/data/users/$directadmin_user/db.conf
+						echo "DB='$db' DBUSER='$db_user' MD5='$md5' HOST='localhost' TYPE='mysql' CHARSET='UTF8' U_DISK='0' SUSPENDED='no' TIME='$time' DATE='$data'" >> /usr/local/lokahostcp/data/users/$directadmin_user/db.conf
 					fi
 
 				done < "backup/${da_db}"
 
-				# Leave lokahost restore passwords and create users
+				# Leave lokahostcp restore passwords and create users
 				tput setaf 2
 				echo "Rebuild databases files for $directadmin_user"
 				tput sgr0
@@ -263,7 +263,7 @@ function da_restore_imap_pass() {
 	#DirectAdmin passw is SHA512-CRYPT
 	da_orig_pass=$(grep -w $1 backup/$2/email/passwd | tr ':' ' ' | cut -d " " -f2)
 	echo ${da_orig_pass}
-	USER_DATA=$LOKAHOST/data/users/${3}/
+	USER_DATA=$LOKAHOSTCP/data/users/${3}/
 	update_object_value "mail/${2}" 'ACCOUNT' "${1}" '$MD5' "{SHA512-CRYPT}$da_orig_pass"
 	echo "Password for $1@$2 restored"
 }

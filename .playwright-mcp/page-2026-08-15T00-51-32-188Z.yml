@@ -1,0 +1,385 @@
+- generic [ref=f1e3]:
+    - link "Skip to content" [ref=f1e4] [cursor=pointer]:
+        - /url: "#VPContent"
+    - banner:
+        - generic:
+            - generic:
+                - generic:
+                    - link "Lokahostcp Control Panel" [ref=f1e6] [cursor=pointer]:
+                        - /url: /
+                    - generic [ref=f1e7]:
+                        - button "Search" [ref=f1e10] [cursor=pointer]:
+                            - generic [ref=f1e11]:
+                                - img "search icon" [ref=f1e12]
+                                - generic [ref=f1e14]: Search
+                            - generic [ref=f1e15]:
+                                - generic [ref=f1e16]: ⌘
+                                - generic [ref=f1e17]: K
+                        - navigation "Main Navigation" [ref=f1e18]:
+                            - link "Features" [ref=f1e20] [cursor=pointer]:
+                                - /url: /features.html
+                            - link "Install" [ref=f1e22] [cursor=pointer]:
+                                - /url: /install.html
+                            - link "Documentation" [ref=f1e24] [cursor=pointer]:
+                                - /url: /docs/introduction/getting-started.html
+                            - button "v1.0.0" [ref=f1e27] [cursor=pointer]
+                        - button "extra navigation" [ref=f1e33] [cursor=pointer]
+    - complementary [ref=f1e38]:
+        - navigation "Sidebar Navigation" [ref=f1e40]:
+            - generic [ref=f1e43]:
+                - button [ref=f1e44] [cursor=pointer]:
+                    - heading "Introduction" [level=2] [ref=f1e46]
+                    - button "toggle section" [ref=f1e47]
+                - generic [ref=f1e50]:
+                    - link [ref=f1e54] [cursor=pointer]:
+                        - /url: /docs/introduction/getting-started.html
+                        - paragraph [ref=f1e55]: Getting started
+                    - link [ref=f1e59] [cursor=pointer]:
+                        - /url: /docs/introduction/best-practices.html
+                        - paragraph [ref=f1e60]: Best practices
+            - generic [ref=f1e62]:
+                - button [ref=f1e63] [cursor=pointer]:
+                    - heading "User guide" [level=2] [ref=f1e65]
+                    - button "toggle section" [ref=f1e66]
+                - generic [ref=f1e69]:
+                    - link [ref=f1e73] [cursor=pointer]:
+                        - /url: /docs/user-guide/account.html
+                        - paragraph [ref=f1e74]: Account
+                    - link [ref=f1e78] [cursor=pointer]:
+                        - /url: /docs/user-guide/backups.html
+                        - paragraph [ref=f1e79]: Backups
+                    - link [ref=f1e83] [cursor=pointer]:
+                        - /url: /docs/user-guide/cron-jobs.html
+                        - paragraph [ref=f1e84]: Cron jobs
+                    - link [ref=f1e88] [cursor=pointer]:
+                        - /url: /docs/user-guide/databases.html
+                        - paragraph [ref=f1e89]: Databases
+                    - link [ref=f1e93] [cursor=pointer]:
+                        - /url: /docs/user-guide/dns.html
+                        - paragraph [ref=f1e94]: DNS
+                    - link [ref=f1e98] [cursor=pointer]:
+                        - /url: /docs/user-guide/file-manager.html
+                        - paragraph [ref=f1e99]: File manager
+                    - link [ref=f1e103] [cursor=pointer]:
+                        - /url: /docs/user-guide/mail-domains.html
+                        - paragraph [ref=f1e104]: Mail domains
+                    - link [ref=f1e108] [cursor=pointer]:
+                        - /url: /docs/user-guide/notifications.html
+                        - paragraph [ref=f1e109]: Notifications
+                    - link [ref=f1e113] [cursor=pointer]:
+                        - /url: /docs/user-guide/packages.html
+                        - paragraph [ref=f1e114]: Packages
+                    - link [ref=f1e118] [cursor=pointer]:
+                        - /url: /docs/user-guide/statistics.html
+                        - paragraph [ref=f1e119]: Statistics
+                    - link [ref=f1e123] [cursor=pointer]:
+                        - /url: /docs/user-guide/users.html
+                        - paragraph [ref=f1e124]: Users
+                    - link [ref=f1e128] [cursor=pointer]:
+                        - /url: /docs/user-guide/web-domains.html
+                        - paragraph [ref=f1e129]: Web domains
+            - generic [ref=f1e131]:
+                - button [ref=f1e132] [cursor=pointer]:
+                    - heading "Server administration" [level=2] [ref=f1e134]
+                    - button "toggle section" [ref=f1e135]
+                - generic [ref=f1e138]:
+                    - link [ref=f1e142] [cursor=pointer]:
+                        - /url: /docs/server-administration/backup-restore.html
+                        - paragraph [ref=f1e143]: Backup & restore
+                    - link [ref=f1e147] [cursor=pointer]:
+                        - /url: /docs/server-administration/configuration.html
+                        - paragraph [ref=f1e148]: Configuration
+                    - link [ref=f1e152] [cursor=pointer]:
+                        - /url: /docs/server-administration/customisation.html
+                        - paragraph [ref=f1e153]: Customisation
+                    - link [ref=f1e157] [cursor=pointer]:
+                        - /url: /docs/server-administration/databases.html
+                        - paragraph [ref=f1e158]: Databases & phpMyAdmin
+                    - link [ref=f1e162] [cursor=pointer]:
+                        - /url: /docs/server-administration/dns.html
+                        - paragraph [ref=f1e163]: DNS clusters & DNSSEC
+                    - link [ref=f1e167] [cursor=pointer]:
+                        - /url: /docs/server-administration/email.html
+                        - paragraph [ref=f1e168]: Email
+                    - link [ref=f1e172] [cursor=pointer]:
+                        - /url: /docs/server-administration/file-manager.html
+                        - paragraph [ref=f1e173]: File manager
+                    - link [ref=f1e177] [cursor=pointer]:
+                        - /url: /docs/server-administration/firewall.html
+                        - paragraph [ref=f1e178]: Firewall
+                    - link [ref=f1e182] [cursor=pointer]:
+                        - /url: /docs/server-administration/os-upgrades.html
+                        - paragraph [ref=f1e183]: OS upgrades
+                    - link [ref=f1e187] [cursor=pointer]:
+                        - /url: /docs/server-administration/rest-api.html
+                        - paragraph [ref=f1e188]: Rest API
+                    - link [ref=f1e192] [cursor=pointer]:
+                        - /url: /docs/server-administration/ssl-certificates.html
+                        - paragraph [ref=f1e193]: SSL certificates
+                    - link [ref=f1e197] [cursor=pointer]:
+                        - /url: /docs/server-administration/web-templates.html
+                        - paragraph [ref=f1e198]: Web templates & caching
+                    - link [ref=f1e202] [cursor=pointer]:
+                        - /url: /docs/server-administration/troubleshooting.html
+                        - paragraph [ref=f1e203]: Troubleshooting
+            - generic [ref=f1e205]:
+                - button [ref=f1e206] [cursor=pointer]:
+                    - heading "Contributing" [level=2] [ref=f1e208]
+                    - button "toggle section" [ref=f1e209]
+                - generic [ref=f1e212]:
+                    - link [ref=f1e216] [cursor=pointer]:
+                        - /url: /docs/contributing/building.html
+                        - paragraph [ref=f1e217]: Building Packages
+                    - link [ref=f1e221] [cursor=pointer]:
+                        - /url: /docs/contributing/development.html
+                        - paragraph [ref=f1e222]: Development
+                    - link [ref=f1e226] [cursor=pointer]:
+                        - /url: /docs/contributing/documentation.html
+                        - paragraph [ref=f1e227]: Documentation
+                    - link [ref=f1e231] [cursor=pointer]:
+                        - /url: /docs/contributing/quick-install-app.html
+                        - paragraph [ref=f1e232]: Quick install app
+                    - link [ref=f1e236] [cursor=pointer]:
+                        - /url: /docs/contributing/testing.html
+                        - paragraph [ref=f1e237]: Testing
+                    - link [ref=f1e241] [cursor=pointer]:
+                        - /url: /docs/contributing/translations.html
+                        - paragraph [ref=f1e242]: Translations
+            - generic [ref=f1e244]:
+                - button [ref=f1e245] [cursor=pointer]:
+                    - heading "Community" [level=2] [ref=f1e247]
+                    - button "toggle section" [ref=f1e248]
+                - generic [ref=f1e251]:
+                    - link [ref=f1e255] [cursor=pointer]:
+                        - /url: /docs/community/lokahostcp-nginx-cache.html
+                        - paragraph [ref=f1e256]: Lokahostcp Nginx Cache
+                    - link [ref=f1e260] [cursor=pointer]:
+                        - /url: /docs/community/ioncube-lokahostcp-installer.html
+                        - paragraph [ref=f1e261]: Ioncube installer for Lokahostcp
+                    - link [ref=f1e265] [cursor=pointer]:
+                        - /url: /docs/community/install-script-generator.html
+                        - paragraph [ref=f1e266]: Install script generator
+            - generic [ref=f1e268]:
+                - button [ref=f1e269] [cursor=pointer]:
+                    - heading "Reference" [level=2] [ref=f1e271]
+                    - button "toggle section" [ref=f1e272]
+                - generic [ref=f1e275]:
+                    - link [ref=f1e279] [cursor=pointer]:
+                        - /url: /docs/reference/api.html
+                        - paragraph [ref=f1e280]: API
+                    - link [ref=f1e284] [cursor=pointer]:
+                        - /url: /docs/reference/cli.html
+                        - paragraph [ref=f1e285]: CLI
+    - generic [ref=f1e290]:
+        - main [ref=f1e291]:
+            - generic [ref=f1e293]:
+                - heading [level=1] [ref=f1e294]:
+                    - text: Getting Started
+                    - link "Permalink to \"Getting Started\"" [ref=f1e295] [cursor=pointer]:
+                        - /url: "#getting-started"
+                        - text: "#"
+                - paragraph [ref=f1e296]: This section will help you get Lokahostcp installed on your server. If you already have Lokahostcp installed and are just looking for options, you can skip this page.
+                - generic [ref=f1e297]:
+                    - paragraph [ref=f1e298]: WARNING
+                    - paragraph [ref=f1e299]:
+                        - text: The installer needs to be run as
+                        - strong [ref=f1e300]: root
+                        - text: ", either directly from the terminal or remotely, using SSH. If you do not do this, the installer will not proceed."
+                - heading [level=2] [ref=f1e301]:
+                    - text: Requirements
+                    - link "Permalink to \"Requirements\"" [ref=f1e302] [cursor=pointer]:
+                        - /url: "#requirements"
+                        - text: "#"
+                - generic [ref=f1e303]:
+                    - paragraph [ref=f1e304]: WARNING
+                    - paragraph [ref=f1e305]:
+                        - text: Lokahostcp must be installed on top of a fresh operating system installation to ensure proper functionality. If on a VPS/KVM, and there is already an admin account, either delete that default admin ID, or use
+                        - code [ref=f1e306]: "--force"
+                        - text: to continue with the installation. See custom installation below for further details.
+                - table [ref=f1e307]:
+                    - rowgroup [ref=f1e308]:
+                        - row [ref=f1e309]:
+                            - columnheader [ref=f1e310]
+                            - columnheader "Minimum" [ref=f1e311]
+                            - columnheader "Recommended" [ref=f1e312]
+                    - rowgroup [ref=f1e313]:
+                        - row [ref=f1e314]:
+                            - cell [ref=f1e315]:
+                                - strong [ref=f1e316]: CPU
+                            - cell "1 core, 64-bit" [ref=f1e317]
+                            - cell "4 cores" [ref=f1e318]
+                        - row [ref=f1e319]:
+                            - cell [ref=f1e320]:
+                                - strong [ref=f1e321]: Memory
+                            - cell "1 GB (no SpamAssassin and ClamAV)" [ref=f1e322]
+                            - cell "4 GB" [ref=f1e323]
+                        - row [ref=f1e324]:
+                            - cell [ref=f1e325]:
+                                - strong [ref=f1e326]: Disk
+                            - cell "10 GB HDD" [ref=f1e327]
+                            - cell "40 GB SSD" [ref=f1e328]
+                        - row [ref=f1e329]:
+                            - cell [ref=f1e330]:
+                                - strong [ref=f1e331]: Operating System
+                            - cell "Debian 10, 11 or 12 Ubuntu 20.04, 22.04 LTS" [ref=f1e332]: Debian 10, 11 or 12Ubuntu 20.04, 22.04 LTS
+                            - cell "Latest Debian Latest Ubuntu LTS" [ref=f1e333]
+                - generic [ref=f1e334]:
+                    - paragraph [ref=f1e335]: WARNING
+                    - paragraph [ref=f1e336]: Lokahostcp only runs on AMD64 / x86_64 and ARM64 / aarch64 processors. It also requires a 64bit operating system! We currently do not support i386 or ARM7-based processors.
+                - heading [level=3] [ref=f1e337]:
+                    - text: Supported operating systems
+                    - link "Permalink to \"Supported operating systems\"" [ref=f1e338] [cursor=pointer]:
+                        - /url: "#supported-operating-systems"
+                        - text: "#"
+                - list [ref=f1e339]:
+                    - listitem [ref=f1e340]: Debian 10, 11 or 12
+                    - listitem [ref=f1e341]: Ubuntu 20.04 or 22.04
+                - generic [ref=f1e342]:
+                    - paragraph [ref=f1e343]: WARNING
+                    - paragraph [ref=f1e344]: Lokahostcp does not support non-LTS Operating systems. If you install it on, for example, Ubuntu 21.10, you will not receive support from us.
+                - heading [level=2] [ref=f1e345]:
+                    - text: Regular installation
+                    - link "Permalink to \"Regular installation\"" [ref=f1e346] [cursor=pointer]:
+                        - /url: "#regular-installation"
+                        - text: "#"
+                - paragraph [ref=f1e347]: Interactive installer that will install the default Lokahostcp software configuration.
+                - heading [level=3] [ref=f1e348]:
+                    - text: "Step 1: Download"
+                    - 'link "Permalink to \"Step 1: Download\"" [ref=f1e349] [cursor=pointer]':
+                        - /url: "#step-1-download"
+                        - text: "#"
+                - paragraph [ref=f1e350]: "Download the installation script for the latest release:"
+                - generic [ref=f1e351]:
+                    - button "Copy Code" [ref=f1e352] [cursor=pointer]
+                    - generic [ref=f1e353]: bash
+                    - code [ref=f1e355]:
+                        - generic [ref=f1e356]: wget https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install.sh
+                - paragraph [ref=f1e357]: "If the download fails due to an SSL validation error, please be sure you've installed the ca-certificate package on your system - you can do this with the following command:"
+                - generic [ref=f1e358]:
+                    - button "Copy Code" [ref=f1e359] [cursor=pointer]
+                    - generic [ref=f1e360]: bash
+                    - code [ref=f1e362]:
+                        - generic [ref=f1e363]: apt-get update && apt-get install ca-certificates
+                - heading [level=3] [ref=f1e364]:
+                    - text: "Step 2: Run"
+                    - 'link "Permalink to \"Step 2: Run\"" [ref=f1e365] [cursor=pointer]':
+                        - /url: "#step-2-run"
+                        - text: "#"
+                - paragraph [ref=f1e366]: "To begin the installation process, simply run the script and follow the on-screen prompts:"
+                - generic [ref=f1e367]:
+                    - button "Copy Code" [ref=f1e368] [cursor=pointer]
+                    - generic [ref=f1e369]: bash
+                    - code [ref=f1e371]:
+                        - generic [ref=f1e372]: bash lcp-install.sh
+                - paragraph [ref=f1e373]: You will receive a welcome email at the address specified during installation (if applicable) and on-screen instructions after the installation is completed to log in and access your server.
+                - heading [level=2] [ref=f1e374]:
+                    - text: Custom installation
+                    - link "Permalink to \"Custom installation\"" [ref=f1e375] [cursor=pointer]:
+                        - /url: "#custom-installation"
+                        - text: "#"
+                - paragraph [ref=f1e376]: If you want to customise which software gets installed, or want to run an unattended installation, you will need to run a custom installation.
+                - paragraph [ref=f1e377]: To view a list of available options, run
+                - generic [ref=f1e378]:
+                    - button "Copy Code" [ref=f1e379] [cursor=pointer]
+                    - generic [ref=f1e380]: bash
+                    - code [ref=f1e382]:
+                        - generic [ref=f1e383]: bash lcp-install.sh -h
+                - heading [level=3] [ref=f1e384]:
+                    - text: List of installation options
+                    - link "Permalink to \"List of installation options\"" [ref=f1e385] [cursor=pointer]:
+                        - /url: "#list-of-installation-options"
+                        - text: "#"
+                - generic [ref=f1e386]:
+                    - paragraph [ref=f1e387]: TIP
+                    - paragraph [ref=f1e388]:
+                        - text: An easier way to choose your installation options is by using the
+                        - link "Install script generator" [ref=f1e389] [cursor=pointer]:
+                            - /url: /install.html
+                        - text: .
+                - paragraph [ref=f1e390]: To choose what software gets installed, you can provide flags to the installation script. You can view the full list of options below.
+                - generic [ref=f1e391]:
+                    - button "Copy Code" [ref=f1e392] [cursor=pointer]
+                    - generic [ref=f1e393]: bash
+                    - code [ref=f1e395]:
+                        - generic [ref=f1e396]: "-a, --apache Install Apache [yes | no] default: yes"
+                        - generic [ref=f1e397]: "-w, --phpfpm Install PHP-FPM [yes | no] default: yes"
+                        - generic [ref=f1e398]: "-o, --multiphp Install MultiPHP [yes | no] default: no"
+                        - generic [ref=f1e399]: "-v, --vsftpd Install VSFTPD [yes | no] default: yes"
+                        - generic [ref=f1e400]: "-j, --proftpd Install ProFTPD [yes | no] default: no"
+                        - generic [ref=f1e401]: "-k, --named Install BIND [yes | no] default: yes"
+                        - generic [ref=f1e402]: "-m, --mysql Install MariaDB [yes | no] default: yes"
+                        - generic [ref=f1e403]: "-M, --mysql8 Install MySQL 8 [yes | no] default: no"
+                        - generic [ref=f1e404]: "-g, --postgresql Install PostgreSQL [yes | no] default: no"
+                        - generic [ref=f1e405]: "-x, --exim Install Exim [yes | no] default: yes"
+                        - generic [ref=f1e406]: "-z, --dovecot Install Dovecot [yes | no] default: yes"
+                        - generic [ref=f1e407]: "-Z, --sieve Install Sieve [yes | no] default: no"
+                        - generic [ref=f1e408]: "-c, --clamav Install ClamAV [yes | no] default: yes"
+                        - generic [ref=f1e409]: "-t, --spamassassin Install SpamAssassin [yes | no] default: yes"
+                        - generic [ref=f1e410]: "-i, --iptables Install iptables [yes | no] default: yes"
+                        - generic [ref=f1e411]: "-b, --fail2ban Install Fail2Ban [yes | no] default: yes"
+                        - generic [ref=f1e412]: "-q, --quota Filesystem Quota [yes | no] default: no"
+                        - generic [ref=f1e413]: "-W, --webterminal Web Terminal [yes | no] default: no"
+                        - generic [ref=f1e414]: "-d, --api Activate API [yes | no] default: yes"
+                        - generic [ref=f1e415]: "-r, --port Change Backend Port default: 8083"
+                        - generic [ref=f1e416]: "-l, --lang Default language default: en"
+                        - generic [ref=f1e417]: "-y, --interactive Interactive install [yes | no] default: yes"
+                        - generic [ref=f1e418]: "-s, --hostname Set hostname"
+                        - generic [ref=f1e419]: "-e, --email Set admin email"
+                        - generic [ref=f1e420]: "-u, --username Set admin user"
+                        - generic [ref=f1e421]: "-p, --password Set admin password"
+                        - generic [ref=f1e422]: "-D, --with-debs Path to Lokahostcp debs"
+                        - generic [ref=f1e423]: "-f, --force Force installation"
+                        - generic [ref=f1e424]: "-h, --help Print this help"
+                - heading [level=4] [ref=f1e425]:
+                    - text: Example
+                    - link "Permalink to \"Example\"" [ref=f1e426] [cursor=pointer]:
+                        - /url: "#example"
+                        - text: "#"
+                - generic [ref=f1e427]:
+                    - button "Copy Code" [ref=f1e428] [cursor=pointer]
+                    - generic [ref=f1e429]: bash
+                    - code [ref=f1e431]:
+                        - generic [ref=f1e432]: bash lcp-install.sh \
+                        - generic [ref=f1e433]: "--interactive no \\"
+                        - generic [ref=f1e434]: "--hostname host.domain.tld \\"
+                        - generic [ref=f1e435]: "--email email@domain.tld \\"
+                        - generic [ref=f1e436]: "--password p4ssw0rd \\"
+                        - generic [ref=f1e437]: "--lang fr \\"
+                        - generic [ref=f1e438]: "--apache no \\"
+                        - generic [ref=f1e439]: "--named no \\"
+                        - generic [ref=f1e440]: "--clamav no \\"
+                        - generic [ref=f1e441]: "--spamassassin no"
+                - paragraph [ref=f1e442]: "This command will install Lokahostcp in French with the following software:"
+                - list [ref=f1e443]:
+                    - listitem [ref=f1e444]: Nginx Web Server
+                    - listitem [ref=f1e445]: PHP-FPM Application Server
+                    - listitem [ref=f1e446]: MariaDB Database Server
+                    - listitem [ref=f1e447]: IPtables Firewall + Fail2Ban Intrusion prevention software
+                    - listitem [ref=f1e448]: Vsftpd FTP Server
+                    - listitem [ref=f1e449]: Exim Mail Server
+                    - listitem [ref=f1e450]: Dovecot POP3/IMAP Server
+                - heading [level=2] [ref=f1e451]:
+                    - text: What’s next?
+                    - link "Permalink to \"What’s next?\"" [ref=f1e452] [cursor=pointer]:
+                        - /url: "#what-s-next"
+                        - text: "#"
+                - paragraph [ref=f1e453]: By now, you should have a Lokahostcp installation on your server. You are ready to add new users, so that you (or they) can add new websites on your server.
+                - paragraph [ref=f1e454]:
+                    - text: To access your control panel, navigate to
+                    - code [ref=f1e455]: https://host.domain.tld:8083
+                    - text: or
+                    - code [ref=f1e456]: http://your.public.ip.address:8083
+        - contentinfo [ref=f1e457]:
+            - generic [ref=f1e458]:
+                - link [ref=f1e460] [cursor=pointer]:
+                    - /url: https://github.com/lokahostcp/lokahostcp/edit/main/docs/docs/introduction/getting-started.md
+                    - img "edit icon" [ref=f1e461]
+                    - text: Edit this page on GitHub
+                - paragraph [ref=f1e465]:
+                    - text: "Last updated:"
+                    - time
+            - navigation [ref=f1e466]:
+                - link "Next page Best practices" [ref=f1e469] [cursor=pointer]:
+                    - /url: /docs/introduction/best-practices.html
+                    - generic [ref=f1e470]: Next page
+                    - generic [ref=f1e471]: Best practices

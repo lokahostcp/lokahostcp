@@ -26,7 +26,7 @@ if ($_SESSION["userContext"] === "admin" && !empty($_GET["user"])) {
 	$user = quoteshellarg($_GET["user"]);
 }
 
-exec(LOKAHOST_CMD . "v-list-user-log $user json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-user-log $user json", $output, $return_var);
 check_error($return_var);
 $data = json_decode(implode("", $output), true);
 if (is_array($data)) {

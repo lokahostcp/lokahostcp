@@ -15,16 +15,16 @@
 ip="$1"
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/ip.sh
-source $LOKAHOST/func/ip.sh
-# shellcheck source=/usr/local/lokahost/func/domain.sh
-source $LOKAHOST/func/domain.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/ip.sh
+source $LOKAHOSTCP/func/ip.sh
+# shellcheck source=/usr/local/lokahostcp/func/domain.sh
+source $LOKAHOSTCP/func/domain.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -37,14 +37,14 @@ is_ip_key_empty '$U_WEB_DOMAINS'
 is_ip_key_empty '$U_SYS_USERS'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 # Import IP variables
-source "$LOKAHOST/data/ips/$ip"
+source "$LOKAHOSTCP/data/ips/$ip"
 cidr="$(convert_netmask "$NETMASK")"
 
 # Get primary IP
@@ -76,10 +76,10 @@ if [ -e "/etc/sysconfig/network-scripts/ifcfg-$interface" ]; then
 fi
 
 # Deleting startup conf on Debian/Ubuntu
-if [ -f "/etc/netplan/60-lokahost.yaml" ]; then
-	sed -i "/$ip\//d" /etc/netplan/60-lokahost.yaml
-	if ! grep -q '-' /etc/netplan/60-lokahost.yaml; then
-		rm /etc/netplan/60-lokahost.yaml
+if [ -f "/etc/netplan/60-lokahostcp.yaml" ]; then
+	sed -i "/$ip\//d" /etc/netplan/60-lokahostcp.yaml
+	if ! grep -q '-' /etc/netplan/60-lokahostcp.yaml; then
+		rm /etc/netplan/60-lokahostcp.yaml
 	fi
 elif [ -e "/etc/network/interfaces" ]; then
 	ip_str="$(grep -n "$ip$" /etc/network/interfaces | cut -f1 -d:)"
@@ -90,8 +90,8 @@ elif [ -e "/etc/network/interfaces" ]; then
 	fi
 fi
 
-# Deleting Lokahost IP
-rm -f $LOKAHOST/data/ips/$ip
+# Deleting Lokahostcp IP
+rm -f $LOKAHOSTCP/data/ips/$ip
 
 # Deleting web config
 if [ -n "$WEB_SYSTEM" ]; then
@@ -129,7 +129,7 @@ if [ -n "$PROXY_SYSTEM" ]; then
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Updating user conf
@@ -139,8 +139,8 @@ fi
 
 if [ "$OWNER" = "$ROOT_USER" ]; then
 	if [ "$STATUS" = 'shared' ]; then
-		for lokahost_user in $("$BIN/v-list-users" list); do
-			decrease_user_value "$lokahost_user" '$IP_AVAIL'
+		for lokahostcp_user in $("$BIN/v-list-users" list); do
+			decrease_user_value "$lokahostcp_user" '$IP_AVAIL'
 		done
 	else
 		decrease_user_value "$OWNER" '$IP_AVAIL'

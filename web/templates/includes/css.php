@@ -6,14 +6,14 @@
 $selected_theme = !empty($_SESSION["userTheme"]) ? $_SESSION["userTheme"] : $_SESSION["THEME"];
 // Load non-default theme
 if ($selected_theme !== "default") {
-	// Load LokahostCP-shipped themes (minified, updated/overwritten with updates) - ($LOKAHOST/web/css/themes/*.min.css)
-	$non_default_theme_path = $_SERVER["LOKAHOST"] . "/web/css/themes/" . $selected_theme . ".min.css";
+	// Load Lokahostcp-shipped themes (minified, updated/overwritten with updates) - ($LOKAHOSTCP/web/css/themes/*.min.css)
+	$non_default_theme_path = $_SERVER["LOKAHOSTCP"] . "/web/css/themes/" . $selected_theme . ".min.css";
 	if (file_exists($non_default_theme_path)) {
 		echo '<link rel="stylesheet" href="/css/themes/' . $selected_theme . ".min.css?" . JS_LATEST_UPDATE . '">';
 	}
-	// Load custom theme files ($LOKAHOST/web/css/themes/custom/*.css)
+	// Load custom theme files ($LOKAHOSTCP/web/css/themes/custom/*.css)
 	else {
-		$custom_theme_path = $_SERVER["LOKAHOST"] . "/web/css/themes/custom/" . $selected_theme . ".min.css";
+		$custom_theme_path = $_SERVER["LOKAHOSTCP"] . "/web/css/themes/custom/" . $selected_theme . ".min.css";
 		if (file_exists($custom_theme_path)) {
 			echo '<link rel="stylesheet" href="/css/themes/custom/' . $selected_theme . ".min.css?" . JS_LATEST_UPDATE . '">';
 		} else {

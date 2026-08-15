@@ -1,15 +1,15 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Resources;
+namespace Lokahostcp\WebApp\Installers\Resources;
 
-use Lokahost\System\LokahostApp;
+use Lokahostcp\System\LokahostcpApp;
 
 class ComposerResource {
 	private $project;
 	private $folder;
 	private $appcontext;
 
-	public function __construct(LokahostApp $appcontext, $data, $destination) {
+	public function __construct(LokahostcpApp $appcontext, $data, $destination) {
 		$this->folder = dirname($destination);
 		$this->project = basename($destination);
 		$this->appcontext = $appcontext;

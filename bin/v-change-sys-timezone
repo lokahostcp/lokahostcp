@@ -14,12 +14,12 @@
 timezone=$1
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 is_timezone_valid() {
 	if [ ! -e "/usr/share/zoneinfo/$timezone" ]; then
@@ -37,7 +37,7 @@ check_args '1' "$#" 'TIMEZONE'
 is_timezone_valid
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -68,7 +68,7 @@ if [ -n "$WEB_SYSTEM" ]; then
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

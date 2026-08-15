@@ -1,0 +1,75 @@
+- generic [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+        - /url: "#VPContent"
+    - banner:
+        - generic:
+            - generic:
+                - generic:
+                    - link "Lokahostcp Control Panel" [ref=e6] [cursor=pointer]:
+                        - /url: /
+                    - generic [ref=e7]:
+                        - button "Search" [ref=e10] [cursor=pointer]:
+                            - generic [ref=e11]:
+                                - img "search icon" [ref=e12]
+                                - generic [ref=e14]: Search
+                            - generic [ref=e15]:
+                                - generic [ref=e16]: ⌘
+                                - generic [ref=e17]: K
+                        - navigation "Main Navigation" [ref=e18]:
+                            - link "Features" [ref=e20] [cursor=pointer]:
+                                - /url: /features.html
+                            - link "Install" [ref=e22] [cursor=pointer]:
+                                - /url: /install.html
+                            - link "Documentation" [ref=e24] [cursor=pointer]:
+                                - /url: /docs/introduction/getting-started.html
+                            - link "Forum" [ref=e26] [cursor=pointer]:
+                                - /url: https://forum.lokahost.online/
+                            - button "v1.0.0" [ref=e29] [cursor=pointer]
+                        - button "extra navigation" [ref=e35] [cursor=pointer]
+    - generic [ref=e41]:
+        - generic [ref=e43]:
+            - generic [ref=e44]:
+                - heading "Lokahostcp Control Panel" [level=1] [ref=e45]
+                - paragraph [ref=e46]: Open-source web server control panel
+                - paragraph [ref=e47]: Fast, reliable, open-source. The control panel you’ve always wanted is just a command away.
+                - generic [ref=e48]:
+                    - link "Get started" [ref=e50] [cursor=pointer]:
+                        - /url: /docs/introduction/getting-started.html
+                    - link "Try the demo" [ref=e52] [cursor=pointer]:
+                        - /url: https://demo.lokahost.online:8083/
+                    - link "View on GitHub" [ref=e54] [cursor=pointer]:
+                        - /url: https://github.com/lokahostcp/lokahostcp
+            - img "Lokahostcp Logo" [ref=e58]
+        - generic [ref=e61]:
+            - link [ref=e63] [cursor=pointer]:
+                - /url: /docs/introduction/getting-started.html
+                - article [ref=e64]:
+                    - generic [ref=e65]: 🚀
+                    - heading "Fast & easy to learn" [level=2] [ref=e66]
+                    - paragraph [ref=e67]: Lokahostcp is made with ease of use in mind. Creating a user or a website is as easy as clicking a button and filling out a couple of fields, while advanced features are easily accessible.
+                    - paragraph [ref=e69]: Documentation
+            - link [ref=e73] [cursor=pointer]:
+                - /url: https://github.com/lokahostcp/lokahostcp
+                - article [ref=e74]:
+                    - generic [ref=e75]: ❤️
+                    - heading "Open source, GPLv3" [level=2] [ref=e76]
+                    - paragraph [ref=e77]: Lokahostcp is open-source software derived from HestiaCP. The code is public, reviewable and open to contribution.
+                    - paragraph [ref=e79]: Browse the source
+            - link [ref=e83] [cursor=pointer]:
+                - /url: /docs/contributing/development.html
+                - article [ref=e84]:
+                    - generic [ref=e85]: 🛠️
+                    - heading "Extendable & powerful" [level=2] [ref=e86]
+                    - paragraph [ref=e87]: Lokahostcp is extendable while being easy to learn. You can build your own themes, web templates, quick install applications and can interact with it using third party software via its API.
+                    - paragraph [ref=e89]: Help develop Lokahostcp
+            - link [ref=e93] [cursor=pointer]:
+                - /url: https://github.com/lokahostcp/lokahostcp/issues
+                - article [ref=e94]:
+                    - generic [ref=e95]: 🤝
+                    - heading "Report an issue" [level=2] [ref=e96]
+                    - paragraph [ref=e97]: Found a bug or want to request a feature? Issues and pull requests are handled on GitHub.
+                    - paragraph [ref=e99]: Open an issue
+    - contentinfo [ref=e102]:
+        - generic [ref=e103]:
+            - paragraph [ref=e104]: Released under the GPLv3 License.
+            - paragraph [ref=e105]: Copyright © 2019-present Lokahostcp Control Panel

@@ -1,8 +1,8 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Laravel;
+namespace Lokahostcp\WebApp\Installers\Laravel;
 
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class LaravelSetup extends BaseSetup {
 	protected $appname = "laravel";

@@ -16,12 +16,12 @@ package=$2
 force=$3
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 is_package_available() {
 
@@ -34,7 +34,7 @@ is_package_available() {
 	DISK_QUOTA='0'
 	BANDWIDTH='0'
 
-	source_conf "$LOKAHOST/data/packages/$package.pkg"
+	source_conf "$LOKAHOSTCP/data/packages/$package.pkg"
 
 	# Checking usage agains package limits
 	if [ "$WEB_DOMAINS" != 'unlimited' ]; then
@@ -79,7 +79,7 @@ change_user_package() {
 	# Keep user creation date and time saved
 	creation_time="$TIME"
 	creation_date="$DATE"
-	source_conf "$LOKAHOST/data/packages/$package.pkg"
+	source_conf "$LOKAHOSTCP/data/packages/$package.pkg"
 	echo "NAME='$NAME'
 PACKAGE='$package'
 WEB_TEMPLATE='$WEB_TEMPLATE'
@@ -160,7 +160,7 @@ if [ "$force" != 'yes' ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -170,23 +170,23 @@ check_lokahost_demo_mode
 change_user_package
 
 # Update user shell
-shell_conf=$(cat "$LOKAHOST/data/packages/$package.pkg" | grep -m1 'SHELL' | cut -f 2 -d \')
-shell_jail_enabled_conf=$(cat "$LOKAHOST/data/packages/$package.pkg" | grep 'SHELL_JAIL_ENABLED' | cut -f 2 -d \')
+shell_conf=$(cat "$LOKAHOSTCP/data/packages/$package.pkg" | grep -m1 'SHELL' | cut -f 2 -d \')
+shell_jail_enabled_conf=$(cat "$LOKAHOSTCP/data/packages/$package.pkg" | grep 'SHELL_JAIL_ENABLED' | cut -f 2 -d \')
 $BIN/v-change-user-shell "$user" "$shell_conf" "$shell_jail_enabled_conf"
 
 # Run template trigger
-if [ -x "$LOKAHOST/data/packages/$package.sh" ]; then
-	$LOKAHOST/data/packages/$package.sh "$user" "$CONTACT" "$NAME"
+if [ -x "$LOKAHOSTCP/data/packages/$package.sh" ]; then
+	$LOKAHOSTCP/data/packages/$package.sh "$user" "$CONTACT" "$NAME"
 fi
 
 # Update disk quota
-source $LOKAHOST/conf/lokahost.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 if [ "$DISK_QUOTA" = 'yes' ]; then
 	$BIN/v-update-user-quota "$user"
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

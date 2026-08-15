@@ -16,18 +16,18 @@ user=$1
 restart=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/domain.sh
-source $LOKAHOST/func/domain.sh
-# shellcheck source=/usr/local/lokahost/func/db.sh
-source $LOKAHOST/func/db.sh
-# shellcheck source=/usr/local/lokahost/func/ip.sh
-source $LOKAHOST/func/ip.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/domain.sh
+source $LOKAHOSTCP/func/domain.sh
+# shellcheck source=/usr/local/lokahostcp/func/db.sh
+source $LOKAHOSTCP/func/db.sh
+# shellcheck source=/usr/local/lokahostcp/func/ip.sh
+source $LOKAHOSTCP/func/ip.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -41,7 +41,7 @@ if [ "$user" = "$ROOT_USER" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -83,8 +83,8 @@ $BIN/v-delete-user-ips "$user"
 check_result "$?" "user ip release failed"
 
 # Deleteing user pipes
-sed -i "/ $user$/d" "$LOKAHOST/data/queue/disk.pipe"
-sed -i "/ $user$/d" "$LOKAHOST/data/queue/traffic.pipe"
+sed -i "/ $user$/d" "$LOKAHOSTCP/data/queue/disk.pipe"
+sed -i "/ $user$/d" "$LOKAHOSTCP/data/queue/traffic.pipe"
 
 # Deleting sftp jail
 $BIN/v-delete-user-sftp-jail "$user"
@@ -118,7 +118,7 @@ if [ "$user" != "$ROOT_USER" ]; then
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

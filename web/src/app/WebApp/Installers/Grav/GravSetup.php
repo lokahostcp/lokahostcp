@@ -1,9 +1,9 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Grav;
+namespace Lokahostcp\WebApp\Installers\Grav;
 
-use Lokahost\System\Util;
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\System\Util;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class GravSetup extends BaseSetup {
 	protected $appInfo = [

@@ -6,10 +6,10 @@
 #----------------------------------------------------------#
 
 # Includes
-source $LOKAHOST/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # get current Roundcube version
-source $LOKAHOST/install/upgrade/upgrade.conf
-source $LOKAHOST/conf/lokahost.conf
+source $LOKAHOSTCP/install/upgrade/upgrade.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -24,7 +24,7 @@ fi
 #                       Action                             #
 #----------------------------------------------------------#
 
-echo "To remove Roundcube you will need use the root password. Password can be found in /usr/local/lokahost/conf/mysql.conf"
+echo "To remove Roundcube you will need use the root password. Password can be found in /usr/local/lokahostcp/conf/mysql.conf"
 read -p 'Would you like to continue? [y/n]' -n 1 -r
 echo # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]; then

@@ -4,7 +4,7 @@
 #
 # example: v-search-command web
 #
-# This function searches for available Lokahost Control Panel commands
+# This function searches for available Lokahostcp Control Panel commands
 # and returns results based on the specified criteria.
 # Originally developed for VestaCP by Federico Krum
 # <https://github.com/FastDigitalOceanDroplets/VestaCP/blob/master/files/v-search-command>
@@ -14,12 +14,12 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -31,7 +31,7 @@ if [ $# -eq 0 ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #

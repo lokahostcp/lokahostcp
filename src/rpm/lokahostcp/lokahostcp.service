@@ -1,0 +1,15 @@
+[Unit]
+Description=Lokahostcp web console
+Documentation=https://www.lokahost.online
+Wants=network-online.target
+After=network-online.target
+Requires=lokahostcp-php.service
+Requires=lokahostcp-nginx.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,14 +1,14 @@
 # Quick install app
 
-One of Lokahost’s most requested feature is to add support for Softaculous. However, due to the required use of Ioncube in lokahost-php and because we are against the use of proprietary software, we have instead developed our own **Quick install app** solution.
+One of Lokahostcp’s most requested feature is to add support for Softaculous. However, due to the required use of Ioncube in lokahostcp-php and because we are against the use of proprietary software, we have instead developed our own **Quick install app** solution.
 
-More information can be found in the [lokahost-quick-install repo](https://github.com/lokahost/lokahost-quick-install/blob/main/Example/ExampleSetup.php)
+More information can be found in the [lokahostcp-quick-install repo](https://github.com/lokahostcp/lokahostcp-quick-install/blob/main/Example/ExampleSetup.php)
 
 ## Creating a new app
 
-1. Make a new folder called `Example` in `/usr/local/lokahost/web/src/app/WebApp/Installers/`
+1. Make a new folder called `Example` in `/usr/local/lokahostcp/web/src/app/WebApp/Installers/`
 2. Create a file named `ExampleSetup.php`.
-3. Copy the [example file’s content](https://github.com/lokahost/lokahost-quick-install/blob/main/Example/ExampleSetup.php) into your new file.
+3. Copy the [example file’s content](https://github.com/lokahostcp/lokahostcp-quick-install/blob/main/Example/ExampleSetup.php) into your new file.
 
 This will add an app called “Example” when you open the **Quick install app** page.
 
@@ -64,13 +64,13 @@ Enables you to set app requirements and web server templates. For example, some 
 There are multiple ways to install and configure the web app after it is has been downloaded.
 
 - Manipulation of config files.
-- Run commands. For example, use `drush` to install [Drupal](https://github.com/lokahost/lokahost/blob/88598deb49cec6a39be4682beb8e9b8720d59c7b/web/src/app/WebApp/Installers/Drupal/DrupalSetup.php#L56-L65).
+- Run commands. For example, use `drush` to install [Drupal](https://github.com/lokahostcp/lokahostcp/blob/88598deb49cec6a39be4682beb8e9b8720d59c7b/web/src/app/WebApp/Installers/Drupal/DrupalSetup.php#L56-L65).
 - Using curl to provide configure the app over HTTP.
 
 ::: warning
-To prevent any issues, make that all commands are executed as the user, instead of `root` or `admin`. All the commands that are supplied by LokahostCP do this by default.
+To prevent any issues, make that all commands are executed as the user, instead of `root` or `admin`. All the commands that are supplied by Lokahostcp do this by default.
 :::
 
 ## Sharing
 
-Once you are done, you can [submit a Pull Request](https://github.com/lokahost/lokahost/pulls) and we will review the code. If it meets our standards, we will include in the next release.
+Once you are done, you can [submit a Pull Request](https://github.com/lokahostcp/lokahostcp/pulls) and we will review the code. If it meets our standards, we will include in the next release.

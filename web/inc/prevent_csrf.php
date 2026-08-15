@@ -3,24 +3,24 @@
 $check_csrf = true;
 
 if (
-	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahost/web/inc/mail-wrapper.php" ||
-	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahost//web/inc/mail-wrapper.php"
+	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahostcp/web/inc/mail-wrapper.php" ||
+	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahostcp//web/inc/mail-wrapper.php"
 ) {
 	$check_csrf = false;
 } // execute only from CLI
 if (
-	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahost/web/reset/mail/index.php" ||
-	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahost/web//reset/mail/index.php"
+	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahostcp/web/reset/mail/index.php" ||
+	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahostcp/web//reset/mail/index.php"
 ) {
 	$check_csrf = false;
 } // Localhost only
 if (
-	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahost/web/api/index.php" ||
-	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahost/web//api/index.php"
+	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahostcp/web/api/index.php" ||
+	$_SERVER["SCRIPT_FILENAME"] == "/usr/local/lokahostcp/web//api/index.php"
 ) {
 	$check_csrf = false;
 } // Own check
-if (substr($_SERVER["SCRIPT_FILENAME"], 0, 22) == "/usr/local/lokahost/bin/") {
+if (substr($_SERVER["SCRIPT_FILENAME"], 0, 22) == "/usr/local/lokahostcp/bin/") {
 	$check_csrf = false;
 }
 

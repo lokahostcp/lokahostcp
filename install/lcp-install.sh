@@ -2,9 +2,9 @@
 
 # ======================================================== #
 #
-# Lokahost Control Panel Installation Routine
+# Lokahostcp Control Panel Installation Routine
 # Automatic OS detection wrapper
-# https://www.lokahost.com/
+# https://www.lokahost.online/
 #
 # Currently Supported Operating Systems:
 #
@@ -13,6 +13,20 @@
 # AlmaLinux, EuroLinux, Red Hat EnterPrise Linux, Rocky Linux 8, 9
 #
 # ======================================================== #
+
+# Where this wrapper fetches the platform installer from.
+#
+# Both parts are overridable so the installer can be tested against a branch
+# before it is promoted, without editing this file:
+#
+#   LCP_BRANCH=v1.0.0 bash lcp-install.sh
+#
+# These were previously hardcoded, which meant a wrapper downloaded from one
+# branch always pulled its second stage from another. A wrapper should install
+# the version it came from unless told otherwise.
+LCP_REPO="${LCP_REPO:-lokahostcp/lokahostcp}"
+LCP_BRANCH="${LCP_BRANCH:-release}"
+LCP_SOURCE="${LCP_SOURCE:-https://raw.githubusercontent.com/$LCP_REPO/$LCP_BRANCH/install}"
 
 # Am I root?
 if [ "x$(id -u)" != 'x0' ]; then
@@ -79,7 +93,7 @@ fi
 no_support_message() {
 	echo "****************************************************"
 	echo "Your operating system (OS) is not supported by"
-	echo "Lokahost Control Panel. Officially supported releases:"
+	echo "Lokahostcp Control Panel. Officially supported releases:"
 	echo "****************************************************"
 	echo "  Debian 10, 11, 12"
 	echo "  Ubuntu 20.04, 22.04 LTS"
@@ -97,7 +111,7 @@ check_wget_curl() {
 	# Check wget
 	if [ -e '/usr/bin/wget' ]; then
 		if [ -e '/etc/redhat-release' ]; then
-			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-rhel.sh -O lcp-install-rhel.sh
+			wget -q $LCP_SOURCE/lcp-install-rhel.sh -O lcp-install-rhel.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-rhel.sh $*
 				exit
@@ -106,7 +120,7 @@ check_wget_curl() {
 				exit 1
 			fi
 		else
-			wget -q https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-$type.sh -O lcp-install-$type.sh
+			wget -q $LCP_SOURCE/lcp-install-$type.sh -O lcp-install-$type.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-$type.sh $*
 				exit
@@ -120,7 +134,7 @@ check_wget_curl() {
 	# Check curl
 	if [ -e '/usr/bin/curl' ]; then
 		if [ -e '/etc/redhat-release' ]; then
-			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-rhel.sh
+			curl -s -O $LCP_SOURCE/lcp-install-rhel.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-rhel.sh $*
 				exit
@@ -129,7 +143,7 @@ check_wget_curl() {
 				exit 1
 			fi
 		else
-			curl -s -O https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install-$type.sh
+			curl -s -O $LCP_SOURCE/lcp-install-$type.sh
 			if [ "$?" -eq '0' ]; then
 				bash lcp-install-$type.sh $*
 				exit

@@ -1,9 +1,9 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\MediaWiki;
+namespace Lokahostcp\WebApp\Installers\MediaWiki;
 
-use Lokahost\System\Util;
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\System\Util;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class MediaWikiSetup extends BaseSetup {
 	protected $appInfo = [

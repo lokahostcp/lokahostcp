@@ -15,18 +15,18 @@ domain_idn=$2
 status=$3
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/rebuild.sh
-source $LOKAHOST/func/rebuild.sh
-# shellcheck source=/usr/local/lokahost/func/syshealth.sh
-source $LOKAHOST/func/syshealth.sh
-# shellcheck source=/usr/local/lokahost/func/domain.sh
-source $LOKAHOST/func/domain.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/rebuild.sh
+source $LOKAHOSTCP/func/rebuild.sh
+# shellcheck source=/usr/local/lokahostcp/func/syshealth.sh
+source $LOKAHOSTCP/func/syshealth.sh
+# shellcheck source=/usr/local/lokahostcp/func/domain.sh
+source $LOKAHOSTCP/func/domain.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 # Additional argument formatting
 format_domain
@@ -49,10 +49,10 @@ if [ -n "$status" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
-if [ "$DNS_CLUSTER_SYSTEM" != 'lokahost-zone' ]; then
-	check_result "$E_DISABLED" "DNSSEC is not supported when DNS_CLUSTER_SYSTEM is not set to lokahost-zone"
+if [ "$DNS_CLUSTER_SYSTEM" != 'lokahostcp-zone' ]; then
+	check_result "$E_DISABLED" "DNSSEC is not supported when DNS_CLUSTER_SYSTEM is not set to lokahostcp-zone"
 fi
 
 version=$(named -v | awk 'NR==1{print $2}')
@@ -64,8 +64,8 @@ fi
 #                       Action                             #
 #----------------------------------------------------------#
 
-if [ -f "$LOKAHOST/data/queue/dns-cluster.pipe" ]; then
-	bash $LOKAHOST/data/queue/dns-cluster.pipe
+if [ -f "$LOKAHOSTCP/data/queue/dns-cluster.pipe" ]; then
+	bash $LOKAHOSTCP/data/queue/dns-cluster.pipe
 fi
 
 syshealth_repair_dns_config
@@ -89,15 +89,15 @@ fi
 # Updating dns-cluster queue
 if [ "$DNS_CLUSTER" = "yes" ]; then
 	# Check for first sync
-	dlock=$(grep "domain $user $domain" $LOKAHOST/data/queue/dns-cluster.pipe)
+	dlock=$(grep "domain $user $domain" $LOKAHOSTCP/data/queue/dns-cluster.pipe)
 	if [ -z "$dlock" ]; then
 		cmd="$BIN/v-add-remote-dns-domain $user $domain yes"
-		echo "$cmd" >> $LOKAHOST/data/queue/dns-cluster.pipe
+		echo "$cmd" >> $LOKAHOSTCP/data/queue/dns-cluster.pipe
 	fi
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

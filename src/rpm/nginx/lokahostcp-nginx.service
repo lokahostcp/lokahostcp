@@ -1,0 +1,15 @@
+[Unit]
+Description=Lokahostcp nginx - administration web server
+Documentation=https://www.lokahost.online
+PartOf=lokahostcp.service
+After=lokahostcp-php.service
+
+[Service]
+Type=forking
+PIDFile=/run/lokahostcp-nginx.pid
+ExecStart=/usr/local/lokahostcp/nginx/sbin/lokahostcp-nginx -c /usr/local/lokahostcp/nginx/conf/nginx.conf
+ExecReload=/bin/sh -c "/bin/kill -s HUP $(/bin/cat /run/lokahostcp-nginx.pid)"
+ExecStop=/bin/sh -c "/bin/kill -s TERM $(/bin/cat /run/lokahostcp-nginx.pid)"
+
+[Install]
+WantedBy=lokahostcp.service

@@ -15,7 +15,7 @@ if ($_SESSION["userContext"] != "admin") {
 if (!empty($_POST)) {
 	if (!empty($_POST["v_app_name"]) && $_SESSION["APP_NAME"] != $_POST["v_app_name"]) {
 		exec(
-			LOKAHOST_CMD .
+			LOKAHOSTCP_CMD .
 				"v-change-sys-config-value APP_NAME " .
 				quoteshellarg($_POST["v_app_name"]),
 			$output,
@@ -24,7 +24,7 @@ if (!empty($_POST)) {
 	}
 	if (!empty($_POST["v_title"]) && $_SESSION["TITLE"] != $_POST["v_title"]) {
 		exec(
-			LOKAHOST_CMD . "v-change-sys-config-value TITLE " . quoteshellarg($_POST["v_title"]),
+			LOKAHOSTCP_CMD . "v-change-sys-config-value TITLE " . quoteshellarg($_POST["v_title"]),
 			$output,
 			$return_var,
 		);
@@ -34,7 +34,7 @@ if (!empty($_POST)) {
 		$_SESSION["SUBJECT_EMAIL"] != $_POST["v_subject_email"]
 	) {
 		exec(
-			LOKAHOST_CMD .
+			LOKAHOSTCP_CMD .
 				"v-change-sys-config-value SUBJECT_EMAIL " .
 				quoteshellarg($_POST["v_subject_email"]),
 			$output,
@@ -43,7 +43,7 @@ if (!empty($_POST)) {
 	}
 	if (!empty($_POST["v_hide_docs"]) && $_SESSION["HIDE_DOCS"] != $_POST["v_hide_docs"]) {
 		exec(
-			LOKAHOST_CMD .
+			LOKAHOSTCP_CMD .
 				"v-change-sys-config-value HIDE_DOCS " .
 				quoteshellarg($_POST["v_hide_docs"]),
 			$output,
@@ -53,7 +53,7 @@ if (!empty($_POST)) {
 
 	if (!empty($_POST["v_from_name"]) && $_SESSION["FROM_NAME"] != $_POST["v_from_name"]) {
 		exec(
-			LOKAHOST_CMD .
+			LOKAHOSTCP_CMD .
 				"v-change-sys-config-value FROM_NAME " .
 				quoteshellarg($_POST["v_from_name"]),
 			$output,
@@ -62,7 +62,7 @@ if (!empty($_POST)) {
 	}
 	if (!empty($_POST["v_from_email"]) && $_SESSION["FROM_EMAIL"] != $_POST["v_from_email"]) {
 		exec(
-			LOKAHOST_CMD .
+			LOKAHOSTCP_CMD .
 				"v-change-sys-config-value FROM_EMAIL " .
 				quoteshellarg($_POST["v_from_email"]),
 			$output,
@@ -71,7 +71,7 @@ if (!empty($_POST)) {
 	}
 	if (!empty($_POST["v_hide_docs"]) && $_SESSION["HIDE_DOCS"] != $_POST["v_hide_docs"]) {
 		exec(
-			LOKAHOST_CMD .
+			LOKAHOSTCP_CMD .
 				"v-change-sys-config-value HIDE_DOCS " .
 				quoteshellarg($_POST["v_hide_docs"]),
 			$output,
@@ -79,15 +79,15 @@ if (!empty($_POST)) {
 		);
 	}
 	if (!empty($_POST["v_update_logo"])) {
-		exec(LOKAHOST_CMD . "v-update-white-label-logo");
+		exec(LOKAHOSTCP_CMD . "v-update-white-label-logo");
 	}
 	if (!empty($_POST["v_reset_logo"])) {
-		exec(LOKAHOST_CMD . "v-update-white-label-logo yes yes");
+		exec(LOKAHOSTCP_CMD . "v-update-white-label-logo yes yes");
 	}
 }
 
 // Check system configuration
-exec(LOKAHOST_CMD . "v-list-sys-config json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-sys-config json", $output, $return_var);
 $data = json_decode(implode("", $output), true);
 unset($output);
 

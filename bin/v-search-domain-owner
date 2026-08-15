@@ -15,12 +15,12 @@ domain=$1
 type=${2-any}
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -31,7 +31,7 @@ check_args '1' "$#" 'DOMAIN [TYPE]'
 is_format_valid 'domain'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -39,10 +39,10 @@ check_lokahost_demo_mode
 
 # Define conf
 case $type in
-	web) conf="$LOKAHOST/data/users/*/web.conf" ;;
-	dns) conf="$LOKAHOST/data/users/*/dns.conf" ;;
-	mail) conf="$LOKAHOST/data/users/*/mail.conf" ;;
-	*) conf="$LOKAHOST/data/users/*/*.conf" ;;
+	web) conf="$LOKAHOSTCP/data/users/*/web.conf" ;;
+	dns) conf="$LOKAHOSTCP/data/users/*/dns.conf" ;;
+	mail) conf="$LOKAHOSTCP/data/users/*/mail.conf" ;;
+	*) conf="$LOKAHOSTCP/data/users/*/*.conf" ;;
 esac
 
 owner=$(grep -H "DOMAIN='$domain'" $conf | head -n 1 | cut -f7 -d '/')
@@ -53,7 +53,7 @@ fi
 echo "$owner"
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

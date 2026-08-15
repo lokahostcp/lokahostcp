@@ -2,7 +2,7 @@
 
 #===========================================================================#
 #                                                                           #
-# Lokahost Control Panel - API Function Library                               #
+# Lokahostcp Control Panel - API Function Library                               #
 #                                                                           #
 #===========================================================================#
 
@@ -50,7 +50,7 @@ send_api_cmd() {
 
 	if [ "$DEBUG_MODE" = "yes" ]; then
 		# log out going request if wanted for debugging
-		echo "$1 $2 $3 $4 $5 $6 $7 $8 $9" >> /var/log/lokahost/api_out.log
+		echo "$1 $2 $3 $4 $5 $6 $7 $8 $9" >> /var/log/lokahostcp/api_out.log
 	fi
 	return $answer
 }
@@ -114,8 +114,8 @@ send_scp_file() {
 }
 
 is_dnshost_new() {
-	if [ -e "$LOKAHOST/conf/dns-cluster.conf" ]; then
-		check_host=$(grep "HOST='$host'" $LOKAHOST/conf/dns-cluster.conf)
+	if [ -e "$LOKAHOSTCP/conf/dns-cluster.conf" ]; then
+		check_host=$(grep "HOST='$host'" $LOKAHOSTCP/conf/dns-cluster.conf)
 		if [ -n "$check_host" ]; then
 			check_result $E_EXISTS "remote dns host $host exists"
 		fi
@@ -135,7 +135,7 @@ remote_dns_health_check() {
 	IFS=$'\n'
 
 	# Starting health-check
-	for str in $(grep "SUSPENDED='no'" $LOKAHOST/conf/dns-cluster.conf); do
+	for str in $(grep "SUSPENDED='no'" $LOKAHOSTCP/conf/dns-cluster.conf); do
 
 		# Reset user, password and hash vars
 		clear_dns_cluster_settings
@@ -156,7 +156,7 @@ remote_dns_health_check() {
 			echo -e "following commands:\n" >> $tmpfile
 			echo "v-unsuspend-remote-dns-host $HOST" >> $tmpfile
 			echo "v-sync-dns-cluster $HOST" >> $tmpfile
-			echo -e "\n\n--\nLokahost Control Panel\n$(hostname)" >> $tmpfile
+			echo -e "\n\n--\nLokahostcp Control Panel\n$(hostname)" >> $tmpfile
 
 			if [ "$1" = 'no_email' ]; then
 				cat $tmpfile

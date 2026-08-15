@@ -13,12 +13,12 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
-source $LOKAHOST/conf/lokahost.conf
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/conf/lokahostcp.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 
 function setupFiles {
 	echo "Use SMTP account for server communication (Y/n): "

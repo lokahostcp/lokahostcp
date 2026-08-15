@@ -1,5 +1,5 @@
 #!/bin/bash
-# info: add file manager functionality to Lokahost Control Panel
+# info: add file manager functionality to Lokahostcp Control Panel
 # options: [MODE]
 #
 # This function installs the File Manager on the server
@@ -10,19 +10,19 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 # load config file
-source_conf "$LOKAHOST/install/upgrade/upgrade.conf"
+source_conf "$LOKAHOSTCP/install/upgrade/upgrade.conf"
 
 MODE=$1
 user="$ROOT_USER"
 
-FM_INSTALL_DIR="$LOKAHOST/web/fm"
+FM_INSTALL_DIR="$LOKAHOSTCP/web/fm"
 FM_FILE="filegator_latest"
 FM_URL="https://github.com/filegator/static/raw/master/builds/filegator_latest.zip"
 COMPOSER_BIN="$HOMEDIR/$user/.composer/composer"
@@ -37,12 +37,12 @@ if [ "x$(id -u)" != 'x0' ]; then
 	exit 10
 fi
 
-# Ensure that $LOKAHOST (/usr/local/lokahost/) and other variables are valid.
-if [ -z "$LOKAHOST" ]; then
-	LOKAHOST="/usr/local/lokahost"
+# Ensure that $LOKAHOSTCP (/usr/local/lokahostcp/) and other variables are valid.
+if [ -z "$LOKAHOSTCP" ]; then
+	LOKAHOSTCP="/usr/local/lokahostcp"
 fi
 
-if [ -z "$HOMEDIR" ] || [ -z "$LOKAHOST_INSTALL_DIR" ]; then
+if [ -z "$HOMEDIR" ] || [ -z "$LOKAHOSTCP_INSTALL_DIR" ]; then
 	echo "ERROR: Environment variables not present, installation aborted."
 	exit 2
 fi
@@ -51,19 +51,19 @@ fi
 if [ ! -f "$COMPOSER_BIN" ]; then
 	$BIN/v-add-user-composer "$user"
 	if [ $? -ne 0 ]; then
-		$BIN/v-add-user-notification "$ROOT_USER" 'Composer installation failed!' '<p class="u-text-bold">The File Manager will not work without Composer.</p><p>Please try running the installer manually from a shell session:<br><code>v-add-sys-filemanager</code></p><p>If this continues, <a href="https://github.com/lokahost/lokahost/issues" target="_blank">open an issue on GitHub</a>.</p>'
+		$BIN/v-add-user-notification "$ROOT_USER" 'Composer installation failed!' '<p class="u-text-bold">The File Manager will not work without Composer.</p><p>Please try running the installer manually from a shell session:<br><code>v-add-sys-filemanager</code></p><p>If this continues, <a href="https://github.com/lokahostcp/lokahostcp/issues" target="_blank">open an issue on GitHub</a>.</p>'
 		exit 1
 	fi
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
-openssl_installed=$(/usr/local/lokahost/php/bin/php -m | grep openssl)
+openssl_installed=$(/usr/local/lokahostcp/php/bin/php -m | grep openssl)
 
 rm --recursive --force "$FM_INSTALL_DIR"
 mkdir -p "$FM_INSTALL_DIR"
@@ -76,22 +76,22 @@ mv --force ${FM_INSTALL_DIR}/filegator/* "${FM_INSTALL_DIR}"
 rm --recursive --force ${FM_INSTALL_DIR}/${FM_FILE}
 [[ -f "${FM_INSTALL_DIR}/${FM_FILE}" ]] && rm "${FM_INSTALL_DIR}/${FM_FILE}"
 
-cp --recursive --force ${LOKAHOST_INSTALL_DIR}/filemanager/filegator/* "${FM_INSTALL_DIR}"
+cp --recursive --force ${LOKAHOSTCP_INSTALL_DIR}/filemanager/filegator/* "${FM_INSTALL_DIR}"
 
 chown $user: -R "${FM_INSTALL_DIR}"
 
 if [ -z "$openssl_installed" ]; then
 	COMPOSER_HOME="$HOMEDIR/$user/.config/composer" user_exec /usr/bin/php $COMPOSER_BIN --quiet --no-dev install
 else
-	COMPOSER_HOME="$HOMEDIR/$user/.config/composer" user_exec /usr/local/lokahost/php/bin/php $COMPOSER_BIN --quiet --no-dev install
+	COMPOSER_HOME="$HOMEDIR/$user/.config/composer" user_exec /usr/local/lokahostcp/php/bin/php $COMPOSER_BIN --quiet --no-dev install
 fi
 
 # Check if installation was successful, if not abort script and throw error message notification and clean-up
 if [ $? -ne 0 ]; then
 	echo "ERROR: File Manager installation failed!"
 	echo "Please report this to our development team:"
-	echo "https://github.com/lokahost/lokahost/issues"
-	$BIN/v-add-user-notification "$ROOT_USER" 'File Manager installation failed!' '<p>Please <a href="https://github.com/lokahost/lokahost/issues" target="_blank">open an issue on GitHub</a> to report this to our development team.</p>'
+	echo "https://github.com/lokahostcp/lokahostcp/issues"
+	$BIN/v-add-user-notification "$ROOT_USER" 'File Manager installation failed!' '<p>Please <a href="https://github.com/lokahostcp/lokahostcp/issues" target="_blank">open an issue on GitHub</a> to report this to our development team.</p>'
 	# Installation failed, clean up files
 	rm --recursive --force ${FM_INSTALL_DIR}
 	$BIN/v-change-sys-config-value 'FILE_MANAGER' 'false'
@@ -100,14 +100,14 @@ if [ $? -ne 0 ]; then
 fi
 
 # Add configuration file
-cp -f $LOKAHOST_INSTALL_DIR/filemanager/filegator/configuration.php $LOKAHOST/web/fm/configuration.php
+cp -f $LOKAHOSTCP_INSTALL_DIR/filemanager/filegator/configuration.php $LOKAHOSTCP/web/fm/configuration.php
 
 echo "$fm_v" > "${FM_INSTALL_DIR}/version"
 # Set permissions
 chown root: -R "${FM_INSTALL_DIR}"
-chown lokahostweb: "${FM_INSTALL_DIR}/private"
-chown lokahostweb: "${FM_INSTALL_DIR}/private/logs"
-chown lokahostweb: "${FM_INSTALL_DIR}/repository"
+chown lokahostcpweb: "${FM_INSTALL_DIR}/private"
+chown lokahostcpweb: "${FM_INSTALL_DIR}/private/logs"
+chown lokahostcpweb: "${FM_INSTALL_DIR}/repository"
 
 $BIN/v-change-sys-config-value 'FILE_MANAGER' 'true'
 

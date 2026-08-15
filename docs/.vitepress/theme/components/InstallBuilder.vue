@@ -9,7 +9,7 @@
 				</p>
 				<CopyToClipboardInput
 					class="u-mb10"
-					value="wget https://raw.githubusercontent.com/lokahost/lokahost/release/install/lcp-install.sh"
+					value="wget https://raw.githubusercontent.com/lokahostcp/lokahostcp/release/install/lcp-install.sh"
 				/>
 				<p class="u-mb10">
 					Check you are running as the <code>root</code> user, configure the options you want below,

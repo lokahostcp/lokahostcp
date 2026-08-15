@@ -11,11 +11,11 @@ verify_csrf($_GET);
 // DNS domain
 if (!empty($_GET["domain"]) && empty($_GET["record_id"])) {
 	$v_domain = quoteshellarg($_GET["domain"]);
-	exec(LOKAHOST_CMD . "v-unsuspend-dns-domain " . $user . " " . $v_domain, $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-unsuspend-dns-domain " . $user . " " . $v_domain, $output, $return_var);
 	if ($return_var != 0) {
 		$error = implode("<br>", $output);
 		if (empty($error)) {
-			$error = _("Error: Lokahost did not return any output.");
+			$error = _("Error: Lokahostcp did not return any output.");
 		}
 		$_SESSION["error_msg"] = $error;
 	}
@@ -34,14 +34,14 @@ if (!empty($_GET["domain"]) && !empty($_GET["record_id"])) {
 	$v_domain = quoteshellarg($_GET["domain"]);
 	$v_record_id = quoteshellarg($_GET["record_id"]);
 	exec(
-		LOKAHOST_CMD . "v-unsuspend-dns-record " . $user . " " . $v_domain . " " . $v_record_id,
+		LOKAHOSTCP_CMD . "v-unsuspend-dns-record " . $user . " " . $v_domain . " " . $v_record_id,
 		$output,
 		$return_var,
 	);
 	if ($return_var != 0) {
 		$error = implode("<br>", $output);
 		if (empty($error)) {
-			$error = _("Error: Lokahost did not return any output.");
+			$error = _("Error: Lokahostcp did not return any output.");
 		}
 		$_SESSION["error_msg"] = $error;
 	}

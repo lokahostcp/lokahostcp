@@ -24,14 +24,14 @@ if [ "$ttl" == '' ]; then
 fi
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/db.sh
-source $LOKAHOST/func/db.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/db.sh
+source $LOKAHOSTCP/func/db.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -48,7 +48,7 @@ is_object_unsuspended 'db' 'DB' "$database"
 get_next_dbhost
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -59,7 +59,7 @@ get_database_values
 
 #generate password and unique user
 dbpass=$(generate_password)
-dbuser="lokahost_sso_$(generate_password)"
+dbuser="lokahostcp_sso_$(generate_password)"
 
 add_mysql_database_temp_user
 if [ $? -ne 0 ]; then
@@ -78,7 +78,7 @@ echo '{
 }'
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

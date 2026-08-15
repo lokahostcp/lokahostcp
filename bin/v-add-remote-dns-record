@@ -16,14 +16,14 @@ domain=$2
 id=$3
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/remote.sh
-source $LOKAHOST/func/remote.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/remote.sh
+source $LOKAHOSTCP/func/remote.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -38,7 +38,7 @@ is_procces_running
 remote_dns_health_check
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -47,18 +47,18 @@ check_lokahost_demo_mode
 # Parsing record
 str=$(grep "ID='$id'" $USER_DATA/dns/$domain.conf)
 if [ -z "$str" ]; then
-	pipe="$LOKAHOST/data/queue/dns-cluster.pipe"
+	pipe="$LOKAHOSTCP/data/queue/dns-cluster.pipe"
 	queue_str=$(grep -n "$SCRIPT $1 $2 $3$" $pipe | cut -f1 -d: | head -n1)
 	if [ -n "$queue_str" ]; then
 		sed -i "$queue_str d" $pipe
 	fi
 	exit
 fi
-# $DNS_CLUSTER_SYSTEM = "lokahost-zone" doesn't need to be uopdated
+# $DNS_CLUSTER_SYSTEM = "lokahostcp-zone" doesn't need to be uopdated
 
-if [ "$DNS_CLUSTER_SYSTEM" != "lokahost-zone" ]; then
+if [ "$DNS_CLUSTER_SYSTEM" != "lokahostcp-zone" ]; then
 	IFS=$'\n'
-	for cluster in $(grep "SUSPENDED='no'" $LOKAHOST/conf/dns-cluster.conf); do
+	for cluster in $(grep "SUSPENDED='no'" $LOKAHOSTCP/conf/dns-cluster.conf); do
 
 		# Reset user, password and hash vars
 		clear_dns_cluster_settings
@@ -85,11 +85,11 @@ if [ "$DNS_CLUSTER_SYSTEM" != "lokahost-zone" ]; then
 	done
 fi
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Updating pipe
-pipe="$LOKAHOST/data/queue/dns-cluster.pipe"
+pipe="$LOKAHOSTCP/data/queue/dns-cluster.pipe"
 str=$(grep -n "$SCRIPT $1 $2 $3$" $pipe | cut -f1 -d: | head -n1)
 if [ -n "$str" ]; then
 	sed -i "$str d" $pipe

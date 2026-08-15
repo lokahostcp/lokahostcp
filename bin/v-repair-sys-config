@@ -9,10 +9,10 @@
 mode=$1
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 
 #----------------------------------------------------------#
 #                        Action                            #
@@ -24,12 +24,12 @@ fi
 
 if [ "$mode" = "repair" ]; then
 	# load config file
-	source_conf "$LOKAHOST/conf/lokahost.conf"
+	source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 	syshealth_repair_system_config
 fi
 
 #----------------------------------------------------------#
-#                        Lokahost                            #
+#                        Lokahostcp                            #
 #----------------------------------------------------------#
 
 $BIN/v-log-action "system" "Info" "System" "Executed $mode operation on system configuration."

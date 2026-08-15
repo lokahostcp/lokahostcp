@@ -38,8 +38,8 @@ server {
 	server_name         _;
 	access_log          off;
 	error_log           /dev/null;
-	ssl_certificate     /usr/local/lokahost/ssl/certificate.crt;
-	ssl_certificate_key /usr/local/lokahost/ssl/certificate.key;
+	ssl_certificate     /usr/local/lokahostcp/ssl/certificate.crt;
+	ssl_certificate_key /usr/local/lokahostcp/ssl/certificate.key;
 	return              301 http://$host$request_uri;
 
 	location / {

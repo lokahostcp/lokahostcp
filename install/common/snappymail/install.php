@@ -22,7 +22,7 @@ $oConfig->Set("contacts", "pdo_password", $argv[3]);
 $oConfig->Set("plugins", "enable", "On");
 
 \SnappyMail\Repository::installPackage("plugin", "change-password");
-\SnappyMail\Repository::installPackage("plugin", "change-password-lokahost");
+\SnappyMail\Repository::installPackage("plugin", "change-password-lokahostcp");
 
 $sFile = APP_PRIVATE_DATA . "configs/plugin-change-password.json";
 if (!file_exists($sFile)) {
@@ -33,10 +33,10 @@ if (!file_exists($sFile)) {
 				"plugin" => [
 					"pass_min_length" => 8,
 					"pass_min_strength" => 60,
-					"driver_lokahost_enabled" => true,
-					"driver_lokahost_allowed_emails" => "*",
-					"lokahost_host" => gethostname(),
-					"lokahost_port" => $argv[4], // $BACKEND_PORT
+					"driver_lokahostcp_enabled" => true,
+					"driver_lokahostcp_allowed_emails" => "*",
+					"lokahostcp_host" => gethostname(),
+					"lokahostcp_port" => $argv[4], // $BACKEND_PORT
 				],
 			],
 			JSON_PRETTY_PRINT,
@@ -64,7 +64,7 @@ if (!file_exists($sFile)) {
 
 $oConfig->Save();
 
-$sFile = APP_PRIVATE_DATA . "domains/lokahost.json";
+$sFile = APP_PRIVATE_DATA . "domains/lokahostcp.json";
 if (!file_exists($sFile)) {
 	$config = json_decode(APP_PRIVATE_DATA . "domains/default.json", true);
 	$config["IMAP"]["shortLogin"] = true;

@@ -5,7 +5,7 @@ error=false
 current=$1
 
 if [ -z "$current" ]; then
-	current="/usr/local/lokahost/web/"
+	current="/usr/local/lokahostcp/web/"
 fi
 
 if [ ! -d $current ] && [ ! -f $current ]; then

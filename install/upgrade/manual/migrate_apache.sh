@@ -8,10 +8,10 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
-source $LOKAHOST/conf/lokahost.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/conf/lokahostcp.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -33,22 +33,22 @@ php_v="$(multiphp_default_version)"
 
 $BIN/v-add-web-php "$php_v"
 
-cp -f "${LOKAHOST_INSTALL_DIR}/php-fpm/www.conf" "/etc/php/${php_v}/fpm/pool.d/www.conf"
+cp -f "${LOKAHOSTCP_INSTALL_DIR}/php-fpm/www.conf" "/etc/php/${php_v}/fpm/pool.d/www.conf"
 systemctl start php${php_v}-fpm
 check_result $? "php${php_v}-fpm start failed"
 update-alternatives --set php /usr/bin/php${php_v}
 
 if [ ! -z "$WEB_SYSTEM" ]; then
-	cp -rf "${LOKAHOST_INSTALL_DIR}/templates/web/$WEB_SYSTEM" "${WEBTPL}/"
+	cp -rf "${LOKAHOSTCP_INSTALL_DIR}/templates/web/$WEB_SYSTEM" "${WEBTPL}/"
 fi
 
-sed -i "/^WEB_BACKEND=/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
-echo "WEB_BACKEND='php-fpm'" >> $LOKAHOST/conf/lokahost.conf
-echo "WEB_BACKEND='php-fpm'" >> $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^WEB_BACKEND=/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+echo "WEB_BACKEND='php-fpm'" >> $LOKAHOSTCP/conf/lokahostcp.conf
+echo "WEB_BACKEND='php-fpm'" >> $LOKAHOSTCP/conf/defaults/lokahostcp.conf
 
 for user in $($BIN/v-list-sys-users plain); do
 	# Define user data and get suspended status
-	USER_DATA=$LOKAHOST/data/users/$user
+	USER_DATA=$LOKAHOSTCP/data/users/$user
 	SUSPENDED=$(get_user_value '$SUSPENDED')
 
 	# Check if user is suspended
@@ -90,7 +90,7 @@ $BIN/v-restart-web-backend "yes"
 check_result $? "Backend restart" > /dev/null 2>&1
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

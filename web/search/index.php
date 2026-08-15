@@ -25,15 +25,15 @@ if ($_SESSION["userContext"] === "admin" && $_SESSION["look"] == "") {
 	if (!empty($_GET["u"])) {
 		$user = $u;
 		exec(
-			LOKAHOST_CMD . "v-search-user-object " . $user . " " . $q . " json",
+			LOKAHOSTCP_CMD . "v-search-user-object " . $user . " " . $q . " json",
 			$output,
 			$return_var,
 		);
 	} else {
-		exec(LOKAHOST_CMD . "v-search-object " . $q . " json", $output, $return_var);
+		exec(LOKAHOSTCP_CMD . "v-search-object " . $q . " json", $output, $return_var);
 	}
 } else {
-	exec(LOKAHOST_CMD . "v-search-user-object " . $user . " " . $q . " json", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-search-user-object " . $user . " " . $q . " json", $output, $return_var);
 }
 
 $data = json_decode(implode("", $output), true);

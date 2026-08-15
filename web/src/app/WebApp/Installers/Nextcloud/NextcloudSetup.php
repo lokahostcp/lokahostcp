@@ -1,8 +1,8 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Nextcloud;
+namespace Lokahostcp\WebApp\Installers\Nextcloud;
 
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class NextcloudSetup extends BaseSetup {
 	protected $appInfo = [

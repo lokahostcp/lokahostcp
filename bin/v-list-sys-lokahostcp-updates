@@ -1,0 +1,156 @@
+#!/bin/bash
+# info: list system updates
+# options: [FORMAT]
+#
+# example: v-list-sys-lokahostcp-updates
+#
+# This function checks available updates for lokahostcp packages.
+
+#----------------------------------------------------------#
+#                Variables & Functions                     #
+#----------------------------------------------------------#
+
+# Argument definition
+format=${1-shell}
+
+# Includes
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# load config file
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
+
+fields="\$NAME \$VERSION \$ARCH \$UPDATED \$DESCR \$TIME \$DATE"
+
+# Check details of installed .deb package function
+check_installed_deb() {
+	dpkg_data=$(dpkg-query -s $1)
+	pkg_date=$(stat -c "%Y" /var/lib/dpkg/info/$1.list)
+	ARCH=$(echo "$dpkg_data" | grep Architecture | cut -f 2 -d ' ')
+	VERSION=$(echo "$dpkg_data" | grep ^Version | cut -f 2 -d ' ')
+	DATE=$(date -d @$pkg_date +"%F")
+	TIME=$(date -d @$pkg_date +"%T")
+}
+
+# Check details of installed .rpm package function
+check_installed_rpm() {
+	rpm_data=$(rpm -qi $1)
+	ARCH=$(echo "$rpm_data" | grep Architecture | cut -f 2 -d ' ')
+	VERSION=$(echo "$rpm_data" | grep Version | cut -f 2 -d ':' | xargs)
+	DATE=$(echo "$rpm_data" | grep "Build Date" | awk '{print $5 " " $6 " " $7}')
+	TIME=$(echo "$rpm_data" | grep "Build Date" | awk '{print $8 " " $9 " " $10}')
+}
+
+# JSON list function
+json_list() {
+	IFS=$'\n'
+	i=1
+	objects=$(echo -e "$data" | grep NAME | wc -l)
+	echo "{"
+	for str in $(echo -e "$data"); do
+		parse_object_kv_list "$str"
+		echo -n '    "'$NAME'": {
+        "VERSION": "'$VERSION'",
+        "ARCH": "'$ARCH'",
+        "UPDATED": "'$UPDATED'",
+        "DESCR": "'$DESCR'",
+        "TIME": "'$TIME'",
+        "DATE": "'$DATE'"
+    }'
+		if [ "$i" -lt "$objects" ]; then
+			echo ','
+		else
+			echo
+		fi
+		((i++))
+	done
+	echo '}'
+}
+
+# SHELL list function
+shell_list() {
+	IFS=$'\n'
+	echo "PKG   VER   ARCH   UPDT   DATE"
+	echo "---   ---   ----   ----   ----"
+	for str in $(echo -e "$data"); do
+		parse_object_kv_list "$str"
+		echo "$NAME $VERSION $ARCH $UPDATED $DATE"
+	done
+}
+
+#----------------------------------------------------------#
+#                       Action                             #
+#----------------------------------------------------------#
+
+# Checking official latest version
+if [ -f '/etc/redhat-release' ]; then
+	lokahostcp_v=$(dnf list lokahostcp | grep lokahostcp | awk '{print $2}' | cut -f 1 -d '-')
+	nginx_v=$(dnf list lokahostcp-nginx | grep lokahostcp-nginx | awk '{print $2}' | cut -f 1 -d '-')
+	php_v=$(dnf list lokahostcp-php | grep lokahostcp-php | awk '{print $2}' | cut -f 1 -d '-')
+else
+	lokahostcp_v=$(apt-cache policy lokahostcp | grep Candidate | cut -d ':' -f 2 | xargs)
+	nginx_v=$(apt-cache policy lokahostcp-nginx | grep Candidate | cut -d ':' -f 2 | xargs)
+	php_v=$(apt-cache policy lokahostcp-php | grep Candidate | cut -d ':' -f 2 | xargs)
+fi
+
+# Checking installed lokahostcp version
+if [ -f '/etc/redhat-release' ]; then
+	check_installed_rpm lokahostcp
+else
+	check_installed_deb lokahostcp
+fi
+
+UPDATED='yes'
+if [ -n "$lokahostcp_v" ] && [ "$lokahostcp_v" \> "$VERSION" ]; then
+	UPDATED='no'
+fi
+
+data="NAME='lokahostcp' VERSION='$VERSION' ARCH='$ARCH'"
+data="$data UPDATED='$UPDATED' DESCR='Lokahostcp core package' TIME='$TIME' DATE='$DATE'"
+
+# Checking installed lokahostcp-php version
+if [ -f '/etc/redhat-release' ]; then
+	check_installed_rpm lokahostcp-php
+else
+	check_installed_deb lokahostcp-php
+fi
+
+UPDATED='yes'
+if [ -n "$php_v" ] && [ "$php_v" \> "$VERSION" ]; then
+	UPDATED='no'
+fi
+
+data="$data\nNAME='lokahostcp-php' VERSION='$VERSION'"
+data="$data ARCH='$ARCH' UPDATED='$UPDATED' DESCR='Lokahostcp internal php interpreter'"
+data="$data TIME='$TIME' DATE='$DATE'"
+
+# Checking installed lokahostcp-nginx version
+if [ -f '/etc/redhat-release' ]; then
+	check_installed_rpm lokahostcp-nginx
+else
+	check_installed_deb lokahostcp-nginx
+fi
+
+UPDATED='yes'
+if [ -n "$nginx_v" ] && [ "$nginx_v" \> "$VERSION" ]; then
+	UPDATED='no'
+fi
+
+data="$data\nNAME='lokahostcp-nginx' VERSION='$VERSION'"
+data="$data ARCH='$ARCH' UPDATED='$UPDATED' DESCR='Lokahostcp internal web server'"
+data="$data TIME='$TIME' DATE='$DATE'"
+
+# Listing data
+case $format in
+	json) json_list ;;
+	plain) plain_list ;;
+	csv) csv_list ;;
+	shell) shell_list | column -t ;;
+esac
+
+#----------------------------------------------------------#
+#                       Lokahostcp                             #
+#----------------------------------------------------------#
+
+exit

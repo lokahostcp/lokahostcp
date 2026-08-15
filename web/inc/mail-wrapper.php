@@ -1,4 +1,4 @@
-#!/usr/local/lokahost/php/bin/php
+#!/usr/local/lokahostcp/php/bin/php
 <?php
 if (empty($argv[1])) {
 	echo "ERROR: not enough arguments\n";
@@ -14,10 +14,10 @@ if (!empty($argv[4]) && $argv[4] == "no") {
 
 define("NO_AUTH_REQUIRED", true);
 
-include "/usr/local/lokahost/web/inc/main.php";
+include "/usr/local/lokahostcp/web/inc/main.php";
 
 // Set system language
-exec(LOKAHOST_CMD . "v-list-sys-config json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-sys-config json", $output, $return_var);
 $data = json_decode(implode("", $output), true);
 if (!empty($data["config"]["LANGUAGE"])) {
 	$_SESSION["language"] = $data["config"]["LANGUAGE"];

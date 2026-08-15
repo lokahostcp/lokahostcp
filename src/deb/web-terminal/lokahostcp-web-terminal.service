@@ -1,0 +1,16 @@
+[Unit]
+Description=Lokahostcp Web Terminal
+Documentation=https://lokahost.online/docs/
+After=network.target
+
+[Service]
+User=root
+Group=lokahostcp-users
+Environment=NODE_ENV=production
+Environment=LOKAHOSTCP=/usr/local/lokahostcp
+ExecStart=/usr/local/lokahostcp/web-terminal/server.js
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

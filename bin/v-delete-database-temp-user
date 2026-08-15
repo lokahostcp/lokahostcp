@@ -2,7 +2,7 @@
 # info: deletes temp database user
 # options: USER DBUSER [TYPE] [HOST]
 #
-# example: v-add-database-temp-user wordress lokahost_sso_user mysql
+# example: v-add-database-temp-user wordress lokahostcp_sso_user mysql
 #
 # Revokes "temp user" access to a database and removes the user
 # To be used in combination with v-add-database-temp-user
@@ -19,14 +19,14 @@ type=${4-mysql}
 host=$5
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/db.sh
-source $LOKAHOST/func/db.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/db.sh
+source $LOKAHOSTCP/func/db.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -41,13 +41,13 @@ is_object_valid 'db' 'DB' "$database"
 is_object_unsuspended 'db' 'DB' "$database"
 get_next_dbhost
 
-if [[ $dbuser != *"lokahost_sso"* ]]; then
+if [[ $dbuser != *"lokahostcp_sso"* ]]; then
 	echo "DBUSER is invalid SSO user"
 	exit "$E_INVALID"
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -59,7 +59,7 @@ get_database_values
 delete_mysql_database_temp_user
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

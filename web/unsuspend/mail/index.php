@@ -11,11 +11,11 @@ verify_csrf($_GET);
 // Mail domain
 if (!empty($_GET["domain"]) && empty($_GET["account"])) {
 	$v_domain = quoteshellarg($_GET["domain"]);
-	exec(LOKAHOST_CMD . "v-unsuspend-mail-domain " . $user . " " . $v_domain, $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-unsuspend-mail-domain " . $user . " " . $v_domain, $output, $return_var);
 	if ($return_var != 0) {
 		$error = implode("<br>", $output);
 		if (empty($error)) {
-			$error = _("Error: Lokahost did not return any output.");
+			$error = _("Error: Lokahostcp did not return any output.");
 		}
 		$_SESSION["error_msg"] = $error;
 	}
@@ -35,14 +35,14 @@ if (!empty($_GET["domain"]) && !empty($_GET["account"])) {
 	$v_domain = quoteshellarg($_GET["domain"]);
 	$v_account = quoteshellarg($_GET["account"]);
 	exec(
-		LOKAHOST_CMD . "v-unsuspend-mail-account " . $user . " " . $v_domain . " " . $v_account,
+		LOKAHOSTCP_CMD . "v-unsuspend-mail-account " . $user . " " . $v_domain . " " . $v_account,
 		$output,
 		$return_var,
 	);
 	if ($return_var != 0) {
 		$error = implode("<br>", $output);
 		if (empty($error)) {
-			$error = _("Error: Lokahost did not return any output.");
+			$error = _("Error: Lokahostcp did not return any output.");
 		}
 		$_SESSION["error_msg"] = $error;
 	}

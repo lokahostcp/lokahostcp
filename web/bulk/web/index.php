@@ -63,15 +63,15 @@ if ($_SESSION["userContext"] === "admin") {
 
 foreach ($domain as $value) {
 	$value = quoteshellarg($value);
-	exec(LOKAHOST_CMD . $cmd . " " . $user . " " . $value . " no", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . $cmd . " " . $user . " " . $value . " no", $output, $return_var);
 	$restart = "yes";
 }
 
 if (isset($restart)) {
-	exec(LOKAHOST_CMD . "v-restart-web", $output, $return_var);
-	exec(LOKAHOST_CMD . "v-restart-proxy", $output, $return_var);
-	exec(LOKAHOST_CMD . "v-restart-dns", $output, $return_var);
-	exec(LOKAHOST_CMD . "v-restart-web-backend", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-restart-web", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-restart-proxy", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-restart-dns", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-restart-web-backend", $output, $return_var);
 }
 
 header("Location: /list/web/");

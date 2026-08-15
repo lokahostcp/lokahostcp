@@ -5,8 +5,8 @@
 Add to /root/.bashrc the following code:
 
 ```bash
-if [ "${PATH#*/usr/local/lokahost/bin*}" = "$PATH" ]; then
-	. /etc/profile.d/lokahost.sh
+if [ "${PATH#*/usr/local/lokahostcp/bin*}" = "$PATH" ]; then
+	. /etc/profile.d/lokahostcp.sh
 fi
 ```
 
@@ -16,7 +16,7 @@ After that you are able to run any v-command you want.
 
 ## Disabling “Use IP address allow list for login attempts” via command line
 
-With the introduction of Lokahost v1.4.0 we have added certain security features, including the possibility to limit login to certain IP addresses. If your IP address changes, you will not able to login anymore. To disable this feature, run the following commands:
+With the introduction of Lokahostcp v1.4.0 we have added certain security features, including the possibility to limit login to certain IP addresses. If your IP address changes, you will not able to login anymore. To disable this feature, run the following commands:
 
 ```bash
 # Disable the feature
@@ -27,7 +27,7 @@ v-change-user-config-value admin LOGIN_ALLOW_IPS ''
 
 ## Can I update my cronjobs via `crontab -e`?
 
-No, you cannot. When you update LokahostCP, the crontab will simply get overwritten. The changes will not get saved in backups either.
+No, you cannot. When you update Lokahostcp, the crontab will simply get overwritten. The changes will not get saved in backups either.
 
 ## After update Apache2 I am not able to restart Apache2 or Nginx
 
@@ -52,9 +52,9 @@ If you see this message **ALWAYS** press "N" or **ENTER** to select the default 
 
 How ever if you entered Y or I. Then replace the config that can be found in /root/lcp_backups/xxxxx/conf/apache2/ folder and copy over apache2.conf and ports.conf to /etc/apache2/ folder
 
-xxxxxx is the date/time the backup is made during the last update of LokahostCP
+xxxxxx is the date/time the backup is made during the last update of Lokahostcp
 
-If you don't have have a backup made you can also copy the config in /usr/local/lokahost/install/deb/apache2/apache2.conf to /etc/apache2.conf and also empty /etc/apache2/ports.conf
+If you don't have have a backup made you can also copy the config in /usr/local/lokahostcp/install/deb/apache2/apache2.conf to /etc/apache2.conf and also empty /etc/apache2/ports.conf
 
 ## Unable to bind adress
 

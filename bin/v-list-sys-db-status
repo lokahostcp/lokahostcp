@@ -14,12 +14,12 @@
 #format=${1-shell}
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -36,15 +36,15 @@ for db in $(echo $DB_SYSTEM | tr ',' '\n'); do
 	IFS=$'\n'
 
 	# Checking database config
-	if [ -e "$LOKAHOST/conf/$db.conf" ]; then
+	if [ -e "$LOKAHOSTCP/conf/$db.conf" ]; then
 
 		# Checking server status
-		for host_str in $(cat $LOKAHOST/conf/$db.conf); do
+		for host_str in $(cat $LOKAHOSTCP/conf/$db.conf); do
 			parse_object_kv_list "$host_str"
 
 			# Checking MySQL
 			if [ "$db" = 'mysql' ]; then
-				mycnf="$LOKAHOST/conf/.mysql.$HOST"
+				mycnf="$LOKAHOSTCP/conf/.mysql.$HOST"
 				if [ ! -e "$mycnf" ]; then
 					echo "[client]" > $mycnf
 					echo "host='$HOST'" >> $mycnf
@@ -81,7 +81,7 @@ for db in $(echo $DB_SYSTEM | tr ',' '\n'); do
 done
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

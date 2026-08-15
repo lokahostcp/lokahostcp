@@ -4,7 +4,7 @@
 #
 # example: v-delete-database-host pgsql localhost
 #
-# This function for deleting the database host from lokahost configuration. It will
+# This function for deleting the database host from lokahostcp configuration. It will
 # be deleted if there are no databases created on it only.
 
 #----------------------------------------------------------#
@@ -16,14 +16,14 @@ type=$1
 host=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/db.sh
-source $LOKAHOST/func/db.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/db.sh
+source $LOKAHOSTCP/func/db.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -37,20 +37,20 @@ is_object_valid "../../conf/$type" 'HOST' "$host"
 is_dbhost_free
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 # Deleting server
-sed -i "/HOST='$host' /d" "$LOKAHOST/conf/$type.conf"
+sed -i "/HOST='$host' /d" "$LOKAHOSTCP/conf/$type.conf"
 # Delete RRD database
-rm -fr $LOKAHOST'/web/rrd/db/'$type'_'$host'.rrd'
-rm -fr $LOKAHOST'/web/rrd/db/'*-$type'_'$host'.*'
+rm -fr $LOKAHOSTCP'/web/rrd/db/'$type'_'$host'.rrd'
+rm -fr $LOKAHOSTCP'/web/rrd/db/'*-$type'_'$host'.*'
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

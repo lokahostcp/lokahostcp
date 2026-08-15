@@ -1,5 +1,5 @@
 <?php
-if( !defined("LOKAHOST_DIR_BIN") ){
+if( !defined("LOKAHOSTCP_DIR_BIN") ){
 	die("Direct access disabled");
 }
 ?>

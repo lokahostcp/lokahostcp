@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lokahost\Models;
+namespace Lokahostcp\Models;
 
 class MailDomain extends Model {
 }

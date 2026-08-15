@@ -1,8 +1,8 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Drupal;
+namespace Lokahostcp\WebApp\Installers\Drupal;
 
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class DrupalSetup extends BaseSetup {
 	protected $appname = "drupal";

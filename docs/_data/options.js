@@ -2,7 +2,7 @@ export const options = [
 	{
 		flag: 'port',
 		label: 'Port',
-		description: 'Change the port Lokahost uses',
+		description: 'Change the port Lokahostcp uses',
 		type: 'text',
 		default: '8083',
 	},
@@ -172,7 +172,7 @@ export const options = [
 	{
 		flag: 'iptables',
 		label: 'iptables',
-		description: 'Allows firewall rule management within Lokahost',
+		description: 'Allows firewall rule management within Lokahostcp',
 		default: 'yes',
 	},
 	{
@@ -195,8 +195,8 @@ export const options = [
 	},
 	{
 		flag: 'api',
-		label: 'Lokahost API',
-		description: "Enable Lokahost's internal API.",
+		label: 'Lokahostcp API',
+		description: "Enable Lokahostcp's internal API.",
 		default: 'yes',
 	},
 	{

@@ -44,7 +44,7 @@ switch ($action) {
 
 foreach ($rule as $value) {
 	$value = quoteshellarg($value);
-	exec(LOKAHOST_CMD . $cmd . " " . $value, $output, $return_var);
+	exec(LOKAHOSTCP_CMD . $cmd . " " . $value, $output, $return_var);
 	$restart = "yes";
 }
 

@@ -30,7 +30,7 @@ if (!empty($_POST["save"])) {
 		fwrite($fp, str_replace("\r\n", "\n", $_POST["v_options"]));
 		fclose($fp);
 		exec(
-			LOKAHOST_CMD .
+			LOKAHOSTCP_CMD .
 				"v-change-sys-service-config " .
 				$new_conf .
 				" postgresql-hba " .
@@ -51,7 +51,7 @@ if (!empty($_POST["save"])) {
 		fwrite($fp, str_replace("\r\n", "\n", $_POST["v_config"]));
 		fclose($fp);
 		exec(
-			LOKAHOST_CMD . "v-change-sys-service-config " . $new_conf . " postgresql " . $v_restart,
+			LOKAHOSTCP_CMD . "v-change-sys-service-config " . $new_conf . " postgresql " . $v_restart,
 			$output,
 			$return_var,
 		);
@@ -67,7 +67,7 @@ if (!empty($_POST["save"])) {
 }
 
 // List config
-exec(LOKAHOST_CMD . "v-list-sys-pgsql-config json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-sys-pgsql-config json", $output, $return_var);
 $data = json_decode(implode("", $output), true);
 unset($output);
 
@@ -76,8 +76,8 @@ $v_config_path = $data["CONFIG"]["config_path"];
 $v_service_name = strtoupper("postgresql");
 
 // Read config
-$v_options = shell_exec(LOKAHOST_CMD . "v-open-fs-config " . $v_options_path);
-$v_config = shell_exec(LOKAHOST_CMD . "v-open-fs-config " . $v_config_path);
+$v_options = shell_exec(LOKAHOSTCP_CMD . "v-open-fs-config " . $v_options_path);
+$v_config = shell_exec(LOKAHOSTCP_CMD . "v-open-fs-config " . $v_config_path);
 
 // Render page
 render_page($user, $TAB, "edit_server_pgsql");

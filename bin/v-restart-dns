@@ -11,12 +11,12 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 send_email_report() {
 	if [ -e '/etc/named.conf' ]; then
@@ -24,7 +24,7 @@ send_email_report() {
 	else
 		dns_conf='/etc/bind/named.conf'
 	fi
-	email=$(grep CONTACT "$LOKAHOST/data/users/$ROOT_USER/user.conf")
+	email=$(grep CONTACT "$LOKAHOSTCP/data/users/$ROOT_USER/user.conf")
 	email=$(echo "$email" | cut -f 2 -d "'")
 	tmpfile=$(mktemp)
 	subj="$(hostname): "$DNS_SYSTEM" restart failed"
@@ -51,8 +51,8 @@ fi
 
 # Schedule restart
 if [ "$1" = 'scheduled' ] || [ -z "$1" -a "$SCHEDULED_RESTART" = 'yes' ]; then
-	sed -i "/\/$SCRIPT now/d" $LOKAHOST/data/queue/restart.pipe
-	echo "$BIN/$SCRIPT now" >> $LOKAHOST/data/queue/restart.pipe
+	sed -i "/\/$SCRIPT now/d" $LOKAHOSTCP/data/queue/restart.pipe
+	echo "$BIN/$SCRIPT now" >> $LOKAHOSTCP/data/queue/restart.pipe
 	exit
 fi
 
@@ -80,12 +80,12 @@ if [ $? -ne 0 ]; then
 fi
 
 # Update restart queue
-if [ -e "$LOKAHOST/data/queue/restart.pipe" ]; then
-	sed -i "/\/$SCRIPT now/d" $LOKAHOST/data/queue/restart.pipe
+if [ -e "$LOKAHOSTCP/data/queue/restart.pipe" ]; then
+	sed -i "/\/$SCRIPT now/d" $LOKAHOSTCP/data/queue/restart.pipe
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

@@ -17,16 +17,16 @@
 package=$1
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 # Functions
 is_package_in_use() {
-	check_package=$(grep "PACKAGE='$package" $LOKAHOST/data/users/*/user.conf | cut -d'/' -f7)
+	check_package=$(grep "PACKAGE='$package" $LOKAHOSTCP/data/users/*/user.conf | cut -d'/' -f7)
 	if [ -n "$check_package" ]; then
 		for user in $check_package; do
 			$BIN/v-change-user-package "$user" 'default'
@@ -44,17 +44,17 @@ is_package_valid
 is_package_in_use
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 # Deleting user package
-rm -f "$LOKAHOST/data/packages/$package.pkg"
+rm -f "$LOKAHOSTCP/data/packages/$package.pkg"
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 $BIN/v-log-action "system" "Info" "System" "Deleted package (Name: $package)."

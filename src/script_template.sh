@@ -13,7 +13,7 @@
 
 # Argument definition
 
-# Includes - Call any necessary libraries from $LOKAHOST/func/
+# Includes - Call any necessary libraries from $LOKAHOSTCP/func/
 #            Remember to add shellcheck headers!
 
 #----------------------------------------------------------#
@@ -23,7 +23,7 @@
 # Insert any necessary verification steps here
 
 # Perform verification if read-only mode is enabled
-# check_lokahost_demo_mode
+# check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -32,7 +32,7 @@
 # Insert action steps here
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Insert logging or last stage service restarts here

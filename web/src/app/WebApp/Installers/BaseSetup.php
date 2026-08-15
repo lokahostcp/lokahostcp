@@ -1,14 +1,14 @@
 <?php
 
-namespace Lokahost\WebApp\Installers;
+namespace Lokahostcp\WebApp\Installers;
 
-use Lokahost\System\Util;
-use Lokahost\System\LokahostApp;
-use Lokahost\WebApp\InstallerInterface;
-use Lokahost\Models\WebDomain;
+use Lokahostcp\System\Util;
+use Lokahostcp\System\LokahostcpApp;
+use Lokahostcp\WebApp\InstallerInterface;
+use Lokahostcp\Models\WebDomain;
 
-use Lokahost\WebApp\Installers\Resources\ComposerResource;
-use Lokahost\WebApp\Installers\Resources\WpResource;
+use Lokahostcp\WebApp\Installers\Resources\ComposerResource;
+use Lokahostcp\WebApp\Installers\Resources\WpResource;
 
 abstract class BaseSetup implements InstallerInterface {
 	protected $appInfo;
@@ -56,7 +56,7 @@ abstract class BaseSetup implements InstallerInterface {
 		}
 		return $this->appInfo;
 	}
-	public function __construct($domain, LokahostApp $appcontext) {
+	public function __construct($domain, LokahostcpApp $appcontext) {
 		if (filter_var($domain, FILTER_VALIDATE_DOMAIN) === false) {
 			throw new \Exception("Invalid domain name");
 		}

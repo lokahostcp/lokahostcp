@@ -7,7 +7,7 @@
 # Original Version by Pavel Galkin (https://skurudo.ru)
 # https://github.com/skurudo/phpmyadmin-fixer
 #
-# Changed some lines to fit to Lokahost Configuration.
+# Changed some lines to fit to Lokahostcp Configuration.
 #
 
 PASS=$(gen_pass)
@@ -143,4 +143,4 @@ FLUSH PRIVILEGES;
 MYSQL_PMA3
 
 #MYSQL DB and TABLES ADDITION
-mysql -uroot < $LOKAHOST_INSTALL_DIR/phpmyadmin/create_tables.sql
+mysql -uroot < $LOKAHOSTCP_INSTALL_DIR/phpmyadmin/create_tables.sql

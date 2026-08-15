@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Lokahost\WebApp;
+namespace Lokahostcp\WebApp;
 
 interface InstallerInterface {
 	public function install(array $options = null);

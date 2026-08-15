@@ -14,12 +14,12 @@
 domain=$1
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -29,7 +29,7 @@ check_args '1' "$#" 'HOSTNAME'
 is_format_valid 'domain'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -59,13 +59,13 @@ fi
 
 # Update webmail's password plugin configuration
 if [ -d /etc/roundcube/ ]; then
-	sed -i "/password_lokahost_host/c\$rcmail_config['password_lokahost_host'] = '$domain';" /etc/roundcube/plugins/password/config.inc.php
+	sed -i "/password_lokahostcp_host/c\$rcmail_config['password_lokahostcp_host'] = '$domain';" /etc/roundcube/plugins/password/config.inc.php
 fi
 if [ -d /etc/rainloop/ ]; then
-	sed -i "/lokahost_host/c\lokahost_host = \"$domain\"" /etc/rainloop/data/_data_/_default_/configs/plugin-lokahost-change-password.ini
+	sed -i "/lokahostcp_host/c\lokahostcp_host = \"$domain\"" /etc/rainloop/data/_data_/_default_/configs/plugin-lokahostcp-change-password.ini
 fi
 if [ -d /etc/snappymail/ ]; then
-	sed -i "/\"lokahost_host\":/c\\\"lokahost_host\": \"$domain\"," /etc/snappymail/data/_data_/_default_/configs/plugin-change-password.json
+	sed -i "/\"lokahostcp_host\":/c\\\"lokahostcp_host\": \"$domain\"," /etc/snappymail/data/_data_/_default_/configs/plugin-change-password.json
 fi
 
 # Update /etc/hosts
@@ -92,7 +92,7 @@ if [ -f /etc/hosts ]; then
 fi
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging

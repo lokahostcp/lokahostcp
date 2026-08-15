@@ -2,24 +2,24 @@
 
 #===========================================================================#
 #                                                                           #
-# Lokahost Control Panel - Upgrade Function Library                           #
+# Lokahostcp Control Panel - Upgrade Function Library                           #
 #                                                                           #
 #===========================================================================#
 
 # Import system health check and repair library
-# shellcheck source=/usr/local/lokahost/func/syshealth.sh
-source $LOKAHOST/func/syshealth.sh
+# shellcheck source=/usr/local/lokahostcp/func/syshealth.sh
+source $LOKAHOSTCP/func/syshealth.sh
 
 #####################################################################
 #######                Functions & Initialization             #######
 #####################################################################
 
 add_upgrade_message() {
-	if [ -f "$LOKAHOST_BACKUP/message.log" ]; then
-		echo -e $1 >> $LOKAHOST_BACKUP/message.log
-		echo -e "\n\n" >> $LOKAHOST_BACKUP/message.log
+	if [ -f "$LOKAHOSTCP_BACKUP/message.log" ]; then
+		echo -e $1 >> $LOKAHOSTCP_BACKUP/message.log
+		echo -e "\n\n" >> $LOKAHOSTCP_BACKUP/message.log
 	else
-		echo -e $1 > $LOKAHOST_BACKUP/message.log
+		echo -e $1 > $LOKAHOSTCP_BACKUP/message.log
 	fi
 }
 
@@ -36,14 +36,14 @@ upgrade_health_check() {
 
 	echo "============================================================================="
 	echo "[ ! ] Performing system health check before proceeding with installation...  "
-	# Perform basic health check against lokahost.conf to ensure that
+	# Perform basic health check against lokahostcp.conf to ensure that
 	# system variables exist and are set to expected defaults.
 
 	if [ -z "$VERSION" ]; then
 		export VERSION="1.1.0"
 		$BIN/v-change-sys-config-value 'VERSION' "$VERSION"
 		echo
-		echo "[ ! ] Unable to detect installed version of Lokahost Control Panel."
+		echo "[ ! ] Unable to detect installed version of Lokahostcp Control Panel."
 		echo "      Setting default version to $VERSION and processing upgrade steps."
 		echo
 	fi
@@ -62,7 +62,7 @@ upgrade_welcome_message() {
 	echo '                 |  _  |  __/\__ \ |_| | (_| | |___|  __/                     '
 	echo '                 |_| |_|\___||___/\__|_|\__,_|\____|_|                        '
 	echo "                                                                              "
-	echo "                    Lokahost Control Panel Software Update                      "
+	echo "                    Lokahostcp Control Panel Software Update                      "
 	echo "                               Version: ${DISPLAY_VER}"
 	if [[ "$new_version" =~ "beta" ]]; then
 		echo "                                BETA RELEASE                                 "
@@ -80,13 +80,13 @@ upgrade_welcome_message() {
 	echo "Default configuration files and templates may be modified or replaced        "
 	echo "during the upgrade process. You may restore these files from:                "
 	echo ""
-	echo "Backup directory: $LOKAHOST_BACKUP/"
+	echo "Backup directory: $LOKAHOSTCP_BACKUP/"
 	echo "Installation log: $LOG"
 }
 
 upgrade_welcome_message_log() {
 	echo "============================================================================="
-	echo "Lokahost Control Panel Software Update Log"
+	echo "Lokahostcp Control Panel Software Update Log"
 	echo "============================================================================="
 	echo
 	echo "OPERATING SYSTEM:      $OS_TYPE ($OS_VERSION)"
@@ -119,24 +119,24 @@ upgrade_complete_message() {
 	echo
 	echo "Upgrade complete! If you encounter any issues or find a bug,                 "
 	echo "please take a moment to report it to us on GitHub at the URL below:          "
-	echo "https://github.com/lokahost/lokahost/issues                                  "
+	echo "https://github.com/lokahostcp/lokahostcp/issues                                  "
 	echo
 	echo "Read the release notes to learn about new fixes and features:                "
-	echo "https://github.com/lokahost/lokahost/blob/release/CHANGELOG.md               "
+	echo "https://github.com/lokahostcp/lokahostcp/blob/release/CHANGELOG.md               "
 	echo
-	echo "We hope that you enjoy using this version of Lokahost Control Panel,           "
+	echo "We hope that you enjoy using this version of Lokahostcp Control Panel,           "
 	echo "have a wonderful day!                                                        "
 	echo
 	echo "Sincerely,                                                                   "
-	echo "The Lokahost Control Panel development team                                    "
+	echo "The Lokahostcp Control Panel development team                                    "
 	echo
-	echo "Web:      https://www.lokahost.com/                                          "
-	echo "Docs:     https://docs.lokahost.com/										   "
-	echo "Forum:    https://forum.lokahost.com/                                        "
-	echo "GitHub:   https://github.com/lokahost/lokahost/                              "
+	echo "Web:      https://www.lokahost.online/                                          "
+	echo "Docs:     https://docs.lokahost.online/										   "
+	echo "Forum:    https://forum.lokahost.online/                                        "
+	echo "GitHub:   https://github.com/lokahostcp/lokahostcp/                              "
 	echo
-	echo "Help support the Lokahost Control Panel project by donating via PayPal:        "
-	echo "https://www.lokahost.com/donate                                              "
+	echo "Help support the Lokahostcp Control Panel project by donating via PayPal:        "
+	echo "https://www.lokahost.online/donate                                              "
 	echo
 	echo "Made with love & pride by the open-source community around the world.        "
 	echo
@@ -149,7 +149,7 @@ upgrade_complete_message_log() {
 	echo "============================================================================="
 	echo "UPGRADE COMPLETE.                                                            "
 	echo "Please report any issues on GitHub:                                          "
-	echo "https://github.com/lokahost/lokahost/issues                                  "
+	echo "https://github.com/lokahostcp/lokahostcp/issues                                  "
 	echo "============================================================================="
 	echo
 	$BIN/v-log-action "system" "Info" "Updates" "Update installed (Version: $new_version)."
@@ -162,17 +162,17 @@ upgrade_cleanup_message() {
 }
 
 upgrade_get_version() {
-	# Retrieve new version number for Lokahost Control Panel from .deb package
-	new_version=$(dpkg -l | awk '$2=="lokahost" { print $3 }')
+	# Retrieve new version number for Lokahostcp Control Panel from .deb package
+	new_version=$(dpkg -l | awk '$2=="lokahostcp" { print $3 }')
 }
 
 upgrade_set_version() {
-	# Set new version number in lokahost.conf
+	# Set new version number in lokahostcp.conf
 	$BIN/v-change-sys-config-value "VERSION" "$@"
 }
 
 upgrade_set_branch() {
-	# Set branch in lokahost.conf
+	# Set branch in lokahostcp.conf
 	DISPLAY_VER=$(echo "$1" | sed "s|~alpha||g" | sed "s|~beta||g")
 	if [ "$DISPLAY_VER" = "$1" ]; then
 		$BIN/v-change-sys-config-value "RELEASE_BRANCH" "release"
@@ -187,13 +187,13 @@ upgrade_send_notification_to_panel() {
 	# Add notification to panel if variable is set to true or is not set
 	if [[ "$new_version" =~ "alpha" ]]; then
 		# Send notifications for development releases
-		$BIN/v-add-user-notification "$ROOT_USER" 'Development snapshot installed' '<p><span class="u-text-bold">Version:</span> '$new_version'<br><span class="u-text-bold">Code Branch:</span> '$RELEASE_BRANCH'</p><p>Please report any bugs by <a href="https://github.com/lokahost/lokahost/issues" target="_blank">opening an issue on GitHub</a>, and feel free to share your feedback on our <a href="https://forum.lokahost.com" target="_blank">discussion forum</a>.</p><p><i class="fas fa-heart icon-red"></i> The Lokahost Control Panel development team</p>'
+		$BIN/v-add-user-notification "$ROOT_USER" 'Development snapshot installed' '<p><span class="u-text-bold">Version:</span> '$new_version'<br><span class="u-text-bold">Code Branch:</span> '$RELEASE_BRANCH'</p><p>Please report any bugs by <a href="https://github.com/lokahostcp/lokahostcp/issues" target="_blank">opening an issue on GitHub</a>, and feel free to share your feedback on our <a href="https://forum.lokahost.online" target="_blank">discussion forum</a>.</p><p><i class="fas fa-heart icon-red"></i> The Lokahostcp Control Panel development team</p>'
 	elif [[ "$new_version" =~ "beta" ]]; then
 		# Send feedback notification for beta releases
-		$BIN/v-add-user-notification "$ROOT_USER" 'Thank you for testing Lokahost Control Panel '$new_version'.' '<p>Please share your feedback with our development team through our <a href="https://forum.lokahost.com" target="_blank">discussion forum</a>.</p><p>Found a bug? <a href="https://github.com/lokahost/lokahost/issues" target="_blank">Open an issue on GitHub</a>!</p><p><i class="fas fa-heart icon-red"></i> The Lokahost Control Panel development team</p>'
+		$BIN/v-add-user-notification "$ROOT_USER" 'Thank you for testing Lokahostcp Control Panel '$new_version'.' '<p>Please share your feedback with our development team through our <a href="https://forum.lokahost.online" target="_blank">discussion forum</a>.</p><p>Found a bug? <a href="https://github.com/lokahostcp/lokahostcp/issues" target="_blank">Open an issue on GitHub</a>!</p><p><i class="fas fa-heart icon-red"></i> The Lokahostcp Control Panel development team</p>'
 	else
 		# Send normal upgrade complete notification for stable releases
-		$BIN/v-add-user-notification "$ROOT_USER" 'Upgrade complete' '<p>Lokahost Control Panel has been updated to <span class="u-text-bold">v'$new_version'</span>.</p><p><a href="https://github.com/lokahost/lokahost/blob/release/CHANGELOG.md" target="_blank">View release notes</a></p><p>Please report any bugs by <a href="https://github.com/lokahost/lokahost/issues" target="_blank">opening an issue on GitHub</a>.</p><p class="u-text-bold">Have a wonderful day!</p><p><i class="fas fa-heart icon-red"></i> The Lokahost Control Panel development team</p>'
+		$BIN/v-add-user-notification "$ROOT_USER" 'Upgrade complete' '<p>Lokahostcp Control Panel has been updated to <span class="u-text-bold">v'$new_version'</span>.</p><p><a href="https://github.com/lokahostcp/lokahostcp/blob/release/CHANGELOG.md" target="_blank">View release notes</a></p><p>Please report any bugs by <a href="https://github.com/lokahostcp/lokahostcp/issues" target="_blank">opening an issue on GitHub</a>.</p><p class="u-text-bold">Have a wonderful day!</p><p><i class="fas fa-heart icon-red"></i> The Lokahostcp Control Panel development team</p>'
 	fi
 }
 
@@ -205,38 +205,38 @@ upgrade_send_notification_to_email() {
 	if [ "$UPGRADE_SEND_EMAIL" = "true" ]; then
 		# Retrieve admin email address, sendmail path, and message temp file path
 		admin_email=$($BIN/v-list-user "$ROOT_USER" json | grep "CONTACT" | cut -d'"' -f4)
-		send_mail="$LOKAHOST/web/inc/mail-wrapper.php"
-		message_tmp_file="/tmp/lokahost-upgrade-complete.txt"
+		send_mail="$LOKAHOSTCP/web/inc/mail-wrapper.php"
+		message_tmp_file="/tmp/lokahostcp-upgrade-complete.txt"
 
 		# Create temporary file
 		touch $message_tmp_file
 
 		# Write message to file
-		echo "$HOSTNAME has been upgraded from Lokahost Control Panel v$VERSION to v${new_version}." >> $message_tmp_file
+		echo "$HOSTNAME has been upgraded from Lokahostcp Control Panel v$VERSION to v${new_version}." >> $message_tmp_file
 		echo "Installation log: $LOG" >> $message_tmp_file
 		echo "" >> $message_tmp_file
 
 		# Check for additional upgrade notes from update scripts.
-		if [[ -f "$LOKAHOST_BACKUP/message.log" ]]; then
+		if [[ -f "$LOKAHOSTCP_BACKUP/message.log" ]]; then
 			echo "===================================================" >> $message_tmp_file
 			echo "The upgrade script has generated additional notifications, which must be heeded urgently:" >> $message_tmp_file
 			echo "" >> $message_tmp_file
-			cat $LOKAHOST_BACKUP/message.log >> $message_tmp_file
+			cat $LOKAHOSTCP_BACKUP/message.log >> $message_tmp_file
 			echo "" >> $message_tmp_file
 			echo "===================================================" >> $message_tmp_file
 			echo "" >> $message_tmp_file
 		fi
 
-		echo "What's new: https://github.com/lokahost/lokahost/blob/$RELEASE_BRANCH/CHANGELOG.md" >> $message_tmp_file
+		echo "What's new: https://github.com/lokahostcp/lokahostcp/blob/$RELEASE_BRANCH/CHANGELOG.md" >> $message_tmp_file
 		echo >> $message_tmp_file
 		echo "What to do if you run into issues:" >> $message_tmp_file
-		echo "- Check our forums for possible solutions: https://forum.lokahost.com" >> $message_tmp_file
-		echo "- File an issue report on GitHub: https://github.com/lokahost/lokahost/issues" >> $message_tmp_file
+		echo "- Check our forums for possible solutions: https://forum.lokahost.online" >> $message_tmp_file
+		echo "- File an issue report on GitHub: https://github.com/lokahostcp/lokahostcp/issues" >> $message_tmp_file
 		echo "" >> $message_tmp_file
-		echo "Help support the Lokahost Control Panel project by donating via PayPal: https://www.lokahost.com/donate" >> $message_tmp_file
+		echo "Help support the Lokahostcp Control Panel project by donating via PayPal: https://www.lokahost.online/donate" >> $message_tmp_file
 		echo "===================================================" >> $message_tmp_file
 		echo "Have a wonderful day," >> $message_tmp_file
-		echo "The Lokahost Control Panel development team" >> $message_tmp_file
+		echo "The Lokahostcp Control Panel development team" >> $message_tmp_file
 
 		# Read back message from file and pass through to sendmail
 		cat $message_tmp_file | $send_mail -s "Update Installed - v${new_version}" $admin_email
@@ -247,100 +247,100 @@ upgrade_send_notification_to_email() {
 upgrade_send_log_to_email() {
 	if [ "$UPGRADE_SEND_EMAIL_LOG" = "true" ]; then
 		admin_email=$($BIN/v-list-user $ROOT_USER json | grep "CONTACT" | cut -d'"' -f4)
-		send_mail="$LOKAHOST/web/inc/mail-wrapper.php"
+		send_mail="$LOKAHOSTCP/web/inc/mail-wrapper.php"
 		cat $LOG | $send_mail -s "Update Installation Log - v${new_version}" $admin_email
 	fi
 }
 
 upgrade_config_set_value() {
-	if [ -f "$LOKAHOST_BACKUP/upgrade.conf" ]; then
+	if [ -f "$LOKAHOSTCP_BACKUP/upgrade.conf" ]; then
 		if [ "$2" = "true" ]; then
-			sed -i "s/$1='false'/$1='true'/g" $LOKAHOST_BACKUP/upgrade.conf
+			sed -i "s/$1='false'/$1='true'/g" $LOKAHOSTCP_BACKUP/upgrade.conf
 		fi
 	fi
 }
 
 prepare_upgrade_config() {
-	mkdir -p $LOKAHOST_BACKUP
-	touch $LOKAHOST_BACKUP/upgrade.conf
+	mkdir -p $LOKAHOSTCP_BACKUP
+	touch $LOKAHOSTCP_BACKUP/upgrade.conf
 	while IFS='= ' read -r lhs rhs; do
 		if [[ ! $lhs =~ ^\ *# && -n $lhs ]]; then
 			rhs="${rhs%%\#*}"  # Del in line right comments
 			rhs="${rhs%%*( )}" # Del trailing spaces
 			rhs="${rhs%\'*}"   # Del opening string quotes
 			rhs="${rhs#\'*}"   # Del closing string quotes
-			echo "$lhs='$rhs'" >> $LOKAHOST_BACKUP/upgrade.conf
+			echo "$lhs='$rhs'" >> $LOKAHOSTCP_BACKUP/upgrade.conf
 		fi
-	done < "$LOKAHOST/install/upgrade/upgrade.conf"
+	done < "$LOKAHOSTCP/install/upgrade/upgrade.conf"
 }
 
 upgrade_init_backup() {
 	# Ensure that backup directories are created
-	# Lokahost Control Panel configuration files
-	mkdir -p $LOKAHOST_BACKUP/conf/lokahost/
+	# Lokahostcp Control Panel configuration files
+	mkdir -p $LOKAHOSTCP_BACKUP/conf/lokahostcp/
 
 	# OpenSSL configuration files
-	mkdir -p $LOKAHOST_BACKUP/conf/openssl/
+	mkdir -p $LOKAHOSTCP_BACKUP/conf/openssl/
 
 	# Hosting Packages
-	mkdir -p $LOKAHOST_BACKUP/packages/
+	mkdir -p $LOKAHOSTCP_BACKUP/packages/
 
 	# Domain template files
-	mkdir -p $LOKAHOST_BACKUP/templates/
+	mkdir -p $LOKAHOSTCP_BACKUP/templates/
 
 	# System services (apache2, nginx, bind9, vsftpd, etc).
 	if [ -n "$WEB_SYSTEM" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$WEB_SYSTEM/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$WEB_SYSTEM/
 	fi
 	if [ -n "$IMAP_SYSTEM" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$IMAP_SYSTEM/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$IMAP_SYSTEM/
 	fi
 	if [ -n "$MAIL_SYSTEM" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$MAIL_SYSTEM/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$MAIL_SYSTEM/
 	fi
 	if [ -n "$DNS_SYSTEM" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$DNS_SYSTEM/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$DNS_SYSTEM/
 	fi
 	if [ -n "$PROXY_SYSTEM" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$PROXY_SYSTEM/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$PROXY_SYSTEM/
 	fi
 	if [ -n "$DB_SYSTEM" ]; then
 		if [[ "$DB_SYSTEM" =~ "mysql" ]]; then
-			mkdir -p $LOKAHOST_BACKUP/conf/mysql/
+			mkdir -p $LOKAHOSTCP_BACKUP/conf/mysql/
 		fi
 		if [[ "$DB_SYSTEM" =~ "pgsql" ]]; then
-			mkdir -p $LOKAHOST_BACKUP/conf/pgsql/
+			mkdir -p $LOKAHOSTCP_BACKUP/conf/pgsql/
 		fi
 	fi
 	if [ -n "$FTP_SYSTEM" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$FTP_SYSTEM/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$FTP_SYSTEM/
 	fi
 	if [ -n "$FIREWALL_SYSTEM" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$FIREWALL_SYSTEM/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$FIREWALL_SYSTEM/
 	fi
 	if [ -n "$FIREWALL_EXTENSION" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/$FIREWALL_EXTENSION/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/$FIREWALL_EXTENSION/
 	fi
 	if [ -e "/etc/ssh/sshd_config" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/ssh/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/ssh/
 	fi
 	if [ -d "/etc/roundcube/" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/roundcube/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/roundcube/
 	fi
 	if [ -d "/etc/snappymail/" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/snappymail/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/snappymail/
 	fi
 	if [ -d "/etc/phpmyadmin/" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/phpmyadmin/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/phpmyadmin/
 	fi
 	if [ -d "/etc/phppgadmin/" ]; then
-		mkdir -p $LOKAHOST_BACKUP/conf/phppgadmin/
+		mkdir -p $LOKAHOSTCP_BACKUP/conf/phppgadmin/
 	fi
 }
 
 upgrade_init_logging() {
 	# Set log file path
-	LOG="$LOKAHOST_BACKUP/lcp-upgrade-$(date +%d%m%Y%H%M).log"
+	LOG="$LOKAHOSTCP_BACKUP/lcp-upgrade-$(date +%d%m%Y%H%M).log"
 
 	# Create log file
 	touch $LOG
@@ -350,10 +350,10 @@ upgrade_init_logging() {
 
 	# Add warnings for pre-release builds
 	if [[ "$new_version" =~ "alpha" ]]; then
-		$BIN/v-log-action "system" "Warning" "Updates" "Development build for testing purposes only. Report bugs at https://github.com/lokahost/lokahost/issues/."
+		$BIN/v-log-action "system" "Warning" "Updates" "Development build for testing purposes only. Report bugs at https://github.com/lokahostcp/lokahostcp/issues/."
 	fi
 	if [[ "$new_version" =~ "beta" ]]; then
-		$BIN/v-log-action "system" "Warning" "Updates" "Beta release. Please report bugs at https://github.com/lokahost/lokahost/issues/."
+		$BIN/v-log-action "system" "Warning" "Updates" "Beta release. Please report bugs at https://github.com/lokahostcp/lokahostcp/issues/."
 	fi
 }
 
@@ -363,60 +363,60 @@ upgrade_start_backup() {
 	if [ "$DEBUG_MODE" = "true" ]; then
 		echo "      - Packages"
 	fi
-	cp -fr $LOKAHOST/data/packages/* $LOKAHOST_BACKUP/packages/
+	cp -fr $LOKAHOSTCP/data/packages/* $LOKAHOSTCP_BACKUP/packages/
 
 	if [ "$DEBUG_MODE" = "true" ]; then
 		echo "      - Templates"
 	fi
-	cp -fr $LOKAHOST/data/templates/* $LOKAHOST_BACKUP/templates/
+	cp -fr $LOKAHOSTCP/data/templates/* $LOKAHOSTCP_BACKUP/templates/
 
 	if [ "$DEBUG_MODE" = "true" ]; then
 		echo "      - Configuration files:"
 	fi
 
-	# Lokahost Control Panel configuration files
+	# Lokahostcp Control Panel configuration files
 	if [ "$DEBUG_MODE" = "true" ]; then
-		echo "      ---- lokahost"
+		echo "      ---- lokahostcp"
 	fi
-	cp -fr $LOKAHOST/conf/* $LOKAHOST_BACKUP/conf/lokahost/
+	cp -fr $LOKAHOSTCP/conf/* $LOKAHOSTCP_BACKUP/conf/lokahostcp/
 
 	# OpenSSL configuration files
 	if [ "$DEBUG_MODE" = "true" ]; then
 		echo "      ---- openssl"
 	fi
-	cp -f /etc/ssl/*.cnf $LOKAHOST_BACKUP/conf/openssl/
+	cp -f /etc/ssl/*.cnf $LOKAHOSTCP_BACKUP/conf/openssl/
 
 	# System service configuration files (apache2, nginx, bind9, vsftpd, etc).
 	if [ -n "$WEB_SYSTEM" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- $WEB_SYSTEM"
 		fi
-		cp -fr /etc/$WEB_SYSTEM/* $LOKAHOST_BACKUP/conf/$WEB_SYSTEM/
+		cp -fr /etc/$WEB_SYSTEM/* $LOKAHOSTCP_BACKUP/conf/$WEB_SYSTEM/
 	fi
 	if [ -n "$PROXY_SYSTEM" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- $PROXY_SYSTEM"
 		fi
-		cp -fr /etc/$PROXY_SYSTEM/* $LOKAHOST_BACKUP/conf/$PROXY_SYSTEM/
+		cp -fr /etc/$PROXY_SYSTEM/* $LOKAHOSTCP_BACKUP/conf/$PROXY_SYSTEM/
 	fi
 	if [ -n "$IMAP_SYSTEM" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- $IMAP_SYSTEM"
 		fi
-		cp -fr /etc/$IMAP_SYSTEM/* $LOKAHOST_BACKUP/conf/$IMAP_SYSTEM/
+		cp -fr /etc/$IMAP_SYSTEM/* $LOKAHOSTCP_BACKUP/conf/$IMAP_SYSTEM/
 	fi
 	if [ -n "$MAIL_SYSTEM" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- $MAIL_SYSTEM"
 		fi
-		cp -fr /etc/$MAIL_SYSTEM/* $LOKAHOST_BACKUP/conf/$MAIL_SYSTEM/
+		cp -fr /etc/$MAIL_SYSTEM/* $LOKAHOSTCP_BACKUP/conf/$MAIL_SYSTEM/
 	fi
 	if [ -n "$DNS_SYSTEM" ]; then
 		if [ "$DNS_SYSTEM" = "bind9" ]; then
 			if [ "$DEBUG_MODE" = "true" ]; then
 				echo "      ---- $DNS_SYSTEM"
 			fi
-			cp -fr /etc/bind/* $LOKAHOST_BACKUP/conf/$DNS_SYSTEM/
+			cp -fr /etc/bind/* $LOKAHOSTCP_BACKUP/conf/$DNS_SYSTEM/
 		fi
 	fi
 	if [ -n "$DB_SYSTEM" ]; then
@@ -424,14 +424,14 @@ upgrade_start_backup() {
 			if [ "$DEBUG_MODE" = "true" ]; then
 				echo "      ---- mysql"
 			fi
-			cp -fr /etc/mysql/* $LOKAHOST_BACKUP/conf/mysql/
+			cp -fr /etc/mysql/* $LOKAHOSTCP_BACKUP/conf/mysql/
 		fi
 		if [[ "$DB_SYSTEM" =~ "pgsql" ]]; then
 			if [ "$DEBUG_MODE" = "true" ]; then
 				echo "      ---- pgsql"
 			fi
 			# config for postgresql is stored in /etc/postgresql/version/main/
-			cp -fr /etc/postgresql/* $LOKAHOST_BACKUP/conf/pgsql/
+			cp -fr /etc/postgresql/* $LOKAHOSTCP_BACKUP/conf/pgsql/
 		fi
 	fi
 	if [ -n "$FTP_SYSTEM" ]; then
@@ -439,60 +439,60 @@ upgrade_start_backup() {
 			echo "      ---- $FTP_SYSTEM"
 		fi
 		if [ "$FTP_SYSTEM" = "vsftpd" ]; then
-			cp -f /etc/$FTP_SYSTEM.conf $LOKAHOST_BACKUP/conf/$FTP_SYSTEM/
+			cp -f /etc/$FTP_SYSTEM.conf $LOKAHOSTCP_BACKUP/conf/$FTP_SYSTEM/
 		fi
 		if [ "$FTP_SYSTEM" = "proftpd" ]; then
-			cp -f /etc/proftpd/proftpd.conf $LOKAHOST_BACKUP/conf/$FTP_SYSTEM/
+			cp -f /etc/proftpd/proftpd.conf $LOKAHOSTCP_BACKUP/conf/$FTP_SYSTEM/
 		fi
 	fi
 	if [ -n "$FIREWALL_SYSTEM" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- $FIREWALL_SYSTEM"
 		fi
-		[ -e "/etc/sysconfig/iptables" ] && cp -f /etc/sysconfig/iptables $LOKAHOST_BACKUP/conf/$FIREWALL_SYSTEM/
-		[ -e "/etc/iptables.rules" ] && cp -f /etc/iptables.rules $LOKAHOST_BACKUP/conf/$FIREWALL_SYSTEM/
+		[ -e "/etc/sysconfig/iptables" ] && cp -f /etc/sysconfig/iptables $LOKAHOSTCP_BACKUP/conf/$FIREWALL_SYSTEM/
+		[ -e "/etc/iptables.rules" ] && cp -f /etc/iptables.rules $LOKAHOSTCP_BACKUP/conf/$FIREWALL_SYSTEM/
 	fi
 	if [ -n "$FIREWALL_EXTENSION" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- $FIREWALL_EXTENSION"
 		fi
-		cp -f /etc/$FIREWALL_EXTENSION/*.conf $LOKAHOST_BACKUP/conf/$FIREWALL_EXTENSION/
-		cp -f /etc/$FIREWALL_EXTENSION/*.local $LOKAHOST_BACKUP/conf/$FIREWALL_EXTENSION/
+		cp -f /etc/$FIREWALL_EXTENSION/*.conf $LOKAHOSTCP_BACKUP/conf/$FIREWALL_EXTENSION/
+		cp -f /etc/$FIREWALL_EXTENSION/*.local $LOKAHOSTCP_BACKUP/conf/$FIREWALL_EXTENSION/
 	fi
 	if [ -e "/etc/ssh/sshd_config" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- sshd"
 		fi
-		cp -fr /etc/ssh/* $LOKAHOST_BACKUP/conf/ssh/
+		cp -fr /etc/ssh/* $LOKAHOSTCP_BACKUP/conf/ssh/
 	fi
 	if [ -d "/etc/roundcube" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- Roundcube"
 		fi
-		cp -fr /etc/roundcube/* $LOKAHOST_BACKUP/conf/roundcube
+		cp -fr /etc/roundcube/* $LOKAHOSTCP_BACKUP/conf/roundcube
 	fi
 	if [ -d "/etc/snappymail" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- SnappyMail"
 		fi
-		cp -fr /etc/snappymail/* $LOKAHOST_BACKUP/conf/snappymail
+		cp -fr /etc/snappymail/* $LOKAHOSTCP_BACKUP/conf/snappymail
 	fi
 	if [ -d "/etc/phpmyadmin" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- phpMyAdmin"
 		fi
-		cp -fr /etc/phpmyadmin/* $LOKAHOST_BACKUP/conf/phpmyadmin
+		cp -fr /etc/phpmyadmin/* $LOKAHOSTCP_BACKUP/conf/phpmyadmin
 	fi
 	if [ -d "/etc/phppgadmin" ]; then
 		if [ "$DEBUG_MODE" = "true" ]; then
 			echo "      ---- phppgadmin"
 		fi
-		cp -fr /etc/phppgadmin/* $LOKAHOST_BACKUP/conf/phppgadmin
+		cp -fr /etc/phppgadmin/* $LOKAHOSTCP_BACKUP/conf/phppgadmin
 	fi
 }
 
 upgrade_refresh_config() {
-	source_conf "/usr/local/lokahost/conf/lokahost.conf"
+	source_conf "/usr/local/lokahostcp/conf/lokahostcp.conf"
 }
 
 upgrade_start_routine() {
@@ -503,10 +503,10 @@ upgrade_start_routine() {
 	VERSION=$(echo "$VERSION" | sed "s/~\([a-zA-Z0-9].*\)//g")
 
 	# Get list of all available version steps and create array
-	upgrade_steps=$(ls -v $LOKAHOST/install/upgrade/versions/*.sh)
+	upgrade_steps=$(ls -v $LOKAHOSTCP/install/upgrade/versions/*.sh)
 	for script in $upgrade_steps; do
 		declare -a available_versions
-		available_versions+=($(echo $script | sed "s|/usr/local/lokahost/install/upgrade/versions/||g" | sed "s|.sh||g"))
+		available_versions+=($(echo $script | sed "s|/usr/local/lokahostcp/install/upgrade/versions/||g" | sed "s|.sh||g"))
 	done
 
 	# Define variables for accessing supported versions
@@ -520,18 +520,18 @@ upgrade_start_routine() {
 		for version_step in "${available_versions[@]}"; do
 			if [ $(check_version $VERSION) -lt $(check_version "$version_step") ]; then
 				upgrade_step_message
-				source $LOKAHOST/install/upgrade/versions/$version_step.sh
+				source $LOKAHOSTCP/install/upgrade/versions/$version_step.sh
 			fi
 		done
 		upgrade_set_version "$VERSION"
 		upgrade_refresh_config
 	else
 		echo ""
-		echo "[ ! ] The latest version of Lokahost Control Panel is already installed."
+		echo "[ ! ] The latest version of Lokahostcp Control Panel is already installed."
 		echo "      Verifying configuration..."
 		echo ""
-		if [ -e "$LOKAHOST/install/upgrade/versions/$VERSION.sh" ]; then
-			source $LOKAHOST/install/upgrade/versions/$VERSION.sh
+		if [ -e "$LOKAHOSTCP/install/upgrade/versions/$VERSION.sh" ]; then
+			source $LOKAHOSTCP/install/upgrade/versions/$VERSION.sh
 		fi
 		VERSION="$new_version"
 		upgrade_set_version "$VERSION"
@@ -598,11 +598,11 @@ upgrade_phppgadmin() {
 			echo "[ * ] Upgrading phppgadmin to version $pga_v..."
 			[ -d /usr/share/phppgadmin ] || mkdir -p /usr/share/phppgadmin
 			# Download latest phpMyAdmin release
-			wget --retry-connrefused --quiet https://github.com/lokahost/phppgadmin/releases/download/v$pga_v/phppgadmin-v$pga_v.tar.gz
+			wget --retry-connrefused --quiet https://github.com/lokahostcp/phppgadmin/releases/download/v$pga_v/phppgadmin-v$pga_v.tar.gz
 			tar xzf phppgadmin-v$pga_v.tar.gz -C /usr/share/phppgadmin/
 
 			if ! version_ge "$pga_release" "7.14.0"; then
-				cp -f $LOKAHOST_INSTALL_DIR/pga/config.inc.php /etc/phppgadmin/
+				cp -f $LOKAHOSTCP_INSTALL_DIR/pga/config.inc.php /etc/phppgadmin/
 			fi
 			if [ ! -f /usr/share/phppgadmin/conf/config.inc.php ]; then
 				ln -s /etc/phppgadmin/config.inc.php /usr/share/phppgadmin/conf
@@ -621,10 +621,10 @@ upgrade_phpmyadmin() {
 			echo "[ * ] phpMyAdmin is up to date (${pma_version})..."
 			# Update permissions
 			if [ -e /var/lib/phpmyadmin/blowfish_secret.inc.php ]; then
-				chown root:lokahostmail /var/lib/phpmyadmin/blowfish_secret.inc.php
+				chown root:lokahostcpmail /var/lib/phpmyadmin/blowfish_secret.inc.php
 				chmod 0640 /var/lib/phpmyadmin/blowfish_secret.inc.php
 			fi
-			chown root:lokahostmail /usr/share/phpmyadmin/tmp
+			chown root:lokahostcpmail /usr/share/phpmyadmin/tmp
 			chmod 0770 /usr/share/phpmyadmin/tmp
 		else
 			# Display upgrade information
@@ -649,13 +649,13 @@ upgrade_phpmyadmin() {
 			# Create temporary folder and change permissions
 			if [ ! -d /usr/share/phpmyadmin/tmp ]; then
 				mkdir /usr/share/phpmyadmin/tmp
-				chown root:lokahostmail /usr/share/phpmyadmin/tmp
+				chown root:lokahostcpmail /usr/share/phpmyadmin/tmp
 				chmod 0770 /usr/share/phpmyadmin/tmp
 
 			fi
 
 			if [ -e /var/lib/phpmyadmin/blowfish_secret.inc.php ]; then
-				chown root:lokahostmail /var/lib/phpmyadmin/blowfish_secret.inc.php
+				chown root:lokahostcpmail /var/lib/phpmyadmin/blowfish_secret.inc.php
 				chmod 0640 /var/lib/phpmyadmin/blowfish_secret.inc.php
 			fi
 
@@ -667,10 +667,10 @@ upgrade_phpmyadmin() {
 }
 
 upgrade_filemanager() {
-	FILE_MANAGER_CHECK=$(cat $LOKAHOST/conf/lokahost.conf | grep "FILE_MANAGER='false'")
+	FILE_MANAGER_CHECK=$(cat $LOKAHOSTCP/conf/lokahostcp.conf | grep "FILE_MANAGER='false'")
 	if [ -z "$FILE_MANAGER_CHECK" ]; then
-		if [ -f "$LOKAHOST/web/fm/version" ]; then
-			fm_version=$(cat $LOKAHOST/web/fm/version)
+		if [ -f "$LOKAHOSTCP/web/fm/version" ]; then
+			fm_version=$(cat $LOKAHOSTCP/web/fm/version)
 		else
 			fm_version="1.0.0"
 		fi
@@ -683,10 +683,10 @@ upgrade_filemanager() {
 			echo "[ * ] File Manager is up to date ($fm_v)..."
 
 			if [ "$UPGRADE_UPDATE_FILEMANAGER_CONFIG" = "true" ]; then
-				if [ -e "$LOKAHOST/web/fm/configuration.php" ]; then
+				if [ -e "$LOKAHOSTCP/web/fm/configuration.php" ]; then
 					echo "[ ! ] Updating File Manager configuration..."
 					# Update configuration.php
-					cp -f $LOKAHOST_INSTALL_DIR/filemanager/filegator/configuration.php $LOKAHOST/web/fm/configuration.php
+					cp -f $LOKAHOSTCP_INSTALL_DIR/filemanager/filegator/configuration.php $LOKAHOSTCP/web/fm/configuration.php
 					# Set environment variable for interface
 					$BIN/v-change-sys-config-value 'FILE_MANAGER' 'true'
 				fi
@@ -699,7 +699,7 @@ upgrade_roundcube() {
 	if [ -n "$(echo "$WEBMAIL_SYSTEM" | grep -w 'roundcube')" ]; then
 		if [ -d "/usr/share/roundcube" ]; then
 			echo "[ ! ] Roundcube: Updates are currently managed using the apt package manager"
-			echo "      To upgrade to the latest version of Roundcube directly from upstream, from please run the command migrate_roundcube.sh located in: /usr/local/lokahost/install/upgrade/manual/"
+			echo "      To upgrade to the latest version of Roundcube directly from upstream, from please run the command migrate_roundcube.sh located in: /usr/local/lokahostcp/install/upgrade/manual/"
 		else
 			rc_version=$(cat /var/lib/roundcube/index.php | grep -o -E '[0-9].[0-9].[0-9]+' | head -1)
 			if ! version_ge "$rc_version" "$rc_v"; then
@@ -725,7 +725,7 @@ upgrade_snappymail() {
 }
 
 upgrade_dependencies() {
-	echo "[ ! ] Update Lokahost PHP dependencies..."
+	echo "[ ! ] Update Lokahostcp PHP dependencies..."
 	$BIN/v-add-sys-dependencies
 }
 
@@ -868,9 +868,9 @@ upgrade_restart_services() {
 		fi
 		if [ "$WEB_TERMINAL" = "true" ]; then
 			if [ "$DEBUG_MODE" = "true" ]; then
-				echo "      - lokahost-web-terminal"
+				echo "      - lokahostcp-web-terminal"
 			fi
-			$BIN/v-restart-service "lokahost-web-terminal"
+			$BIN/v-restart-service "lokahostcp-web-terminal"
 		fi
 		# Restart SSH daemon service
 		if [ "$DEBUG_MODE" = "true" ]; then
@@ -879,9 +879,9 @@ upgrade_restart_services() {
 		$BIN/v-restart-service ssh
 	fi
 
-	# Always restart the Lokahost Control Panel service
+	# Always restart the Lokahostcp Control Panel service
 	if [ "$DEBUG_MODE" = "true" ]; then
-		echo "      - lokahost"
+		echo "      - lokahostcp"
 	fi
-	$BIN/v-restart-service lokahost
+	$BIN/v-restart-service lokahostcp
 }

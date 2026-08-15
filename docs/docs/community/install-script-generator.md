@@ -2,13 +2,13 @@
 
 These are some install script generators created by the community:
 
-- [lokahost-scriptline-generator](https://github.com/gabizz/lokahost-scriptline-generator)
+- [hestiacp-scriptline-generator](https://github.com/gabizz/hestiacp-scriptline-generator)
 
-  Tiny online app aimed to generate the necessary command for an unattended Lokahost Control Panel installation.
+  Tiny online app aimed to generate the necessary command for an unattended Lokahostcp Control Panel installation.
 
-- [LokahostCP-Command-Creator](https://github.com/turbopixel/LokahostCP-Command-Creator)
+- [HestiaCP-Command-Creator](https://github.com/turbopixel/HestiaCP-Command-Creator)
 
-  Vue.js based web app to generate the command line for an unattended Lokahost Control Panel installation.
+  Vue.js based web app to generate the command line for an unattended Lokahostcp Control Panel installation.
 
 We thank the community for these contributions, which our [official install script generator](/install) is inspired by.
 

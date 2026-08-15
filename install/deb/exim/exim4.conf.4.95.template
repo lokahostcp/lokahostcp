@@ -1,6 +1,6 @@
 ######################################################################
 #                                                                    #
-#          Exim configuration file for Lokahost Control Panel          #
+#          Exim configuration file for Lokahostcp Control Panel          #
 #                                                                    #
 ######################################################################
 
@@ -49,19 +49,19 @@ tls_advertise_hosts = *
 tls_certificate = \
         ${if and {\
                      { eq {${domain:foo@$tls_in_sni}} {$tls_in_sni}}\
-                     { exists{/usr/local/lokahost/ssl/mail/$tls_in_sni.crt} }\
+                     { exists{/usr/local/lokahostcp/ssl/mail/$tls_in_sni.crt} }\
                  }\
-                 {/usr/local/lokahost/ssl/mail/$tls_in_sni.crt}\
-                 {/usr/local/lokahost/ssl/certificate.crt}\
+                 {/usr/local/lokahostcp/ssl/mail/$tls_in_sni.crt}\
+                 {/usr/local/lokahostcp/ssl/certificate.crt}\
          }
 
 tls_privatekey = \
         ${if and {\
                      { eq {${domain:foo@$tls_in_sni}} {$tls_in_sni}}\
-                     { exists{/usr/local/lokahost/ssl/mail/$tls_in_sni.key} }\
+                     { exists{/usr/local/lokahostcp/ssl/mail/$tls_in_sni.key} }\
                  }\
-                 {/usr/local/lokahost/ssl/mail/$tls_in_sni.key}\
-                 {/usr/local/lokahost/ssl/certificate.key}\
+                 {/usr/local/lokahostcp/ssl/mail/$tls_in_sni.key}\
+                 {/usr/local/lokahostcp/ssl/certificate.key}\
          }
 
 daemon_smtp_ports = 25 : 465 : 587

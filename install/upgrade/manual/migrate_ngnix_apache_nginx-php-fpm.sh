@@ -8,12 +8,12 @@
 #----------------------------------------------------------#
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
-source $LOKAHOST/conf/lokahost.conf
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/conf/lokahostcp.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -34,31 +34,31 @@ fi
 #----------------------------------------------------------#
 
 # Remove apache2 from config
-sed -i "/^WEB_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
-sed -i "/^WEB_SSL/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
-sed -i "/^WEB_SSL_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
-sed -i "/^WEB_RGROUPS/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
-sed -i "/^WEB_SYSTEM/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^WEB_PORT/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+sed -i "/^WEB_SSL/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+sed -i "/^WEB_SSL_PORT/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+sed -i "/^WEB_RGROUPS/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+sed -i "/^WEB_SYSTEM/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
 
 # Remove nginx (proxy) from config
-sed -i "/^PROXY_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
-sed -i "/^PROXY_SSL_PORT/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
-sed -i "/^PROXY_SYSTEM/d" $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+sed -i "/^PROXY_PORT/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+sed -i "/^PROXY_SSL_PORT/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+sed -i "/^PROXY_SYSTEM/d" $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
 
 # Add Nginx settings to config
-echo "WEB_PORT='80'" >> $LOKAHOST/conf/lokahost.conf
-echo "WEB_SSL='openssl'" >> $LOKAHOST/conf/lokahost.conf
-echo "WEB_SSL_PORT='443'" >> $LOKAHOST/conf/lokahost.conf
-echo "WEB_SYSTEM='nginx'" >> $LOKAHOST/conf/lokahost.conf
+echo "WEB_PORT='80'" >> $LOKAHOSTCP/conf/lokahostcp.conf
+echo "WEB_SSL='openssl'" >> $LOKAHOSTCP/conf/lokahostcp.conf
+echo "WEB_SSL_PORT='443'" >> $LOKAHOSTCP/conf/lokahostcp.conf
+echo "WEB_SYSTEM='nginx'" >> $LOKAHOSTCP/conf/lokahostcp.conf
 
 # Add Nginx settings to config
-echo "WEB_PORT='80'" >> $LOKAHOST/conf/defaults/lokahost.conf
-echo "WEB_SSL='openssl'" >> $LOKAHOST/conf/defaults/lokahost.conf
-echo "WEB_SSL_PORT='443'" >> $LOKAHOST/conf/defaults/lokahost.conf
-echo "WEB_SYSTEM='nginx'" >> $LOKAHOST/conf/defaults/lokahost.conf
+echo "WEB_PORT='80'" >> $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+echo "WEB_SSL='openssl'" >> $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+echo "WEB_SSL_PORT='443'" >> $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+echo "WEB_SYSTEM='nginx'" >> $LOKAHOSTCP/conf/defaults/lokahostcp.conf
 
-rm $LOKAHOST/conf/defaults/lokahost.conf
-cp $LOKAHOST/conf/lokahost.conf $LOKAHOST/conf/defaults/lokahost.conf
+rm $LOKAHOSTCP/conf/defaults/lokahostcp.conf
+cp $LOKAHOSTCP/conf/lokahostcp.conf $LOKAHOSTCP/conf/defaults/lokahostcp.conf
 
 # Rebuild web config
 

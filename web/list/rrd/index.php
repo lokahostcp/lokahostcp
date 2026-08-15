@@ -12,7 +12,7 @@ if ($_SESSION["userContext"] != "admin") {
 }
 
 // Data
-exec(LOKAHOST_CMD . "v-list-sys-rrd json", $output, $return_var);
+exec(LOKAHOSTCP_CMD . "v-list-sys-rrd json", $output, $return_var);
 $data = json_decode(implode("", $output), true);
 unset($output);
 

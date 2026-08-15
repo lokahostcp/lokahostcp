@@ -14,22 +14,22 @@
 format="${1-shell}"
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/ip.sh
-source $LOKAHOST/func/ip.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/ip.sh
+source $LOKAHOSTCP/func/ip.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 # JSON list function
 json_list() {
 	echo '{'
-	ip_count="$(ls $LOKAHOST/data/ips/ | wc -l)"
+	ip_count="$(ls $LOKAHOSTCP/data/ips/ | wc -l)"
 	i=1
 	while read IP; do
-		source_conf "$LOKAHOST/data/ips/$IP"
+		source_conf "$LOKAHOSTCP/data/ips/$IP"
 		echo -n '    "'$IP'": {
         "OWNER": "'$OWNER'",
         "STATUS": "'$STATUS'",
@@ -48,7 +48,7 @@ json_list() {
 			echo
 		fi
 		((i++))
-	done < <(ls $LOKAHOST/data/ips/)
+	done < <(ls $LOKAHOSTCP/data/ips/)
 	echo '}'
 }
 
@@ -57,21 +57,21 @@ shell_list() {
 	echo "IP   MASK   NAT    STATUS   WEB  DATE"
 	echo "--   ----   ---    ------   ---  ----"
 	while read IP; do
-		source_conf "$LOKAHOST/data/ips/$IP"
+		source_conf "$LOKAHOSTCP/data/ips/$IP"
 		if [ -z "$NAT" ]; then
 			NAT='no'
 		fi
 		echo "$IP $NETMASK $NAT $STATUS $U_WEB_DOMAINS $DATE"
-	done < <(ls $LOKAHOST/data/ips/)
+	done < <(ls $LOKAHOSTCP/data/ips/)
 }
 
 # PLAIN list function
 plain_list() {
 	while read IP; do
-		source_conf "$LOKAHOST/data/ips/$IP"
+		source_conf "$LOKAHOSTCP/data/ips/$IP"
 		echo -ne "$IP\t$OWNER\t$STATUS\t$NAME\t$U_SYS_USERS\t$U_WEB_DOMAINS\t"
 		echo -e "$INTERFACE\t$NETMASK\t$NAT\t$TIME\t$DATE"
-	done < <(ls $LOKAHOST/data/ips/)
+	done < <(ls $LOKAHOSTCP/data/ips/)
 }
 
 # CSV list function
@@ -79,10 +79,10 @@ csv_list() {
 	echo -n "IP,OWNER,STATUS,NAME,U_SYS_USERS,U_WEB_DOMAINS,INTERFACE"
 	echo "NETMASK,NAT,TIME,DATE"
 	while read IP; do
-		source_conf "$LOKAHOST/data/ips/$IP"
+		source_conf "$LOKAHOSTCP/data/ips/$IP"
 		echo -n "$IP,$OWNER,$STATUS,$NAME,\"$U_SYS_USERS\",$U_WEB_DOMAINS,"
 		echo "$INTERFACE, $NETMASK,$NAT,$TIME,$DATE"
-	done < <(ls $LOKAHOST/data/ips/)
+	done < <(ls $LOKAHOSTCP/data/ips/)
 }
 
 #----------------------------------------------------------#
@@ -98,7 +98,7 @@ case $format in
 esac
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

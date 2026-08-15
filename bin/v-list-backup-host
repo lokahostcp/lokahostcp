@@ -15,12 +15,12 @@ type=$1
 format=${2-shell}
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 # JSON list function
 json_list() {
@@ -120,12 +120,12 @@ is_common_format_valid $type "type"
 #----------------------------------------------------------#
 
 # Checking backup config
-if [ ! -e "$LOKAHOST/conf/$type.backup.conf" ]; then
+if [ ! -e "$LOKAHOSTCP/conf/$type.backup.conf" ]; then
 	exit
 fi
 
 # Parsing backup config
-source_conf "$LOKAHOST/conf/$type.backup.conf"
+source_conf "$LOKAHOSTCP/conf/$type.backup.conf"
 
 # Listing data
 case $format in
@@ -136,7 +136,7 @@ case $format in
 esac
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

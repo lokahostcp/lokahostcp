@@ -3,9 +3,9 @@
 
 <head>
 	<!-- Load necessary CSS and JavaScript from source -->
-	<?php require $_SERVER["LOKAHOST"] . "/web/templates/includes/title.php"; ?>
-	<?php require $_SERVER["LOKAHOST"] . "/web/templates/includes/css.php"; ?>
-	<?php require $_SERVER["LOKAHOST"] . "/web/templates/includes/js.php"; ?>
+	<?php require $_SERVER["LOKAHOSTCP"] . "/web/templates/includes/title.php"; ?>
+	<?php require $_SERVER["LOKAHOSTCP"] . "/web/templates/includes/css.php"; ?>
+	<?php require $_SERVER["LOKAHOSTCP"] . "/web/templates/includes/js.php"; ?>
 </head>
 
 <body class="page-weblog">

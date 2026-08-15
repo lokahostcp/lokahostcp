@@ -14,14 +14,14 @@
 format=${1-shell}
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/conf/lokahost.conf
-source $LOKAHOST/conf/lokahost.conf
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/conf/lokahostcp.conf
+source $LOKAHOSTCP/conf/lokahostcp.conf
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -37,7 +37,7 @@ is_system_enabled "$FIREWALL_SYSTEM" 'FIREWALL_SYSTEM'
 json_list() {
 	IFS=$'\n'
 	i=1
-	objects=$(grep LISTNAME $LOKAHOST/data/firewall/ipset.conf | wc -l)
+	objects=$(grep LISTNAME $LOKAHOSTCP/data/firewall/ipset.conf | wc -l)
 	echo "{"
 	while read str; do
 		[[ -z "$str" ]] && continue
@@ -52,7 +52,7 @@ json_list() {
     }'
 		[[ "$i" -lt "$objects" ]] && echo ',' || echo
 		((i++))
-	done < <(cat $LOKAHOST/data/firewall/ipset.conf)
+	done < <(cat $LOKAHOSTCP/data/firewall/ipset.conf)
 	echo '}'
 }
 
@@ -65,7 +65,7 @@ shell_list() {
 		[[ -z "$str" ]] && continue
 		parse_object_kv_list "$str"
 		echo "$LISTNAME^$IP_VERSION^$AUTOUPDATE^$SUSPENDED^$SOURCE^$TIME^$DATE"
-	done < <(cat $LOKAHOST/data/firewall/ipset.conf)
+	done < <(cat $LOKAHOSTCP/data/firewall/ipset.conf)
 }
 
 # PLAIN list function
@@ -76,7 +76,7 @@ plain_list() {
 		parse_object_kv_list "$str"
 		echo -ne "$LISTNAME\t$IP_VERSION\t$AUTOUPDATE\t$SUSPENDED\t$SOURCE\t"
 		echo -e "$TIME\t$DATE"
-	done < <(cat $LOKAHOST/data/firewall/ipset.conf)
+	done < <(cat $LOKAHOSTCP/data/firewall/ipset.conf)
 }
 
 # CSV list function
@@ -88,10 +88,10 @@ csv_list() {
 		parse_object_kv_list "$str"
 		echo -n "$LISTNAME,$IP_VERSION,$AUTOUPDATE,$SUSPENDED,\"$SOURCE\","
 		echo "$TIME,$DATE"
-	done < <(cat $LOKAHOST/data/firewall/ipset.conf)
+	done < <(cat $LOKAHOSTCP/data/firewall/ipset.conf)
 }
 
-[ ! -f "$LOKAHOST/data/firewall/ipset.conf" ] && touch "$LOKAHOST/data/firewall/ipset.conf"
+[ ! -f "$LOKAHOSTCP/data/firewall/ipset.conf" ] && touch "$LOKAHOSTCP/data/firewall/ipset.conf"
 
 # Listing data
 case $format in
@@ -102,7 +102,7 @@ case $format in
 esac
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 exit

@@ -15,20 +15,20 @@ user=$1
 restart=$2
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/domain.sh
-source $LOKAHOST/func/domain.sh
-# shellcheck source=/usr/local/lokahost/func/ip.sh
-source $LOKAHOST/func/ip.sh
-# shellcheck source=/usr/local/lokahost/func/rebuild.sh
-source $LOKAHOST/func/rebuild.sh
-# shellcheck source=/usr/local/lokahost/func/syshealth.sh
-source $LOKAHOST/func/syshealth.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/domain.sh
+source $LOKAHOSTCP/func/domain.sh
+# shellcheck source=/usr/local/lokahostcp/func/ip.sh
+source $LOKAHOSTCP/func/ip.sh
+# shellcheck source=/usr/local/lokahostcp/func/rebuild.sh
+source $LOKAHOSTCP/func/rebuild.sh
+# shellcheck source=/usr/local/lokahostcp/func/syshealth.sh
+source $LOKAHOSTCP/func/syshealth.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -44,15 +44,15 @@ if [ -n "$check_user" ]; then
 fi
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
 #----------------------------------------------------------#
 
 # Deleting old web configs
-if [ -e "/etc/$WEB_SYSTEM/conf.d/lokahost.conf" ]; then
-	sed -i "/.*\/$user\/conf\/web\//d" /etc/$WEB_SYSTEM/conf.d/lokahost.conf
+if [ -e "/etc/$WEB_SYSTEM/conf.d/lokahostcp.conf" ]; then
+	sed -i "/.*\/$user\/conf\/web\//d" /etc/$WEB_SYSTEM/conf.d/lokahostcp.conf
 fi
 
 if [ -e "$HOMEDIR/$user/conf/web/$domain/$WEB_SYSTEM.conf" ]; then
@@ -66,8 +66,8 @@ fi
 
 # Deleting old proxy configs
 if [ -n "$PROXY_SYSTEM" ]; then
-	if [ -e "/etc/$PROXY_SYSTEM/conf.d/lokahost.conf" ]; then
-		sed -i "/.*\/$user\/conf\/web\//d" /etc/$PROXY_SYSTEM/conf.d/lokahost.conf
+	if [ -e "/etc/$PROXY_SYSTEM/conf.d/lokahostcp.conf" ]; then
+		sed -i "/.*\/$user\/conf\/web\//d" /etc/$PROXY_SYSTEM/conf.d/lokahostcp.conf
 	fi
 
 	if [ -e "$HOMEDIR/$user/conf/web/$domain/$PROXY_SYSTEM.conf" ]; then
@@ -87,7 +87,7 @@ for php_folder in /etc/php/*; do
 
 	v_php="$(basename $php_folder)"
 	if [ ! -f "/etc/php/${v_php}/fpm/pool.d/dummy.conf" ]; then
-		cp -f "$LOKAHOST_INSTALL_DIR/php-fpm/dummy.conf" "/etc/php/${v_php}/fpm/pool.d/"
+		cp -f "$LOKAHOSTCP_INSTALL_DIR/php-fpm/dummy.conf" "/etc/php/${v_php}/fpm/pool.d/"
 		sed -i "s/9999/99${v_php//./}/g" "/etc/php/${v_php}/fpm/pool.d/dummy.conf"
 	fi
 done
@@ -120,7 +120,7 @@ for domain in $($BIN/v-list-web-domains $user plain | cut -f 1); do
 done
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Updating user counters

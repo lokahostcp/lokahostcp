@@ -39,7 +39,7 @@
 					<option value="DNS" <?php if ((!empty($v_chain)) && ( $v_chain == "'DNS'" )) echo 'selected'?>><?= _("DNS") ?></option>
 					<option value="MAIL" <?php if ((!empty($v_chain)) && ( $v_chain == "'MAIL'" )) echo 'selected'?>><?= _("MAIL") ?></option>
 					<option value="DB" <?php if ((!empty($v_chain)) && ( $v_chain == "'DB'" )) echo 'selected'?>><?= _("DB") ?></option>
-					<option value="LOKAHOST" <?php if ((!empty($v_chain)) && ( $v_chain == "'LOKAHOST'" )) echo 'selected'?>><?= _("LOKAHOST") ?></option>
+					<option value="LOKAHOSTCP" <?php if ((!empty($v_chain)) && ( $v_chain == "'LOKAHOSTCP'" )) echo 'selected'?>><?= _("LOKAHOSTCP") ?></option>
 				</select>
 			</div>
 		</div>

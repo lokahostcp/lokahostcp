@@ -1,8 +1,8 @@
 <?php
 
-namespace Lokahost\WebApp\Installers\Prestashop;
+namespace Lokahostcp\WebApp\Installers\Prestashop;
 
-use Lokahost\WebApp\Installers\BaseSetup as BaseSetup;
+use Lokahostcp\WebApp\Installers\BaseSetup as BaseSetup;
 
 class PrestashopSetup extends BaseSetup {
 	protected $appInfo = [

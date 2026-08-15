@@ -7,7 +7,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/inc/main.php";
 
 // Data & Render page
 if (empty($_GET["domain"])) {
-	exec(LOKAHOST_CMD . "v-list-mail-domains $user json", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-list-mail-domains $user json", $output, $return_var);
 	$data = json_decode(implode("", $output), true);
 	if ($_SESSION["userSortOrder"] == "name") {
 		ksort($data);
@@ -19,19 +19,19 @@ if (empty($_GET["domain"])) {
 	render_page($user, $TAB, "list_mail");
 } elseif (!empty($_GET["dns"])) {
 	exec(
-		LOKAHOST_CMD . "v-list-mail-domain " . $user . " " . quoteshellarg($_GET["domain"]) . " json",
+		LOKAHOSTCP_CMD . "v-list-mail-domain " . $user . " " . quoteshellarg($_GET["domain"]) . " json",
 		$output,
 		$return_var,
 	);
 	$data = json_decode(implode("", $output), true);
 	$data = array_reverse($data, true);
 	unset($output);
-	exec(LOKAHOST_CMD . "v-list-user-ips " . $user . " json", $output, $return_var);
+	exec(LOKAHOSTCP_CMD . "v-list-user-ips " . $user . " json", $output, $return_var);
 	$ips = json_decode(implode("", $output), true);
 	$ips = array_reverse($ips, true);
 	unset($output);
 	exec(
-		LOKAHOST_CMD .
+		LOKAHOSTCP_CMD .
 			"v-list-mail-domain-dkim-dns " .
 			$user .
 			" " .
@@ -47,7 +47,7 @@ if (empty($_GET["domain"])) {
 	render_page($user, $TAB, "list_mail_dns");
 } else {
 	exec(
-		LOKAHOST_CMD .
+		LOKAHOSTCP_CMD .
 			"v-list-mail-accounts " .
 			$user .
 			" " .

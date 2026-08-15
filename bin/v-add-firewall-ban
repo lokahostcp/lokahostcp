@@ -18,14 +18,14 @@ chain=$(echo $2 | tr '[:lower:]' '[:upper:]')
 iptables="/sbin/iptables"
 
 # Includes
-# shellcheck source=/etc/lokahost/lokahost.conf
-source /etc/lokahost/lokahost.conf
-# shellcheck source=/usr/local/lokahost/func/main.sh
-source $LOKAHOST/func/main.sh
-# shellcheck source=/usr/local/lokahost/func/firewall.sh
-source $LOKAHOST/func/firewall.sh
+# shellcheck source=/etc/lokahostcp/lokahostcp.conf
+source /etc/lokahostcp/lokahostcp.conf
+# shellcheck source=/usr/local/lokahostcp/func/main.sh
+source $LOKAHOSTCP/func/main.sh
+# shellcheck source=/usr/local/lokahostcp/func/firewall.sh
+source $LOKAHOSTCP/func/firewall.sh
 # load config file
-source_conf "$LOKAHOST/conf/lokahost.conf"
+source_conf "$LOKAHOSTCP/conf/lokahostcp.conf"
 
 #----------------------------------------------------------#
 #                    Verifications                         #
@@ -36,7 +36,7 @@ is_format_valid 'ip' 'chain'
 is_system_enabled "$FIREWALL_SYSTEM" 'FIREWALL_SYSTEM'
 
 # Perform verification if read-only mode is enabled
-check_lokahost_demo_mode
+check_lokahostcp_demo_mode
 
 #----------------------------------------------------------#
 #                       Action                             #
@@ -46,19 +46,19 @@ check_lokahost_demo_mode
 heal_iptables_links
 
 # Checking server ip
-if [ -e "$LOKAHOST/data/ips/$ip" ] || [ "$ip" = '127.0.0.1' ]; then
+if [ -e "$LOKAHOSTCP/data/ips/$ip" ] || [ "$ip" = '127.0.0.1' ]; then
 	exit
 fi
 
 # Checking ip exclusions
-excludes="$LOKAHOST/data/firewall/excludes.conf"
+excludes="$LOKAHOSTCP/data/firewall/excludes.conf"
 check_excludes=$(grep "^$ip$" $excludes 2> /dev/null)
 if [ -n "$check_excludes" ]; then
 	exit
 fi
 
 # Checking ip in banlist
-conf="$LOKAHOST/data/firewall/banlist.conf"
+conf="$LOKAHOSTCP/data/firewall/banlist.conf"
 check_ip=$(grep "IP='$ip' CHAIN='$chain'" $conf 2> /dev/null)
 if [ -n "$check_ip" ]; then
 	exit
@@ -81,7 +81,7 @@ $iptables -I fail2ban-$chain 1 -s $ip \
 chmod 660 $conf
 
 #----------------------------------------------------------#
-#                       Lokahost                             #
+#                       Lokahostcp                             #
 #----------------------------------------------------------#
 
 # Logging
