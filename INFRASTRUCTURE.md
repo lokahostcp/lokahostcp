@@ -15,47 +15,58 @@ serve, and which files reference it. All hostnames are under
 Referenced by `install/lcp-install-debian.sh:18`, `install/lcp-install-ubuntu.sh:18`
 (as `RHOST`), and reachability-checked at line 456 before the install proceeds.
 
-**Status: live, but incomplete — one of four packages is published.**
+**Status: complete for `arm64`. `amd64` carries the panel only.**
 
-A signed repository is serving at `https://apt.lokahost.online/` for codenames
-`buster`, `bullseye`, `bookworm`, `focal` and `jammy`, on `amd64` and `arm64`.
-The full trust chain verifies: `pubkey.gpg` → `InRelease` signature →
-`Packages` checksum → `.deb` checksum.
+A signed repository serves at `https://apt.lokahost.online/` for codenames
+`buster`, `bullseye`, `bookworm`, `focal` and `jammy`. Verified with a real apt
+client in a clean container: `apt-get update` accepts the signature without
+warnings, and `apt-get install --download-only lokahostcp=1.0.0
+lokahostcp-nginx lokahostcp-php lokahostcp-web-terminal` fetches all four
+(88.4 MB) with dependencies resolved.
 
-| Package                   | Built from              | Published | Why                                      |
-| ------------------------- | ----------------------- | --------- | ---------------------------------------- |
-| `lokahostcp`              | `src/deb/lokahostcp/`   | yes       | Pure scripts and web assets, no compiler |
-| `lokahostcp-nginx`        | `src/deb/nginx/`        | no        | Compiles nginx from source               |
-| `lokahostcp-php`          | `src/deb/php/`          | no        | Compiles PHP from source                 |
-| `lokahostcp-web-terminal` | `src/deb/web-terminal/` | no        | `node-pty` is a native module            |
+| Package                   | Version    | arm64 | amd64                     |
+| ------------------------- | ---------- | ----- | ------------------------- |
+| `lokahostcp`              | `1.0.0`    | yes   | yes (`Architecture: all`) |
+| `lokahostcp-nginx`        | `1.25.2-1` | yes   | pending                   |
+| `lokahostcp-php`          | `8.2.11-1` | yes   | pending                   |
+| `lokahostcp-web-terminal` | `1.0.0`    | yes   | pending                   |
 
-The installer requests `lokahostcp=${LOKAHOSTCP_INSTALL_VER}` — an exact
-version pin — plus the other three unpinned. **An install still fails**, at the
-package step, until all four are present.
+`lokahostcp` is `Architecture: all`, so one build serves both. The control file
+previously said `amd64`, which would have made the panel uninstallable on arm64
+regardless of what the repository carried.
 
-`lokahostcp` is `Architecture: all`, so one build serves both architectures.
-The control file previously said `amd64`, which would have made the panel
-uninstallable on arm64 regardless of what the repository carried.
+#### Building the packages
 
-#### Building the remaining three
+They cannot be built on the deployment host: it has `gcc`, `g++`, `make` and
+`cmake` but lacks `autoconf`, `bison`, `pkg-config` and the `zlib`, `pcre2`,
+`libxml2`, `sqlite3` and `curl` headers, all of which need root; and `node-pty`
+needs `node-gyp` with Node ≥ 18 against its Node v12.22.9.
 
-They cannot be built on the current host. It has `gcc`, `g++`, `make` and
-`cmake`, but lacks `autoconf`, `bison` and `pkg-config`, and lacks the headers
-`zlib.h`, `pcre2.h`, `libxml2`, `sqlite3` and `curl` — installing any of which
-needs root. `node-pty` additionally needs `node-gyp` and Node ≥ 18; the host
-has Node v12.22.9.
-
-Build them on a machine with root and a full toolchain, once per architecture:
+Build in a container instead, once per architecture. **Install Node 20
+explicitly first** — the build script's own nodesource step fails silently
+here, and because `set -e` is disabled at `src/lcp_autocompile.sh:3` the build
+then continues without it, producing a `lokahostcp` package with no compiled
+CSS/JS and a `lokahostcp-web-terminal` with no `node_modules`. Both are valid
+`.deb` files that install cleanly and do not work.
 
 ```bash
-docker run --rm --platform linux/amd64 -v "$PWD:/src" -w /src debian:bookworm \
-	bash src/lcp_autocompile.sh --all
-docker run --rm --platform linux/arm64 -v "$PWD:/src" -w /src debian:bookworm \
-	bash src/lcp_autocompile.sh --all
+docker run --rm --platform linux/arm64 -v "$PWD:/work" -w /work debian:bookworm bash -c '
+	apt-get -qq update && apt-get -qq install -y ca-certificates curl wget git lsb-release python3 make g++ xz-utils
+	curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get -qq install -y nodejs
+	node -v || exit 1
+	echo N | bash src/lcp_autocompile.sh --all ~localsrc'
 ```
 
-Then add them to the repository with the procedure in the "Publishing" section
-below, and re-sign.
+`~localsrc` builds from the mounted checkout rather than downloading a branch.
+Mount a clean `git archive` export, not the working tree — a macOS
+`node_modules` will poison the container build.
+
+Always verify before publishing, because these failures are silent:
+
+```bash
+dpkg-deb -c lokahostcp_1.0.0_all.deb | grep -cE 'web/js/dist|web/css/themes' # expect ~17, not 0
+dpkg-deb -c lokahostcp-web-terminal_1.0.0_*.deb | grep -c node_modules       # expect ~361, not 0
+```
 
 ### 2. GPG signing keypair
 
@@ -116,7 +127,7 @@ the workstation that holds the key, never on the web server:
 for c in buster bullseye bookworm focal jammy; do
 	for a in amd64 arm64; do
 		mkdir -p "dists/$c/main/binary-$a"
-		apt-ftparchive packages pool/ > "dists/$c/main/binary-$a/Packages"
+		apt-ftparchive --arch "$a" packages pool/ > "dists/$c/main/binary-$a/Packages"
 		gzip -9cn "dists/$c/main/binary-$a/Packages" > "dists/$c/main/binary-$a/Packages.gz"
 	done
 	apt-ftparchive \
@@ -135,9 +146,10 @@ gpg --local-user 98D8AFF10FDC39E8 --clearsign -o InRelease Release
 # ...and upload Release.gpg and InRelease back beside Release.
 ```
 
-An `Architecture: all` package must appear in **every** per-architecture
-`Packages` index, which is why the loop writes the same output to
-`binary-amd64` and `binary-arm64`.
+`--arch` is not optional. Without it every index lists every package in the
+pool, so an amd64 machine would be offered arm64 binaries. With it,
+architecture-specific packages land only in their own index while
+`Architecture: all` packages correctly appear in both.
 
 ### 3. `ip.lokahost.online` — public IPv4 echo service
 
