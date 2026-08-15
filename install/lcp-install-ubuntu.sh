@@ -2237,7 +2237,19 @@ echo "[ * ] Configuring PHP dependencies..."
 $LOKAHOSTCP/bin/v-add-sys-dependencies quiet
 
 echo "[ * ] Installing Rclone..."
-curl -s https://rclone.org/install.sh | bash > /dev/null 2>&1
+# Bounded: this pipes a third-party installer which itself downloads a release
+# archive with no timeout of its own. A stalled mirror otherwise hangs the whole
+# panel installation indefinitely, with "Installing Rclone..." as the last
+# output and no way to tell it apart from slow progress. Observed hanging for
+# 15 minutes on downloads.rclone.org before being killed by hand.
+#
+# Rclone is only needed for remote backup targets, so a failure here is not
+# fatal to the install.
+if ! timeout 300 bash -c 'curl -fsS --connect-timeout 15 --max-time 240 https://rclone.org/install.sh | bash' > /dev/null 2>&1; then
+	echo "[ ! ] Rclone installation skipped (download failed or timed out)."
+	echo "      Remote backup targets will be unavailable until you run:"
+	echo "      curl https://rclone.org/install.sh | sudo bash"
+fi
 
 #----------------------------------------------------------#
 #                   Configure IP                           #
