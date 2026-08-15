@@ -99,20 +99,8 @@ Two things need your attention:
    `gpg --change-passphrase 98D8AFF10FDC39E8`, accepting that publishing then
    becomes interactive. Back the key up offline; losing it means every existing
    install stops trusting updates.
-2. **The RPM repository still needs the same key** exported to
-   `https://rpm.lokahost.online/RPM-GPG-KEY-LOKAHOSTCP`, per
-   `install/rpm/lokahostcp/lokahostcp.repo:4`. `rpm.lokahost.online` resolves
-   to the server but **has no vhost provisioned**, so there is nowhere to put
-   it yet. Create the web domain in the panel, then:
-
-   ```bash
-   gpg --export --armor 98D8AFF10FDC39E8 > RPM-GPG-KEY-LOKAHOSTCP
-   scp RPM-GPG-KEY-LOKAHOSTCP \
-   	hiroshiaki@207.211.153.17:~/web/rpm.lokahost.online/public_html/
-   ```
-
-   This matters less than it looks: there is no RHEL installer in the tree (see
-   below), so nothing currently consumes that repository.
+2. **The RPM repository is published and uses the same key.** See
+   `rpm.lokahost.online` below.
 
 Never publish the private key. Only the public half belongs on the web server.
 
@@ -151,7 +139,30 @@ pool, so an amd64 machine would be offered arm64 binaries. With it,
 architecture-specific packages land only in their own index while
 `Architecture: all` packages correctly appear in both.
 
-### 3. `ip.lokahost.online` — public IPv4 echo service
+### 3. `rpm.lokahost.online` — yum repository
+
+**Status: live, and empty on purpose.**
+
+Serving over HTTPS with the signing key at
+`https://rpm.lokahost.online/RPM-GPG-KEY-LOKAHOSTCP` and valid `repodata` for
+`rhel/{8,9}/{x86_64,aarch64}`, matching the `$releasever`/`$basearch`
+expansion in `install/rpm/lokahostcp/lokahostcp.repo`.
+
+Verified with a real client: dropping that exact `.repo` into a `rockylinux:9`
+container, `dnf repolist` resolves it, `dnf makecache` succeeds, and
+`rpm --import` of the `gpgkey=` URL registers key `98D8AFF10FDC39E8`.
+
+**It contains no packages, and that is not a temporary gap.** There is no
+`lcp-install-rhel.sh` in this repository (see below), so no RHEL machine can
+reach the point of using this repository. Publishing the key and valid metadata
+means the references resolve instead of 404ing; it does not make RHEL
+supported.
+
+Building RPMs needs `mock` and `rpmbuild` on a RHEL host
+(`src/lcp_autocompile.sh:255-268`), which is a separate exercise from the
+Debian packaging and has never been run for this fork.
+
+### 4. `ip.lokahost.online` — public IPv4 echo service
 
 Referenced by `bin/v-update-sys-ip:167`, `install/lcp-install-debian.sh:2260`,
 `install/lcp-install-ubuntu.sh:2234`:
@@ -177,7 +188,7 @@ bare `curl` and have no fallback, so a NAT'd machine installing before this
 host exists will still misdetect its IP at install time — only later
 `v-update-sys-ip` runs will correct it.
 
-### 4. `github.com/lokahostcp/lokahostcp` — source repository
+### 5. `github.com/lokahostcp/lokahostcp` — source repository
 
 The repository exists and is public. Its `release` branch is what the
 documented install command downloads:
@@ -239,7 +250,7 @@ same repository, and failure notifications throughout `bin/` link users to
 
 | Host                        | Serves                                                                     | Referenced by                                     |
 | --------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
-| `rpm.lokahost.online`       | yum repository + `RPM-GPG-KEY-LOKAHOSTCP`                                  | `install/rpm/lokahostcp/lokahostcp.repo`          |
+| `rpm.lokahost.online`       | yum repository + `RPM-GPG-KEY-LOKAHOSTCP` — live, see below                | `install/rpm/lokahostcp/lokahostcp.repo`          |
 | `beta-apt.lokahost.online`  | beta channel repo, its own `pubkey.gpg`, and copies of the install scripts | `docs/docs/contributing/testing.md`               |
 | `storage.lokahost.online`   | README screenshot; backup tarballs used by the restore tests               | `README.md`, `test/restore.bats`                  |
 | `docs.lokahost.online`      | documentation site (built from `docs/`)                                    | `README.md`, `func/upgrade.sh`, installers        |
